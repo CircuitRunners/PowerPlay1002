@@ -14,5 +14,7 @@ public class Test extends LinearOpMode {
 
         waitForStart();
         leftFront.setPower(0.5);
+
+
     }
 }
