@@ -14,7 +14,7 @@ public class SkillIssue extends LinearOpMode {
     private DcMotor rightFront;
     private DcMotor leftBack;
     private DcMotor rightBack;
-    private double multiplier = 0.5, globalMultiplier = 1;
+    private double multiplier = 0.5;
 
     @Override
     public void runOpMode() {
@@ -23,8 +23,8 @@ public class SkillIssue extends LinearOpMode {
         leftBack = hardwareMap.get(DcMotor.class, "lb");
         rightBack = hardwareMap.get(DcMotor.class, "rb");
 
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
 
@@ -35,11 +35,17 @@ public class SkillIssue extends LinearOpMode {
 
             if (gamepad1.right_bumper) { y1 = 1; x1=0; }
 
-            leftFront.setPower( globalMultiplier * ( y1 - x1 ) );
-            leftBack.setPower( globalMultiplier * ( y1 - x1 ));
+            leftFront.setPower( ( y1 - x1 ) );
+            leftBack.setPower(  ( y1 - x1 ));
 
-            rightFront.setPower( globalMultiplier * ( y1 + x1));
-            rightBack.setPower( globalMultiplier * ( y1 + x1));
+            rightFront.setPower(( y1 + x1));
+            rightBack.setPower(  ( y1 + x1));
+            if ((gamepad1.right_trigger > 0.5) && gamepad1.y) {
+                multiplier = 1;
+            }   else if ((gamepad1.right_trigger > 0.5) && gamepad1.b){
+                multiplier = 0.5;
+            }
+
         }
 
     }
