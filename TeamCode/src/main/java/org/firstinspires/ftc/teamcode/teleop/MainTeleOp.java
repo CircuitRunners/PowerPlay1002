@@ -34,11 +34,14 @@ public class MainTeleOp extends LinearOpMode {
         rf = hardwareMap.get(DcMotorEx.class, "rf");
         rb = hardwareMap.get(DcMotorEx.class, "rb");
 
-
-
         //Reverse right side motors
         rf.setDirection(DcMotorSimple.Direction.REVERSE);
         rb.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+        imu.initialize(parameters);
 
         //Set the zero power behavior to brake
         for (DcMotorEx motor : motors) motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -52,8 +55,24 @@ public class MainTeleOp extends LinearOpMode {
         while (opModeIsActive()){
 
             //Read gamepad joysticks
+            double y = -gamepad1.left_stick_y;
+            double x = -gamepad1.left_stick_x;
+            double rx = -gamepad1.right_stick_x;
 
-            //refer to gm0 for mecanum math
+            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+            double frontLeftPower = (y + x + rx);
+            double backLeftPower = (y - x + rx);
+            double frontRightPower = (y - x - rx);
+            double backRightPower = (y + x - rx);
+
+            lf.setPower(frontLeftPower);
+            lb.setPower(backLeftPower);
+            rf.setPower(frontRightPower);
+            rb.setPower(backRightPower);
+
+
+
+            double botHeading = -imu.getAngularOrientation().firstAngle;
 
         }
 
