@@ -76,6 +76,8 @@ public class MainTeleOp extends LinearOpMode {
             rb.setPower(backRightPower);
 
             if(gamepad1.b) headingOffset = botHeading;
+            telemetry.addData("Heading", botHeading);
+            telemetry.update();
 
         }
 
