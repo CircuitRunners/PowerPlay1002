@@ -18,9 +18,9 @@ public class MainTeleOp extends LinearOpMode {
     private List<DcMotorEx> motors;
 
 //    //IMU sensor
-//    private BNO055IMU imu;
+    private BNO055IMU imu;
 //    //Offset variable for resetting heading;
-//    private double headingOffset = 0;
+    private double headingOffset = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -38,7 +38,7 @@ public class MainTeleOp extends LinearOpMode {
         rf.setDirection(DcMotorSimple.Direction.REVERSE);
         rb.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
@@ -59,26 +59,28 @@ public class MainTeleOp extends LinearOpMode {
             double x = -gamepad1.left_stick_x;
             double rx = -gamepad1.right_stick_x;
 
+            //Read heading
+            double botHeading = -imu.getAngularOrientation().firstAngle;
+
+            //Find motor powers
             double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
             double frontLeftPower = (y + x + rx);
             double backLeftPower = (y - x + rx);
             double frontRightPower = (y - x - rx);
             double backRightPower = (y + x - rx);
 
+            //Set motor powers
             lf.setPower(frontLeftPower);
             lb.setPower(backLeftPower);
             rf.setPower(frontRightPower);
             rb.setPower(backRightPower);
 
-
-
-            double botHeading = -imu.getAngularOrientation().firstAngle;
+            if(gamepad1.b) headingOffset = botHeading;
 
         }
 
         //Stop all motors
         for(DcMotorEx motor : motors) motor.setPower(0);
-
 
     }
 }
