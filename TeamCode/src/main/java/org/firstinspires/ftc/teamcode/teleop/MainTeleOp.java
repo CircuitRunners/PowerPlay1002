@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,9 +19,9 @@ public class MainTeleOp extends LinearOpMode {
     private DcMotorEx lf, lb, rf, rb;
     private List<DcMotorEx> motors;
 
-//    //IMU sensor
+    //IMU sensor
     private BNO055IMU imu;
-//    //Offset variable for resetting heading;
+    //Offset variable for resetting heading;
     private double headingOffset = 0;
 
     @Override
@@ -38,6 +40,7 @@ public class MainTeleOp extends LinearOpMode {
         rf.setDirection(DcMotorSimple.Direction.REVERSE);
         rb.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        //Initialize imu
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
@@ -45,6 +48,9 @@ public class MainTeleOp extends LinearOpMode {
 
         //Set the zero power behavior to brake
         for (DcMotorEx motor : motors) motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        //Ensure all motors are set to no encoders (since there are none plugged in)
+        for (DcMotorEx motor : motors) motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         //Send line to telemetry indicating initialization is done
         telemetry.addLine("Ready for start!");
@@ -59,8 +65,15 @@ public class MainTeleOp extends LinearOpMode {
             double x = -gamepad1.left_stick_x;
             double rx = -gamepad1.right_stick_x;
 
-            //Read heading
-            double botHeading = -imu.getAngularOrientation().firstAngle;
+            //Read heading and subtract offset, then renormalize
+            double heading = AngleUnit.normalizeRadians(-imu.getAngularOrientation().firstAngle - headingOffset);
+
+            //Reset the zero point for field centric by making the current heading the offset
+            if(gamepad1.b){
+                headingOffset = heading;
+                //Vibrate the gamepad
+                gamepad1.rumble(300);
+            }
 
             //Find motor powers
             double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
@@ -75,11 +88,8 @@ public class MainTeleOp extends LinearOpMode {
             rf.setPower(frontRightPower);
             rb.setPower(backRightPower);
 
-            if(gamepad1.b){
-                headingOffset = botHeading;
-                gamepad1.rumble(300);
-            }
-            telemetry.addData("Heading", botHeading);
+            telemetry.addData("Heading", heading);
+            telemetry.addLine("Press B on Gamepad 1 to reset heading");
             telemetry.update();
 
         }
