@@ -43,11 +43,17 @@ public class AprilTagDemo extends LinearOpMode
     @Override
     public void runOpMode()
     {
+        //Obtain the GUI element for showing the camera stream
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        //Creating the camera object from the webcam
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        //Creating the pipeline
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
 
+        //Giving the pipeline to the camera stream
         camera.setPipeline(aprilTagDetectionPipeline);
+
+        //Setting the opener, will happen asynchronously upon the stream starting
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
@@ -106,6 +112,8 @@ public class AprilTagDemo extends LinearOpMode
                         aprilTagDetectionPipeline.setDecimation(DECIMATION_HIGH);
                     }
 
+                    //TODO: Change this to read the ID of the tag,
+                    // and compare it to known IDs to find the parking position
                     for(AprilTagDetection detection : detections)
                     {
                         telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
