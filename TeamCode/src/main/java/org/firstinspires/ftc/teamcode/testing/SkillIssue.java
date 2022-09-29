@@ -44,11 +44,13 @@ public class SkillIssue extends LinearOpMode {
 
             double denominator = Math.max(Math.abs(y1) + Math.abs(x1), 1);
 
-            leftFront.setPower( ( y1 - x1 )/denominator );
-            leftBack.setPower(  ( y1 - x1 )/denominator);
+            double leftPower = (y1 - x1 * (1 - y2) - .05) / denominator;
+            leftFront.setPower(leftPower);
+            leftBack.setPower(leftPower);
 
-            rightFront.setPower(( y1 + x1)/denominator);
-            rightBack.setPower(  ( y1 + x1)/denominator);
+            double rightPower = (y1 + x1 * (1 - y2)) / denominator;
+            rightFront.setPower(rightPower);
+            rightBack.setPower(rightPower);
         }
 
     }
