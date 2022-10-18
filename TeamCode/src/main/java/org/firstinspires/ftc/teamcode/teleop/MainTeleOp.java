@@ -69,7 +69,7 @@ public class MainTeleOp extends LinearOpMode {
             double rx = (abs(gamepad1.right_stick_x) > 0.02) ? gamepad1.right_stick_x : 0.0;
 
             //Read heading and subtract offset, then renormalize
-            double heading = AngleUnit.normalizeRadians(-imu.getAngularOrientation().firstAngle - headingOffset);
+            double heading = AngleUnit.normalizeRadians(-imu.getAngularOrientation().thirdAngle - headingOffset);
 
             //Reset the zero point for field centric by making the current heading the offset
             if(gamepad1.b){
@@ -78,11 +78,13 @@ public class MainTeleOp extends LinearOpMode {
                 gamepad1.rumble(0.0, 1.0, 300);
             }
 
+            //Apply a curve to the inputs
             y = cubeInput(y, 0.2);
             x = cubeInput(x, 0.2);
             rx = cubeInput(rx, 0.2);
 
 
+            //Rotate the translation by the heading of the robot
             double rotX = x * Math.cos(heading) - y * Math.sin(heading);
             double rotY = x * Math.sin(heading) + y * Math.cos(heading);
 
