@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.subsystems.Claw;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,10 +27,14 @@ public class MainTeleOp extends LinearOpMode {
     //Offset variable for resetting heading;
     private double headingOffset = 0;
 
+    private Claw bob;
     @Override
     public void runOpMode() throws InterruptedException {
 
         //Retrieve them from the hardware map
+
+        bob = new Claw(hardwareMap);
+
         lf = hardwareMap.get(DcMotorEx.class, "lf");
         lb = hardwareMap.get(DcMotorEx.class, "lb");
         rf = hardwareMap.get(DcMotorEx.class, "rf");
@@ -67,6 +72,9 @@ public class MainTeleOp extends LinearOpMode {
             double y = (abs(gamepad1.left_stick_y) > 0.02) ? -gamepad1.left_stick_y : 0.0; // Remember, this is reversed!
             double x = (abs(gamepad1.left_stick_x) > 0.02) ? gamepad1.left_stick_x * 1.1 : 0.0; // Counteract imperfect strafing
             double rx = (abs(gamepad1.right_stick_x) > 0.02) ? gamepad1.right_stick_x : 0.0;
+            if(gamepad2.y){
+                bob.open();
+            }
 
             //Read heading and subtract offset, then renormalize
             double heading = AngleUnit.normalizeRadians(-imu.getAngularOrientation().thirdAngle - headingOffset);
