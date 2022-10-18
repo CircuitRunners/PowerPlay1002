@@ -1,28 +1,30 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Claw{
 
     private HardwareMap hardwareMap;
 
-    private Servo claw;
+    private Servo clawIntake;
 
     //Servos for the linkages
 
 
     public Claw(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
+        clawIntake = hardwareMap.get(Servo.class, "clawIntake");
 
         //Retrieve servos from the hardware map
     }
 
-    public void lock(){
-        //Move servos to lock wheels
-    }
+    public void clampClose(){
+        clawIntake.setPosition(0);
 
-    public void unlock(){
-        //Move servos to unlock wheels
+    }
+    public void clampOpen(){
+        clawIntake.setPosition(1);
     }
 
 
