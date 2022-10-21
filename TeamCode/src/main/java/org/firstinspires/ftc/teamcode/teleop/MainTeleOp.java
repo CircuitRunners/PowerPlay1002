@@ -118,7 +118,6 @@ public class MainTeleOp extends CommandOpMode {
 
     @Override
     public void run() {
-
         //Run the other functions in the superclass
         super.run();
 
@@ -133,7 +132,7 @@ public class MainTeleOp extends CommandOpMode {
         }
 
 
-        //Read heading and subtract offset, then renormalize
+        //Read heading and subtract offset, then normalize again
         double heading =
                 imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).thirdAngle;
         heading = AngleUnit.normalizeRadians(heading - headingOffset);

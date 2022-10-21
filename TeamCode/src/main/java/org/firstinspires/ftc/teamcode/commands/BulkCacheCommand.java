@@ -13,7 +13,6 @@ public class BulkCacheCommand extends CommandBase {
 
     private final List<LynxModule> allHubs;
 
-
     public BulkCacheCommand(HardwareMap hardwareMap) {
         allHubs = hardwareMap.getAll(LynxModule.class);
     }

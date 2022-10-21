@@ -14,9 +14,6 @@ public class Lift extends SubsystemBase {
 
     private DcMotorEx liftMotor;
 
-
-
-
     public Lift(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
         liftMotor = hardwareMap.get(DcMotorEx.class, "liftMotor");
@@ -54,5 +51,5 @@ public class Lift extends SubsystemBase {
     public boolean atLowerLimit(){
         return getLiftPosition() < 5;
     }
-
+    //@TODO find ticks to inches conversion and add levels.
 }

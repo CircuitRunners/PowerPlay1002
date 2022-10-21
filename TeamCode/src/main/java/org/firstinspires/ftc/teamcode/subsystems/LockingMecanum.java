@@ -18,15 +18,24 @@ public class LockingMecanum extends SubsystemBase {
     }
 
     public void init() {
-
+        //@TODO is the check for position necessary or should it set the position to 0 everytime regardless?
+        if (leftLinkage.getPosition()!=0){
+            leftLinkage.setPosition(0);
+        }
     }
 
+    //Move servos to lock wheels
     public void lock(){
-        //Move servos to lock wheels
+        //@TODO Replace 1 with the position of the servo where it is locked
+        leftLinkage.setPosition(1);
+        rightLinkage.setPosition(1);
     }
 
+    //Move servos to unlock wheels
     public void unlock(){
-        //Move servos to unlock wheels
+        //@TODO Replace 0 with the position of the servo where it is unlocked
+        leftLinkage.setPosition(0);
+        rightLinkage.setPosition(0);
     }
 
 

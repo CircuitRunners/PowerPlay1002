@@ -52,6 +52,6 @@ public class Intake extends SubsystemBase {
         leftServo.setPosition(0.5);
         rightServo.setPosition(0.5);
     }
-
+    //@TODO add thing that detects whether cone can go in and close or open it based on its dimensions
 
 }

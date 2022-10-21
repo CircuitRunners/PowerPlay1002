@@ -11,7 +11,6 @@ public class Claw{
 
     //Servos for the linkages
 
-
     public Claw(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
         //Retrieve servos from the hardware map

@@ -29,8 +29,6 @@ public class BlueParkAuto extends CommandOpMode {
 
         beaconDetector = new BeaconDetector(hardwareMap);
 
-
-
         //Start vision
         beaconDetector.startStream();
         while(!isStarted()){

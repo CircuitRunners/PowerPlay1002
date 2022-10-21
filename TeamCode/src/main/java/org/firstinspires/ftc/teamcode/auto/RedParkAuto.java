@@ -29,8 +29,6 @@ public class RedParkAuto extends CommandOpMode {
 
         beaconDetector = new BeaconDetector(hardwareMap);
 
-
-
         //Start vision
         beaconDetector.startStream();
         while(!isStarted()){
