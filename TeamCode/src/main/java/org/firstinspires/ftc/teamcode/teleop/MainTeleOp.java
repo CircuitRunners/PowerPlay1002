@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Lift;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,14 +29,26 @@ public class MainTeleOp extends LinearOpMode {
     //Offset variable for resetting heading;
     private double headingOffset = 0;
 
-    private Claw bob;
+//    private Claw claw = new Claw(hardwareMap);
+    private Lift lift;
+    private Intake intake;
+
+//    boolean clawButtonPrev = false;
+//    boolean clawClosed = false;
+
+
     @Override
     public void runOpMode() throws InterruptedException {
 
-        //Retrieve them from the hardware map
+        lift = new Lift(hardwareMap);
+        intake = new Intake(hardwareMap);
 
-        bob = new Claw(hardwareMap);
+//        claw.init();
+        lift.init();
+        intake.init();
+//        intake.closeArms();
 
+        //Retrieve dt motors from the hardware map
         lf = hardwareMap.get(DcMotorEx.class, "lf");
         lb = hardwareMap.get(DcMotorEx.class, "lb");
         rf = hardwareMap.get(DcMotorEx.class, "rf");
@@ -65,19 +79,34 @@ public class MainTeleOp extends LinearOpMode {
 
         waitForStart();
 
+        double heading = 0;
+
         while (opModeIsActive()){
+
+//            if(gamepad1.right_bumper && !clawButtonPrev){
+//                if(clawClosed) claw.clampOpen();
+//                else claw.clampClose();
+//                clawClosed = !clawClosed;
+//            }
+//            clawButtonPrev = gamepad1.right_bumper;
+//
+            if(gamepad2.left_trigger > 0.3) intake.intake();
+            else intake.stop();
+//
+//
+            if(gamepad2.dpad_up) lift.up();
+            else if(gamepad2.dpad_down) lift.down();
+            else lift.hold();
+
+
 
             //Read gamepad joysticks
             //Check the deadband of the controller
             double y = (abs(gamepad1.left_stick_y) > 0.02) ? -gamepad1.left_stick_y : 0.0; // Remember, this is reversed!
             double x = (abs(gamepad1.left_stick_x) > 0.02) ? gamepad1.left_stick_x * 1.1 : 0.0; // Counteract imperfect strafing
             double rx = (abs(gamepad1.right_stick_x) > 0.02) ? gamepad1.right_stick_x : 0.0;
-            if(gamepad2.y){
-                bob.open();
-            }
 
-            //Read heading and subtract offset, then renormalize
-            double heading = AngleUnit.normalizeRadians(-imu.getAngularOrientation().thirdAngle - headingOffset);
+
 
             //Reset the zero point for field centric by making the current heading the offset
             if(gamepad1.b){
@@ -86,25 +115,29 @@ public class MainTeleOp extends LinearOpMode {
                 gamepad1.rumble(0.0, 1.0, 300);
             }
 
+
+            //Read heading and subtract offset, then renormalize
+//            heading = AngleUnit.normalizeRadians(-imu.getAngularOrientation().thirdAngle - headingOffset);
+
             //Apply a curve to the inputs
             y = cubeInput(y, 0.2);
             x = cubeInput(x, 0.2);
             rx = cubeInput(rx, 0.2);
 
 
-            //Rotate the translation by the heading of the robot
-            double rotX = x * Math.cos(heading) - y * Math.sin(heading);
-            double rotY = x * Math.sin(heading) + y * Math.cos(heading);
-
-            x = rotX;
-            y = rotY;
+//            //Rotate the translation by the heading of the robot
+//            double rotX = x * Math.cos(heading) - y * Math.sin(heading);
+//            double rotY = x * Math.sin(heading) + y * Math.cos(heading);
+//
+//            x = rotX;
+//            y = rotY;
 
             //Find motor powers
             double denominator = Math.max(abs(y) + abs(x) + abs(rx), 1);
-            double frontLeftPower = (y + x + rx) / denominator * 0.69;
-            double backLeftPower = (y - x + rx) / denominator * 0.69;
-            double frontRightPower = (y - x - rx) / denominator * 0.69;
-            double backRightPower = (y + x - rx) / denominator * 0.69;
+            double frontLeftPower = (y + x + rx) / denominator * 1;
+            double backLeftPower = (y - x + rx) / denominator * 1;
+            double frontRightPower = (y - x - rx) / denominator * 1;
+            double backRightPower = (y + x - rx) / denominator * 1;
 
             //Set motor powers
             lf.setPower(frontLeftPower);

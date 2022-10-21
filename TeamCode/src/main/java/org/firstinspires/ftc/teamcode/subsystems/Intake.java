@@ -24,13 +24,37 @@ public class Intake extends SubsystemBase {
     public void init(){
         leftMotor = hardwareMap.get(DcMotorSimple.class, "leftMotor");
         rightMotor = hardwareMap.get(DcMotorSimple.class, "rightMotor");
+        rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         leftServo = hardwareMap.get(Servo.class, "leftServo");
         rightServo = hardwareMap.get(Servo.class, "rightServo");
     }
 
-    @Override
-    public void periodic(){
-
+    public void intake(){
+        leftMotor.setPower(0.7);
+        rightMotor.setPower(0.7);
     }
+
+    public void outtake(){
+        leftMotor.setPower(-0.7);
+        rightMotor.setPower(-0.7);
+    }
+
+    public void stop(){
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+    }
+
+    public void openArms(){
+        leftServo.setPosition(1);
+        rightServo.setPosition(0);
+    }
+
+    public void closeArms(){
+        leftServo.setPosition(0.5);
+        rightServo.setPosition(0.5);
+    }
+
+
 }
