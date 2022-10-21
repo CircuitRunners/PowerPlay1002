@@ -2,6 +2,12 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import static java.lang.Math.abs;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.button.Trigger;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -10,6 +16,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
@@ -18,35 +27,33 @@ import java.util.Arrays;
 import java.util.List;
 
 @TeleOp
-public class MainTeleOp extends LinearOpMode {
+public class MainTeleOp extends CommandOpMode {
 
     //Drive motors and list to hold them
     private DcMotorEx lf, lb, rf, rb;
-    private List<DcMotorEx> motors;
-
     //IMU sensor
     private BNO055IMU imu;
-    //Offset variable for resetting heading;
-    private double headingOffset = 0;
-
-//    private Claw claw = new Claw(hardwareMap);
+    private Claw claw;
     private Lift lift;
     private Intake intake;
+    //Offset variable for resetting heading;
+    private double headingOffset = 0;
+    private boolean prevHeadingReset = false;
 
-//    boolean clawButtonPrev = false;
+
+    //    boolean clawButtonPrev = false;
 //    boolean clawClosed = false;
 
-
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void initialize() {
 
+        //Set the bulk cache command to continuously run
+        schedule(new BulkCacheCommand(hardwareMap));
+
+        claw = new Claw(hardwareMap);
         lift = new Lift(hardwareMap);
         intake = new Intake(hardwareMap);
 
-//        claw.init();
-        lift.init();
-        intake.init();
-//        intake.closeArms();
 
         //Retrieve dt motors from the hardware map
         lf = hardwareMap.get(DcMotorEx.class, "lf");
@@ -55,9 +62,16 @@ public class MainTeleOp extends LinearOpMode {
         rb = hardwareMap.get(DcMotorEx.class, "rb");
 
         //Add all the dt motors to the list
-        motors = Arrays.asList(lf, lb, rf, rb);
+        List<DcMotorEx> motors = Arrays.asList(lf, lb, rf, rb);
 
-        //Reverse right side motors
+        for (DcMotorEx motor : motors) {
+            //Set the zero power behavior to brake
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            //Ensure all motors are set to no encoders
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+
+        //Reverse left side motors
         lf.setDirection(DcMotorSimple.Direction.REVERSE);
         lb.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -67,92 +81,106 @@ public class MainTeleOp extends LinearOpMode {
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
 
-        //Set the zero power behavior to brake
-        for (DcMotorEx motor : motors) motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        //Ensure all motors are set to no encoders (since there are none plugged in)
-        for (DcMotorEx motor : motors) motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //Commands
+
+        GamepadEx driver = new GamepadEx(gamepad1);
+        GamepadEx manipulator = new GamepadEx(gamepad2);
+
+
+        //control to rnu intake whenever the trigger is pressed
+        new Trigger(() -> driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
+                .whenActive(() -> {
+                    intake.intake();
+                })
+                .whenInactive(() -> {
+                    intake.stop();
+                });
+
+        //control to outtake whenever Y is pressed (for safety)
+        driver.getGamepadButton(GamepadKeys.Button.Y)
+                .whenActive(intake::outtake)
+                .whenInactive(intake::stop);
+
+
+//        //TODO: toggle control for the claw
+//        manipulator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+//                .toggleWhenActive(
+//
+//                )
+
 
         //Send line to telemetry indicating initialization is done
         telemetry.addLine("Ready for start!");
         telemetry.update();
 
-        waitForStart();
+    }
 
-        double heading = 0;
+    @Override
+    public void run() {
 
-        while (opModeIsActive()){
-
-//            if(gamepad1.right_bumper && !clawButtonPrev){
-//                if(clawClosed) claw.clampOpen();
-//                else claw.clampClose();
-//                clawClosed = !clawClosed;
-//            }
-//            clawButtonPrev = gamepad1.right_bumper;
-//
-            if(gamepad2.left_trigger > 0.3) intake.intake();
-            else intake.stop();
-//
-//
-            if(gamepad2.dpad_up) lift.up();
-            else if(gamepad2.dpad_down) lift.down();
-            else lift.hold();
+        //Run the other functions in the superclass
+        super.run();
 
 
-
-            //Read gamepad joysticks
-            //Check the deadband of the controller
-            double y = (abs(gamepad1.left_stick_y) > 0.02) ? -gamepad1.left_stick_y : 0.0; // Remember, this is reversed!
-            double x = (abs(gamepad1.left_stick_x) > 0.02) ? gamepad1.left_stick_x * 1.1 : 0.0; // Counteract imperfect strafing
-            double rx = (abs(gamepad1.right_stick_x) > 0.02) ? gamepad1.right_stick_x : 0.0;
-
-
-
-            //Reset the zero point for field centric by making the current heading the offset
-            if(gamepad1.b){
-                headingOffset += heading;
-                //Vibrate the gamepad
-                gamepad1.rumble(0.0, 1.0, 300);
-            }
-
-
-            //Read heading and subtract offset, then renormalize
-//            heading = AngleUnit.normalizeRadians(-imu.getAngularOrientation().thirdAngle - headingOffset);
-
-            //Apply a curve to the inputs
-            y = cubeInput(y, 0.2);
-            x = cubeInput(x, 0.2);
-            rx = cubeInput(rx, 0.2);
-
-
-//            //Rotate the translation by the heading of the robot
-//            double rotX = x * Math.cos(heading) - y * Math.sin(heading);
-//            double rotY = x * Math.sin(heading) + y * Math.cos(heading);
-//
-//            x = rotX;
-//            y = rotY;
-
-            //Find motor powers
-            double denominator = Math.max(abs(y) + abs(x) + abs(rx), 1);
-            double frontLeftPower = (y + x + rx) / denominator * 1;
-            double backLeftPower = (y - x + rx) / denominator * 1;
-            double frontRightPower = (y - x - rx) / denominator * 1;
-            double backRightPower = (y + x - rx) / denominator * 1;
-
-            //Set motor powers
-            lf.setPower(frontLeftPower);
-            lb.setPower(backLeftPower);
-            rf.setPower(frontRightPower);
-            rb.setPower(backRightPower);
-
-            telemetry.addData("Heading", heading);
-            telemetry.addLine("Press B on Gamepad 1 to reset heading");
-            telemetry.update();
-
+        //TODO: Figure out how to control the intake arms
+        if (gamepad2.dpad_up){
+            lift.setLiftPower(0.6);
+        } else if (gamepad2.dpad_down){
+            lift.setLiftPower(-0.2);
+        } else{
+            lift.setLiftPower(0.1);
         }
 
-        //Stop all motors
-        for(DcMotorEx motor : motors) motor.setPower(0);
+
+        //Read heading and subtract offset, then renormalize
+        double heading =
+                imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).thirdAngle;
+        heading = AngleUnit.normalizeRadians(heading - headingOffset);
+
+
+        //Reset the zero point for field centric by making the current heading the offset
+        if (gamepad1.x && !prevHeadingReset) {
+            headingOffset += heading;
+            //Vibrate the gamepad
+            gamepad1.rumble(0.0, 1.0, 300);
+        }
+        prevHeadingReset = gamepad1.x;
+
+
+        //Read gamepad joysticks
+        //Check the deadband of the controller
+        double y = (abs(gamepad1.left_stick_y) > 0.02) ? -gamepad1.left_stick_y : 0.0; // Remember, this is reversed!
+        double x = (abs(gamepad1.left_stick_x) > 0.02) ? gamepad1.left_stick_x * 1.1 : 0.0; // Counteract imperfect strafing
+        double rx = (abs(gamepad1.right_stick_x) > 0.02) ? gamepad1.right_stick_x : 0.0;
+
+        //Apply a curve to the inputs
+        y = cubeInput(y, 0.2);
+        x = cubeInput(x, 0.2);
+        rx = cubeInput(rx, 0.2);
+
+        //Make a vector out of the x and y and rotate it by the heading
+        Vector2d vec = new Vector2d(x, y).rotated(-heading);
+        x = vec.getX();
+        y = vec.getY();
+
+        //Ensure powers are in the range of [-1, 1] and set power
+        double denominator = Math.max(abs(y) + abs(x) + abs(rx), 1.0);
+        double frontLeftPower = (y + x + rx) / denominator;
+        double backLeftPower = (y - x + rx) / denominator;
+        double frontRightPower = (y - x - rx) / denominator;
+        double backRightPower = (y + x - rx) / denominator;
+
+        //Set motor powers
+        lf.setPower(frontLeftPower);
+        lb.setPower(backLeftPower);
+        rf.setPower(frontRightPower);
+        rb.setPower(backRightPower);
+
+        telemetry.addData("Current Heading with offset", "%.2f", AngleUnit.DEGREES.fromRadians(heading));
+        telemetry.addData("Offset", "%.2f", AngleUnit.DEGREES.fromRadians(headingOffset));
+        telemetry.addLine("Press A on Gamepad 1 to reset heading");
+        telemetry.update();
 
     }
 

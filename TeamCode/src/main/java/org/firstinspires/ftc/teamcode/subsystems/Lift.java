@@ -14,35 +14,45 @@ public class Lift extends SubsystemBase {
 
     private DcMotorEx liftMotor;
 
-    private PIDFController liftController =
-            new PIDFController(new PIDCoefficients(0.05, 0, 0),0,0, 0);
+
 
 
     public Lift(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
-    }
-
-
-    public void init(){
         liftMotor = hardwareMap.get(DcMotorEx.class, "liftMotor");
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     @Override
     public void periodic(){
-
+        //happens every loop
     }
 
-    public void up(){
-        liftMotor.setPower(0.4);
+    public void setLiftPower(double power){
+        liftMotor.setPower(power);
     }
 
-    public void down(){
-        liftMotor.setPower(-0.2);
+    public void stop(){
+        liftMotor.setPower(0);
     }
 
-    public void hold(){
-        liftMotor.setPower(0.1);
+    public double getLiftPosition(){
+        return liftMotor.getCurrentPosition();
+    }
+
+    public void resetLiftPosition(){
+        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public boolean atUpperLimit(){
+        return getLiftPosition() > 1000;
+    }
+
+    public boolean atLowerLimit(){
+        return getLiftPosition() < 5;
     }
 
 }

@@ -14,9 +14,6 @@ public class Claw{
 
     public Claw(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
-    }
-
-    public void init(){
         //Retrieve servos from the hardware map
         claw = hardwareMap.get(Servo.class, "clawServo");
     }

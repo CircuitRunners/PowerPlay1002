@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class BeaconDetector {
 
-    enum BeaconTags {
+    public enum BeaconTags {
         LEFT(84),
         CENTER(200),
         RIGHT(220);
@@ -26,7 +26,6 @@ public class BeaconDetector {
 
     private OpenCvCamera camera;
     private AprilTagDetectionPipeline aprilTagDetectionPipeline;
-    private HardwareMap hardwareMap;
 
     static final double FEET_PER_METER = 3.28084;
 
@@ -50,10 +49,7 @@ public class BeaconDetector {
     final int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION = 4;
 
     public BeaconDetector(HardwareMap hardwareMap) {
-        this.hardwareMap = hardwareMap;
-    }
 
-    public void initialize() {
         //Obtain the GUI element for showing the camera stream
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         //Creating the camera object from the webcam
@@ -64,6 +60,10 @@ public class BeaconDetector {
         //Giving the pipeline to the camera stream
         camera.setPipeline(aprilTagDetectionPipeline);
 
+
+    }
+
+    public void startStream(){
         //Setting the opener, will happen asynchronously upon the stream starting
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
@@ -76,7 +76,13 @@ public class BeaconDetector {
 
             }
         });
+    }
 
+    public void stopStream(){
+        camera.stopStreaming();
+        camera.closeCameraDeviceAsync(() -> {
+            //do nothing
+        });
     }
 
     public BeaconTags update() {
