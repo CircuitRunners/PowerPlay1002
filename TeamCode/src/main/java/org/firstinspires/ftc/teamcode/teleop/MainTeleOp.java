@@ -76,7 +76,7 @@ public class MainTeleOp extends CommandOpMode {
         lb.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //Initialize imu
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu = hardwareMap.get(BNO055IMU.class, "imu 1");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
