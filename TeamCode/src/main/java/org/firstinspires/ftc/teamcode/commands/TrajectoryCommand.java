@@ -27,7 +27,7 @@ public class TrajectoryCommand extends CommandBase {
 
     @Override
     public boolean isFinished(){
-        return drive.isBusy();
+        return !drive.isBusy();
     }
 
 

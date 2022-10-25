@@ -50,9 +50,9 @@ public class MainTeleOp extends CommandOpMode {
         //Set the bulk cache command to continuously run
         schedule(new BulkCacheCommand(hardwareMap));
 
-        claw = new Claw(hardwareMap);
+//        claw = new Claw(hardwareMap);
         lift = new Lift(hardwareMap);
-        intake = new Intake(hardwareMap);
+//        intake = new Intake(hardwareMap);
 
 
         //Retrieve dt motors from the hardware map
@@ -89,18 +89,18 @@ public class MainTeleOp extends CommandOpMode {
 
 
         //control to rnu intake whenever the trigger is pressed
-        new Trigger(() -> driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
-                .whenActive(() -> {
-                    intake.intake();
-                })
-                .whenInactive(() -> {
-                    intake.stop();
-                });
+//        new Trigger(() -> driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
+//                .whenActive(() -> {
+//                    intake.intake();
+//                })
+//                .whenInactive(() -> {
+//                    intake.stop();
+//                });
 
         //control to outtake whenever Y is pressed (for safety)
-        driver.getGamepadButton(GamepadKeys.Button.Y)
-                .whenActive(intake::outtake)
-                .whenInactive(intake::stop);
+//        driver.getGamepadButton(GamepadKeys.Button.Y)
+//                .whenActive(intake::outtake)
+//                .whenInactive(intake::stop);
 
 
 //        //TODO: toggle control for the claw

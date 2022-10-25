@@ -94,7 +94,7 @@ public class BeaconDetector {
         // processed since the last time we called it. Otherwise, it will return null. This
         // enables us to only run logic when there has been a new frame, as opposed to the
         // getLatestDetections() method which will always return an object.
-        ArrayList<AprilTagDetection> detections = aprilTagDetectionPipeline.getDetectionsUpdate();
+        ArrayList<AprilTagDetection> detections = aprilTagDetectionPipeline.getLatestDetections();
 
         // If there's been a new frame...
         if (detections != null && detections.size() != 0) {
@@ -102,7 +102,6 @@ public class BeaconDetector {
             if (detections.get(0).id == BeaconTags.LEFT.id) tag = BeaconTags.LEFT;
             else if (detections.get(0).id == BeaconTags.CENTER.id) tag = BeaconTags.CENTER;
             else tag = BeaconTags.RIGHT;
-
         }
 
         return tag;
