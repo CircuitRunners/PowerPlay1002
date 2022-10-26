@@ -9,7 +9,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectoryCommand;
+import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
 @Autonomous
@@ -35,7 +37,17 @@ public class BlueParkAuto extends CommandOpMode {
 
         //Start vision
         beaconDetector.startStream();
-        Trajectory traj1 = drive.trajectoryBuilder(startPose)
+        TrajectorySequence traj1 = drive.trajectorySequenceBuilder(startPose)
+                .forward(40)
+                .turn(toRadians(90))
+                .forward(40)
+                .build();
+        TrajectorySequence traj2 = drive.trajectorySequenceBuilder(startPose)
+                .forward(40)
+                .build();
+        TrajectorySequence traj3 = drive.trajectorySequenceBuilder(startPose)
+                .forward(40)
+                .turn(toRadians(270))
                 .forward(40)
                 .build();
 
@@ -50,7 +62,7 @@ public class BlueParkAuto extends CommandOpMode {
 
         //Actually do stuff
         schedule(
-                new TrajectoryCommand(drive, traj1)
+                new TrajectorySequenceCommand(drive, traj1)
         );
 
     }
