@@ -16,21 +16,15 @@ public class TrajectorySequenceCommand extends CommandBase {
         this.trajectory = trajectory;
     }
 
-//    @Override
-//    public void initialize(){
-//        // Doing nothing here rn
-//    }
+    @Override
+    public void initialize(){
+        drive.followTrajectorySequenceAsync(trajectory);
+    }
 
     @Override
     public void execute(){
-        drive.followTrajectorySequence(trajectory);
+        drive.update();
     }
-
-    /*
-    public void end(boolean inturrupted) {
-        do Things when done
-    }
-     */
 
     @Override
     public boolean isFinished(){

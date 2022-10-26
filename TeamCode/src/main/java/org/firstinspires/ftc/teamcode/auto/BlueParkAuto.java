@@ -38,17 +38,17 @@ public class BlueParkAuto extends CommandOpMode {
         //Start vision
         beaconDetector.startStream();
         TrajectorySequence traj1 = drive.trajectorySequenceBuilder(startPose)
-                .forward(40)
+                .forward(30)
                 .turn(toRadians(90))
-                .forward(40)
+                .forward(20)
                 .build();
         TrajectorySequence traj2 = drive.trajectorySequenceBuilder(startPose)
-                .forward(40)
+                .forward(30)
                 .build();
         TrajectorySequence traj3 = drive.trajectorySequenceBuilder(startPose)
-                .forward(40)
-                .turn(toRadians(270))
-                .forward(40)
+                .forward(30)
+                .turn(toRadians(-90))
+                .forward(20)
                 .build();
 
         while(!isStarted()){
@@ -60,10 +60,19 @@ public class BlueParkAuto extends CommandOpMode {
 
         beaconDetector.stopStream();
 
-        //Actually do stuff
-        schedule(
-                new TrajectorySequenceCommand(drive, traj1)
-        );
+        //Gets much more complex, for now simply siwthc
+        switch(beaconId){
+            case LEFT:
+                schedule(new TrajectorySequenceCommand(drive, traj1));
+                break;
+            case CENTER:
+                schedule(new TrajectorySequenceCommand(drive, traj2));
+                break;
+            case RIGHT:
+                schedule(new TrajectorySequenceCommand(drive, traj3));
+                break;
+        }
+
 
     }
 
