@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
-@Autonomous
+@Autonomous (name="Blue Park")
 public class BlueParkAuto extends CommandOpMode {
 
 
@@ -37,18 +37,14 @@ public class BlueParkAuto extends CommandOpMode {
 
         //Start vision
         beaconDetector.startStream();
-        TrajectorySequence traj1 = drive.trajectorySequenceBuilder(startPose)
-                .forward(30)
-                .turn(toRadians(90))
-                .forward(20)
+        TrajectorySequence leftTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
+                .splineToLinearHeading(new Pose2d((70*2.5/3)-35,(70/3)-57.5, toRadians(-180)), toRadians(0))
                 .build();
-        TrajectorySequence traj2 = drive.trajectorySequenceBuilder(startPose)
-                .forward(30)
+        TrajectorySequence middleTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
+                .forward((70/3)-57.5)
                 .build();
-        TrajectorySequence traj3 = drive.trajectorySequenceBuilder(startPose)
-                .forward(30)
-                .turn(toRadians(-90))
-                .forward(20)
+        TrajectorySequence rightTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
+                .splineToLinearHeading(new Pose2d(-(70*2.5/3)+35,(70/3)-57.5, toRadians(0)), toRadians(180))
                 .build();
 
         while(!isStarted()){
@@ -60,16 +56,16 @@ public class BlueParkAuto extends CommandOpMode {
 
         beaconDetector.stopStream();
 
-        //Gets much more complex, for now simply siwthc
+        //Gets much more complex, for now simply switch
         switch(beaconId){
             case LEFT:
-                schedule(new TrajectorySequenceCommand(drive, traj1));
+                schedule(new TrajectorySequenceCommand(drive, leftTrajectoryAbs));
                 break;
             case CENTER:
-                schedule(new TrajectorySequenceCommand(drive, traj2));
+                schedule(new TrajectorySequenceCommand(drive, middleTrajectoryAbs));
                 break;
             case RIGHT:
-                schedule(new TrajectorySequenceCommand(drive, traj3));
+                schedule(new TrajectorySequenceCommand(drive, rightTrajectoryAbs));
                 break;
         }
 
