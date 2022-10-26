@@ -40,7 +40,7 @@ public class BlueParkAuto extends CommandOpMode {
                 .build();
 
         while(!isStarted()){
-            beaconId = BeaconDetector.BeaconTags.valueOf(beaconDetector.update().toString());
+            beaconId = beaconDetector.update();
             telemetry.addLine("Ready for start!");
             telemetry.addData("Beacon", beaconId);
             telemetry.update();

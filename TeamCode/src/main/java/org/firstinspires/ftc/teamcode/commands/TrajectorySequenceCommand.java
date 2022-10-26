@@ -5,12 +5,12 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
-public class TrajectoryCommand extends CommandBase {
+public class TrajectorySequenceCommand extends CommandBase {
 
     private SampleMecanumDrive drive;
     private Trajectory trajectory;
 
-    public TrajectoryCommand(SampleMecanumDrive drive, Trajectory trajectory){
+    public TrajectorySequenceCommand(SampleMecanumDrive drive, Trajectory trajectory){
         this.drive = drive;
         this.trajectory = trajectory;
     }
