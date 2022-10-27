@@ -52,10 +52,4 @@ public class Lift extends SubsystemBase {
         return getLiftPosition() < 5;
     }
     //@TODO find ticks to inches conversion and add levels.
-
-    public void lowerLimit() {
-        while (atLowerLimit() == false) {
-            liftMotor.setPower(-0.3);
-        }
-    }
 }
