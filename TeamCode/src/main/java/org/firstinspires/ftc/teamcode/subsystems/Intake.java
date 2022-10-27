@@ -44,13 +44,13 @@ public class Intake extends SubsystemBase {
     }
 
     public void openArms(){
-        leftServo.setPosition(0.6);
-        rightServo.setPosition(0.4);
+        leftServo.setPosition(1);
+        rightServo.setPosition(0);
     }
 
     public void closeArms(){
-        leftServo.setPosition(0.4);
-        rightServo.setPosition(0.6);
+        leftServo.setPosition(0.74);
+        rightServo.setPosition(0.3);
     }
     //@TODO add thing that detects whether cone can go in and close or open it based on its dimensions
 
