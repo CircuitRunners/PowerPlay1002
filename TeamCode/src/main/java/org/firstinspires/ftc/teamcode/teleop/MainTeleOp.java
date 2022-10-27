@@ -103,7 +103,7 @@ public class MainTeleOp extends CommandOpMode {
                 .whenInactive(intake::stop);
 
 
-//        //TODO: toggle control for the claw
+        //TODO: toggle control for the claw
         manipulator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .toggleWhenActive(claw::clampClose, claw::clampOpen);
 
@@ -125,9 +125,7 @@ public class MainTeleOp extends CommandOpMode {
         //Run the other functions in the superclass
         super.run();
 
-
         //TODO: Figure out how to control the intake arms
-
         if (gamepad2.dpad_up && !lift.atUpperLimit()) {
             lift.setLiftPower(0.8);
         } else if (gamepad2.dpad_down && !lift.atLowerLimit()) {
