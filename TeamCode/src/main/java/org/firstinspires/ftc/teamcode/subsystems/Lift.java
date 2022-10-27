@@ -11,15 +11,29 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Lift extends SubsystemBase {
 
     private HardwareMap hardwareMap;
-
     private DcMotorEx liftMotor;
+    private double power;
+
+    public final double
+        level1 = 1227,
+        level2 = 2028,
+        level3 = 2988;
 
     public Lift(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
         liftMotor = hardwareMap.get(DcMotorEx.class, "liftMotor");
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    public Lift(HardwareMap hardwareMap, double power) {
+        this.hardwareMap = hardwareMap;
+        liftMotor = hardwareMap.get(DcMotorEx.class, "liftMotor");
+        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftMotor.setPower(power);
     }
 
     @Override
@@ -39,6 +53,10 @@ public class Lift extends SubsystemBase {
         return liftMotor.getCurrentPosition();
     }
 
+    public double pos() {
+        return getLiftPosition();
+    }
+
     public void resetLiftPosition(){
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -54,8 +72,25 @@ public class Lift extends SubsystemBase {
     //@TODO find ticks to inches conversion and add levels.
 
     public void goToLowerLimit() {
-        while (atLowerLimit() == false) {
+        while (!atLowerLimit()) {
             liftMotor.setPower(-0.3);
         }
     }
+
+    public void goToPosition (double ticks, double offset) {
+        while (!((ticks-offset <= pos()) && (pos() <= offset+ticks))) {
+            double c = -1*((pos()/ticks)-1);
+            if (ticks+offset <= pos()) {
+                setLiftPower(-0.3+c);
+            }
+            else if (pos() <= ticks-offset) {
+                setLiftPower(0.3+c);
+            }
+        }
+    }
+    public void goToPosition (int ticks, int tolerance) {
+        liftMotor.setTargetPositionTolerance(tolerance);
+        liftMotor.setTargetPosition(ticks);
+    }
+
 }

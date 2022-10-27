@@ -10,7 +10,6 @@ public class Claw{
     private Servo claw;
 
     //Servos for the linkages
-
     public Claw(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
         //Retrieve servos from the hardware map
@@ -20,6 +19,7 @@ public class Claw{
     public void clampClose(){
         claw.setPosition(1);
     }
+
     public void clampOpen(){
         claw.setPosition(0);
     }

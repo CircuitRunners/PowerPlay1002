@@ -28,7 +28,7 @@ import java.util.List;
 
 @TeleOp
 public class MainTeleOp extends CommandOpMode {
-
+    
     //Drive motors and list to hold them
     private DcMotorEx lf, lb, rf, rb;
     //IMU sensor
@@ -53,7 +53,6 @@ public class MainTeleOp extends CommandOpMode {
         claw = new Claw(hardwareMap);
         lift = new Lift(hardwareMap);
         intake = new Intake(hardwareMap);
-
 
         //Retrieve dt motors from the hardware map
         lf = hardwareMap.get(DcMotorEx.class, "lf");
@@ -81,12 +80,9 @@ public class MainTeleOp extends CommandOpMode {
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
 
-
-        //Commands
-
+        //Controllers
         GamepadEx driver = new GamepadEx(gamepad1);
         GamepadEx manipulator = new GamepadEx(gamepad2);
-
 
         //control to rnu intake whenever the trigger is pressed
         new Trigger(() -> driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
@@ -97,21 +93,23 @@ public class MainTeleOp extends CommandOpMode {
                     intake.stop();
                 });
 
-        //control to outtake whenever Y is pressed (for safety)
-        driver.getGamepadButton(GamepadKeys.Button.Y)
-                .whenActive(intake::outtake)
-                .whenInactive(intake::stop);
+        //control to outtake whenever right trigger is pressed (for safety)
+        new Trigger(() -> driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
+                .whenActive(() -> {
+                    intake.intake();
+                })
+                .whenInactive(() -> {
+                    intake.stop();
+                });
 
 
         //TODO: toggle control for the claw
-        manipulator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+        manipulator.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenActive(claw::clampClose, claw::clampOpen);
 
         //Control the intake arms (manually for now)
         manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .toggleWhenActive(intake::closeArms, intake::openArms);
-
-
 
 
         //Send line to telemetry indicating initialization is done
@@ -125,16 +123,6 @@ public class MainTeleOp extends CommandOpMode {
         //Run the other functions in the superclass
         super.run();
 
-        //TODO: Figure out how to control the intake arms
-        if (gamepad2.dpad_up && !lift.atUpperLimit()) {
-            lift.setLiftPower(0.8);
-        } else if (gamepad2.dpad_down && !lift.atLowerLimit()) {
-            lift.setLiftPower(-0.6);
-        } else {
-            lift.setLiftPower(0.1);
-        }
-
-
         //Read heading and subtract offset, then normalize again
         double heading =
                 imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).thirdAngle;
@@ -142,12 +130,12 @@ public class MainTeleOp extends CommandOpMode {
 
 
         //Reset the zero point for field centric by making the current heading the offset
-        if (gamepad1.x && !prevHeadingReset) {
+        if (gamepad1.back && !prevHeadingReset) {
             headingOffset += heading;
             //Vibrate the gamepad
             gamepad1.rumble(0.0, 1.0, 300);
         }
-        prevHeadingReset = gamepad1.x;
+        prevHeadingReset = gamepad1.back;
 
 
         //Read gamepad joysticks
@@ -155,12 +143,7 @@ public class MainTeleOp extends CommandOpMode {
         double y = (abs(gamepad1.left_stick_y) > 0.02) ? -gamepad1.left_stick_y : 0.0; // Remember, this is reversed!
         double x = (abs(gamepad1.left_stick_x) > 0.02) ? gamepad1.left_stick_x * 1.1 : 0.0; // Counteract imperfect strafing
         double rx = (abs(gamepad1.right_stick_x) > 0.02) ? gamepad1.right_stick_x : 0.0;
-        boolean lockClaw = (gamepad2.y);
-        boolean dropCone = (gamepad2.b);
-        boolean stopLift = (gamepad2.x);
-        boolean level3 = (gamepad2.dpad_up);
-        boolean level2 = (gamepad2.dpad_right);
-        boolean level1 = (gamepad2.dpad_down);
+
         boolean groundLevel = (gamepad2.dpad_left);
 
         //Apply a curve to the inputs
@@ -188,28 +171,29 @@ public class MainTeleOp extends CommandOpMode {
 
         telemetry.addData("Current Heading with offset", "%.2f", AngleUnit.DEGREES.fromRadians(heading));
         telemetry.addData("Offset", "%.2f", AngleUnit.DEGREES.fromRadians(headingOffset));
-        telemetry.addLine("Press A on Gamepad 1 to reset heading");
+        telemetry.addLine("Press \"back\" on Gamepad 1 to reset heading");
         telemetry.update();
 
-        if(lockClaw == true) {
+        // Intake goes brr
+        if (gamepad2.dpad_up) {
+            lift.goToPosition(lift.level3,100);
+        }
+        else if (gamepad2.dpad_right) {
+            lift.goToPosition(lift.level2,100);
+        }
+        else if (gamepad2.dpad_down) {
+            lift.goToPosition(lift.level1,100);
+        }
+
+        if (gamepad2.y) {
             claw.clampClose();
         }
-        if(dropCone == true) {
+        if (gamepad2.b) {
             claw.clampOpen();
             lift.goToLowerLimit();
         }
-        if(stopLift == true){
-            lift.stop();
-        }
-        if(level3 == true){
+        if (gamepad2.x) lift.stop();
 
-        }
-        if(level2 == true){
-
-        }
-        if(level1 == true){
-
-        }
         if(groundLevel == true){
 
         }
