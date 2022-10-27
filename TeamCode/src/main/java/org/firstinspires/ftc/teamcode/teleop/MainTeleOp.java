@@ -159,11 +159,6 @@ public class MainTeleOp extends CommandOpMode {
         double rx = (abs(gamepad1.right_stick_x) > 0.02) ? gamepad1.right_stick_x : 0.0;
         boolean lockClaw = (gamepad2.y);
         boolean dropCone = (gamepad2.b);
-        boolean stopLift = (gamepad2.x);
-        boolean level3 = (gamepad2.dpad_up);
-        boolean level2 = (gamepad2.dpad_right);
-        boolean level1 = (gamepad2.dpad_down);
-        boolean groundLevel = (gamepad2.dpad_left);
 
         //Apply a curve to the inputs
         y = cubeInput(y, 0.2);
@@ -198,24 +193,8 @@ public class MainTeleOp extends CommandOpMode {
         }
         if(dropCone == true) {
             claw.clampOpen();
-            lift.goToLowerLimit();
+            lift.lowerLimit();
         }
-        if(stopLift == true){
-            lift.stop();
-        }
-        if(level3 == true){
-
-        }
-        if(level2 == true){
-
-        }
-        if(level1 == true){
-
-        }
-        if(groundLevel == true){
-
-        }
-
 
     }
 
