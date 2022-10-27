@@ -53,6 +53,8 @@ public class MainTeleOp extends CommandOpMode {
         claw = new Claw(hardwareMap);
         lift = new Lift(hardwareMap);
         intake = new Intake(hardwareMap);
+        claw.clampOpen();
+        intake.closeArms();
 
 
         //Retrieve dt motors from the hardware map
