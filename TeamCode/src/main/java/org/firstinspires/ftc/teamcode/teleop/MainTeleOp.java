@@ -157,6 +157,8 @@ public class MainTeleOp extends CommandOpMode {
         double y = (abs(gamepad1.left_stick_y) > 0.02) ? -gamepad1.left_stick_y : 0.0; // Remember, this is reversed!
         double x = (abs(gamepad1.left_stick_x) > 0.02) ? gamepad1.left_stick_x * 1.1 : 0.0; // Counteract imperfect strafing
         double rx = (abs(gamepad1.right_stick_x) > 0.02) ? gamepad1.right_stick_x : 0.0;
+        boolean lockClaw = (gamepad2.y);
+        boolean dropCone = (gamepad2.b);
 
         //Apply a curve to the inputs
         y = cubeInput(y, 0.2);
@@ -185,6 +187,14 @@ public class MainTeleOp extends CommandOpMode {
         telemetry.addData("Offset", "%.2f", AngleUnit.DEGREES.fromRadians(headingOffset));
         telemetry.addLine("Press A on Gamepad 1 to reset heading");
         telemetry.update();
+
+        if(lockClaw == true) {
+            claw.clampClose();
+        }
+        if(dropCone == true) {
+            claw.clampOpen();
+            lift.lowerLimit();
+        }
 
     }
 
