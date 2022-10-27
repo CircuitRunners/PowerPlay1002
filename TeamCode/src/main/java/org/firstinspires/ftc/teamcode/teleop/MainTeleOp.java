@@ -19,6 +19,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -38,7 +39,7 @@ public class MainTeleOp extends CommandOpMode {
     private Lift lift;
     private Intake intake;
     //Offset variable for resetting heading;
-    private double headingOffset = 0;
+    private double headingOffset = 0, zyx = -1;
     private boolean prevHeadingReset = false;
 
 
@@ -127,26 +128,26 @@ public class MainTeleOp extends CommandOpMode {
         super.run();
 
         //Read heading and subtract offset, then normalize again
-        double heading =
-                imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle;
-
+        Orientation orientation =
+                imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
+        double heading = AngleUnit.normalizeRadians(orientation.firstAngle - headingOffset);
 
         //Reset the zero point for field centric by making the current heading the offset
         if (gamepad1.back && !prevHeadingReset) {
             headingOffset += heading;
             //Vibrate the gamepad
-            gamepad1.rumble(0.0, 1.0, 300);
+            gamepad1.rumble(0.0, 1.0, 800);
         }
         prevHeadingReset = gamepad1.back;
 
 
         //Read gamepad joysticks
         //Check the deadband of the controller
-        double y = (abs(gamepad1.left_stick_y) > 0.02) ? -gamepad1.left_stick_y : 0.0; // Remember, this is reversed!
-        double x = (abs(gamepad1.left_stick_x) > 0.02) ? -gamepad1.left_stick_x * 1.1 : 0.0; // Counteract imperfect strafing
-        double rx = (abs(gamepad1.right_stick_x) > 0.02) ? gamepad1.right_stick_x : 0.0;
+        double y = (abs(gamepad1.left_stick_y) > 0.021) ? -gamepad1.left_stick_y : 0.0; // Remember, this is reversed!
+        double x = (abs(gamepad1.left_stick_x) > 0.023) ? -gamepad1.left_stick_x * 1.1 : 0.0; // Counteract imperfect strafing
+        double rx = (abs(gamepad1.right_stick_x) > 0.021) ? gamepad1.right_stick_x : 0.0;
 
-        boolean groundLevel = (gamepad2.dpad_left);
+//        boolean groundLevel = (gamepad2.dpad_left);
 
         //Apply a curve to the inputs
         y = cubeInput(y, 0.2);
@@ -154,13 +155,14 @@ public class MainTeleOp extends CommandOpMode {
         rx = cubeInput(rx, 0.2);
 
         //Make a vector out of the x and y and rotate it by the heading
-        Vector2d vec = new Vector2d(x, y);
-        vec = vec.rotated(heading - headingOffset);
-        x = vec.getX();
-        y = vec.getY();
+        Vector2d vector = new Vector2d(x, y).rotated(heading*zyx);
+
+        x = vector.getX();
+        y = vector.getY();
 
         //Ensure powers are in the range of [-1, 1] and set power
         double denominator = Math.max(abs(y) + abs(x) + abs(rx), 1.0);
+
         double frontLeftPower = (y + x + rx) / denominator;
         double backLeftPower = (y - x + rx) / denominator;
         double frontRightPower = (y - x - rx) / denominator;
@@ -174,6 +176,7 @@ public class MainTeleOp extends CommandOpMode {
 
         telemetry.addData("Current Heading with offset", "%.2f", AngleUnit.DEGREES.fromRadians(heading));
         telemetry.addData("Offset", "%.2f", AngleUnit.DEGREES.fromRadians(headingOffset));
+        telemetry.addData("heading factor", "%.2f", zyx);
         telemetry.addLine("Press \"back\" on Gamepad 1 to reset heading");
         telemetry.update();
 
@@ -197,11 +200,8 @@ public class MainTeleOp extends CommandOpMode {
         }
         if (gamepad2.x) lift.stop();
 
-        if(groundLevel == true){
-
-        }
-
-
+        // Testing heading logic
+        if (gamepad1.a) zyx*=-1;
     }
 
     private static double cubeInput(double input, double factor) {
