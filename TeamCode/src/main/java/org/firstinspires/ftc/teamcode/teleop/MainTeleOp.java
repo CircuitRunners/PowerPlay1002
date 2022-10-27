@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.toRadians;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -54,7 +55,7 @@ public class MainTeleOp extends CommandOpMode {
         lift = new Lift(hardwareMap);
         intake = new Intake(hardwareMap);
         claw.clampOpen();
-        intake.closeArms();
+//        intake.closeArms();
 
         //Retrieve dt motors from the hardware map
         lf = hardwareMap.get(DcMotorEx.class, "lf");
@@ -110,8 +111,8 @@ public class MainTeleOp extends CommandOpMode {
                 .toggleWhenActive(claw::clampClose, claw::clampOpen);
 
         //Control the intake arms (manually for now)
-        manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .toggleWhenActive(intake::closeArms, intake::openArms);
+//        manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+//                .toggleWhenActive(intake::openArms, intake::closeArms);
 
 
         //Send line to telemetry indicating initialization is done
@@ -127,8 +128,7 @@ public class MainTeleOp extends CommandOpMode {
 
         //Read heading and subtract offset, then normalize again
         double heading =
-                imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).thirdAngle;
-        heading = AngleUnit.normalizeRadians(heading - headingOffset);
+                imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle;
 
 
         //Reset the zero point for field centric by making the current heading the offset
@@ -143,7 +143,7 @@ public class MainTeleOp extends CommandOpMode {
         //Read gamepad joysticks
         //Check the deadband of the controller
         double y = (abs(gamepad1.left_stick_y) > 0.02) ? -gamepad1.left_stick_y : 0.0; // Remember, this is reversed!
-        double x = (abs(gamepad1.left_stick_x) > 0.02) ? gamepad1.left_stick_x * 1.1 : 0.0; // Counteract imperfect strafing
+        double x = (abs(gamepad1.left_stick_x) > 0.02) ? -gamepad1.left_stick_x * 1.1 : 0.0; // Counteract imperfect strafing
         double rx = (abs(gamepad1.right_stick_x) > 0.02) ? gamepad1.right_stick_x : 0.0;
 
         boolean groundLevel = (gamepad2.dpad_left);
@@ -154,7 +154,8 @@ public class MainTeleOp extends CommandOpMode {
         rx = cubeInput(rx, 0.2);
 
         //Make a vector out of the x and y and rotate it by the heading
-        Vector2d vec = new Vector2d(x, y).rotated(-heading);
+        Vector2d vec = new Vector2d(x, y);
+        vec = vec.rotated(heading - headingOffset);
         x = vec.getX();
         y = vec.getY();
 
