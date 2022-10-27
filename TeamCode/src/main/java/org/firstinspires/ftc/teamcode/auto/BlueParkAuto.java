@@ -11,14 +11,16 @@ import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectoryCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
-@Autonomous (name="Blue Park")
+@Autonomous (name="Parking Auto")
 public class BlueParkAuto extends CommandOpMode {
 
 
     private SampleMecanumDrive drive;
+    private Claw claw;
 
 
     private BeaconDetector beaconDetector;
@@ -30,6 +32,7 @@ public class BlueParkAuto extends CommandOpMode {
     public void initialize(){
         schedule(new BulkCacheCommand(hardwareMap));
 
+        claw = new Claw(hardwareMap);
         drive = new SampleMecanumDrive(hardwareMap);
         drive.setPoseEstimate(startPose);
 
@@ -53,7 +56,10 @@ public class BlueParkAuto extends CommandOpMode {
                 .turn(toRadians(90))
                 .build();
 
-        while(!isStarted()){
+        //Close the claw
+        claw.clampClose();
+
+        while(opModeInInit()){
             beaconId = beaconDetector.update();
             telemetry.addLine("Ready for start!");
             telemetry.addData("Beacon", beaconId);

@@ -104,10 +104,14 @@ public class MainTeleOp extends CommandOpMode {
 
 
 //        //TODO: toggle control for the claw
-//        manipulator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-//                .toggleWhenActive(
-//
-//                )
+        manipulator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .toggleWhenActive(claw::clampClose, claw::clampOpen);
+
+        //Control the intake arms (manually for now)
+        manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .toggleWhenActive(intake::closeArms, intake::openArms);
+
+
 
 
         //Send line to telemetry indicating initialization is done
@@ -124,11 +128,11 @@ public class MainTeleOp extends CommandOpMode {
 
         //TODO: Figure out how to control the intake arms
 
-        if (gamepad2.dpad_up && !lift.atUpperLimit()){
+        if (gamepad2.dpad_up && !lift.atUpperLimit()) {
             lift.setLiftPower(0.8);
-        } else if (gamepad2.dpad_down && !lift.atLowerLimit()){
+        } else if (gamepad2.dpad_down && !lift.atLowerLimit()) {
             lift.setLiftPower(-0.6);
-        } else{
+        } else {
             lift.setLiftPower(0.1);
         }
 
