@@ -174,21 +174,25 @@ public class MainTeleOp extends CommandOpMode {
         rf.setPower(frontRightPower);
         rb.setPower(backRightPower);
 
+        telemetry.addLine("Press \"back\" on Gamepad 1 to reset heading");
         telemetry.addData("Current Heading with offset", "%.2f", AngleUnit.DEGREES.fromRadians(heading));
         telemetry.addData("Offset", "%.2f", AngleUnit.DEGREES.fromRadians(headingOffset));
         telemetry.addData("heading factor", "%.2f", zyx);
-        telemetry.addLine("Press \"back\" on Gamepad 1 to reset heading");
+        telemetry.addData("Z deg",AngleUnit.DEGREES.fromRadians(orientation.firstAngle));
+        telemetry.addData("Y deg",AngleUnit.DEGREES.fromRadians(orientation.secondAngle));
+        telemetry.addData("X deg",AngleUnit.DEGREES.fromRadians(orientation.thirdAngle));
+        telemetry.addData("Vector",vector.toString());
         telemetry.update();
 
         // Intake goes brr
         if (gamepad2.dpad_up) {
-            lift.goToPosition(lift.level3,100);
+            lift.goToPosition(lift.level3,25);
         }
         else if (gamepad2.dpad_right) {
-            lift.goToPosition(lift.level2,100);
+            lift.goToPosition(lift.level2,25);
         }
         else if (gamepad2.dpad_down) {
-            lift.goToPosition(lift.level1,100);
+            lift.goToPosition(lift.level1,25);
         }
 
         if (gamepad2.y) {

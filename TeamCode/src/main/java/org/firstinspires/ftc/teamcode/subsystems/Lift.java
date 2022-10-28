@@ -14,6 +14,8 @@ public class Lift extends SubsystemBase {
     private DcMotorEx liftMotor;
     private double power;
 
+    public double ground;
+
     public final double
         level1 = 1227,
         level2 = 2028,
