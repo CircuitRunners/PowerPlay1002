@@ -28,6 +28,7 @@ public class LiftPositionCommand extends CommandBase {
 
         liftController = new PIDFController(coefficients, 0, 0, kStatic);
         liftController.setOutputBounds(-0.5, 1);
+        addRequirements(lift);
     }
 
     @Override
