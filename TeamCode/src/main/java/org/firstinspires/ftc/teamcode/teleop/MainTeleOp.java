@@ -39,7 +39,7 @@ public class MainTeleOp extends CommandOpMode {
     private Lift lift;
     private Intake intake;
     //Offset variable for resetting heading;
-    private double headingOffset = 0;
+    private double headingOffset = toRadians(-90);
     private boolean prevHeadingReset = false;
 
 
@@ -136,7 +136,7 @@ public class MainTeleOp extends CommandOpMode {
             if (gamepad2.dpad_up && !lift.atUpperLimit()) {
                 lift.setLiftPower(1.0);
             } else if (gamepad2.dpad_down && !lift.atLowerLimit()) {
-                lift.setLiftPower(-0.7);
+                lift.setLiftPower(-0.8);
             } else {
                 lift.setLiftPower(0.1);
             }
@@ -146,7 +146,7 @@ public class MainTeleOp extends CommandOpMode {
     //Read heading and subtract offset, then normalize again
     Orientation orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
 
-    double heading = AngleUnit.normalizeRadians(orientation.thirdAngle - headingOffset);
+    double heading = AngleUnit.normalizeRadians(orientation.firstAngle - headingOffset);
 
     //Reset the zero point for field centric by making the current heading the offset
         if(gamepad1.x &&!prevHeadingReset)
@@ -162,33 +162,27 @@ public class MainTeleOp extends CommandOpMode {
     //Read gamepad joysticks
     //Check the deadband of the controller
     double y = (abs(gamepad1.left_stick_y) > 0.02) ? -gamepad1.left_stick_y : 0.0; // Remember, this is reversed!
-    double x = (abs(gamepad1.left_stick_x) > 0.02) ? -gamepad1.left_stick_x * 1.1 : 0.0; // Counteract imperfect strafing
+    double x = (abs(gamepad1.left_stick_x) > 0.02) ? gamepad1.left_stick_x * 1.06 : 0.0; // Counteract imperfect strafing
     double rx = (abs(gamepad1.right_stick_x) > 0.02) ? gamepad1.right_stick_x : 0.0;
 
     //Apply a curve to the inputs
-    y =
+    y = cubeInput(y, 0.3);
 
-    cubeInput(y, 0.2);
+    x = cubeInput(x, 0.3);
 
-    x =
-
-    cubeInput(x, 0.2);
-
-    rx =
-
-    cubeInput(rx, 0.2);
+    rx = cubeInput(rx, 0.3);
 
     //Make a vector out of the x and y and rotate it by the heading
     Vector2d vec = new Vector2d(x, y).rotated(-heading);
-    x =vec.getX();
-    y =vec.getY();
+    x = vec.getX();
+    y = vec.getY();
 
     //Ensure powers are in the range of [-1, 1] and set power
     double denominator = Math.max(abs(y) + abs(x) + abs(rx), 1.0);
-    double frontLeftPower = (y + x + rx) / denominator;
-    double backLeftPower = (y - x + rx) / denominator;
-    double frontRightPower = (y - x - rx) / denominator;
-    double backRightPower = (y + x - rx) / denominator;
+    double frontLeftPower = (y + x + rx) / denominator * 0.8;
+    double backLeftPower = (y - x + rx) / denominator * 0.8;
+    double frontRightPower = (y - x - rx) / denominator * 0.8;
+    double backRightPower = (y + x - rx) / denominator * 0.8;
 
     //Set motor powers
         lf.setPower(frontLeftPower);

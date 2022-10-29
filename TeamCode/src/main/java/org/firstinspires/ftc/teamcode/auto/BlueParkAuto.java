@@ -41,18 +41,18 @@ public class BlueParkAuto extends CommandOpMode {
         //Start vision
         beaconDetector.startStream();
         TrajectorySequence leftTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
-                .forward(-26)
+                .forward(26)
                 .turn(toRadians(90))
-                .forward(-25)
+                .forward(25)
                 .turn(toRadians(-90))
                 .build();
         TrajectorySequence middleTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
-                .forward(-25)
+                .forward(25)
                 .build();
         TrajectorySequence rightTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
-                .forward(-25)
+                .forward(25)
                 .turn(toRadians(-90))
-                .forward(-25)
+                .forward(25)
                 .turn(toRadians(90))
                 .build();
 
