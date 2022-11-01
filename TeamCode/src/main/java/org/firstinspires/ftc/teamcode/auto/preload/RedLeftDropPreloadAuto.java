@@ -22,8 +22,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
-@Autonomous(name = "Blue Right Side Pre-Load")
-public class BlueRightDropPreloadAuto extends CommandOpMode {
+@Autonomous(name = "Red Left Side Pre-Load")
+public class RedLeftDropPreloadAuto extends CommandOpMode {
 
 
     private SampleMecanumDrive drive;

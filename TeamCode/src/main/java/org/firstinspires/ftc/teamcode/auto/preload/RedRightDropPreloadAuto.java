@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
+import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -14,6 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.LiftPositionCommand;
+import org.firstinspires.ftc.teamcode.commands.RetractLiftCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectoryCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -22,7 +24,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
-@Autonomous (name="Red Right Side Pre-Load")
+@Autonomous(name = "Red Right Side Pre-Load")
 public class RedRightDropPreloadAuto extends CommandOpMode {
 
 
@@ -37,7 +39,7 @@ public class RedRightDropPreloadAuto extends CommandOpMode {
     private Pose2d startPose = new Pose2d(0, 0, toRadians(0.0));
 
     @Override
-    public void initialize(){
+    public void initialize() {
         schedule(new BulkCacheCommand(hardwareMap));
 
         drive = new SampleMecanumDrive(hardwareMap);
@@ -61,20 +63,22 @@ public class RedRightDropPreloadAuto extends CommandOpMode {
                 .forward(7)
                 .build();
 
+        Trajectory backFromPole = drive.trajectoryBuilder(forwardToPole.end())
+                .back(7)
+                .build();
+
 
         TrajectorySequence leftTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
-                .forward(26)
-                .turn(toRadians(90))
-                .forward(25)
-                .turn(toRadians(-90))
+                .turn(toRadians(-45))
                 .build();
         TrajectorySequence middleTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
+                .turn(toRadians(-135))
                 .forward(25)
+                .turn(toRadians(90))
                 .build();
         TrajectorySequence rightTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
-                .forward(25)
-                .turn(toRadians(-90))
-                .forward(25)
+                .turn(toRadians(-135))
+                .forward(50)
                 .turn(toRadians(90))
                 .build();
 
@@ -82,7 +86,7 @@ public class RedRightDropPreloadAuto extends CommandOpMode {
         //Start vision
         beaconDetector.startStream();
 
-        while(!isStarted()){
+        while (!isStarted()) {
             beaconId = beaconDetector.update();
             telemetry.addLine("Ready for start!");
             telemetry.addData("Beacon", beaconId);
@@ -100,25 +104,27 @@ public class RedRightDropPreloadAuto extends CommandOpMode {
                 new InstantCommand(() -> lift.setLiftPower(0.1)),
                 new TrajectoryCommand(drive, forwardToPole),
                 new WaitCommand(2000),
-                new InstantCommand(claw::clampOpen)
+                new InstantCommand(claw::clampOpen),
+                new WaitCommand(500),
+                new InstantCommand(claw::clampClose),
+                new TrajectoryCommand(drive, backFromPole),
+                new WaitCommand(500),
+                new RetractLiftCommand(lift, claw),
+                new WaitCommand(500),
+                new SelectCommand(() -> {
+                    switch (beaconId) {
+                        case LEFT:
+                            return new TrajectorySequenceCommand(drive, leftTrajectoryAbs);
+                        case CENTER:
+                            return new TrajectorySequenceCommand(drive, middleTrajectoryAbs);
+                        default:
+                            return new TrajectorySequenceCommand(drive, rightTrajectoryAbs);
+                    }
+                })
         ));
-
-//        //Gets much more complex, for now simply switch
-//        switch(beaconId){
-//            case LEFT:
-//                schedule(new TrajectorySequenceCommand(drive, leftTrajectoryAbs));
-//                break;
-//            case CENTER:
-//                schedule(new TrajectorySequenceCommand(drive, middleTrajectoryAbs));
-//                break;
-//            case RIGHT:
-//                schedule(new TrajectorySequenceCommand(drive, rightTrajectoryAbs));
-//                break;
-//        }
 
 
     }
-
 
 
 }

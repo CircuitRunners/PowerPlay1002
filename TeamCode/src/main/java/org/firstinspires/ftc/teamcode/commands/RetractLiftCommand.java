@@ -15,9 +15,7 @@ public class RetractLiftCommand extends ParallelCommandGroup {
         addCommands(
                 new LiftPositionCommand(lift, 0, 7),
                 new InstantCommand(
-                        () -> {
-                            claw.clampOpen();
-                        }
+                        claw::clampOpen
                 )
         );
     }

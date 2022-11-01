@@ -22,8 +22,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
-@Autonomous(name = "Blue Right Side Pre-Load")
-public class BlueRightDropPreloadAuto extends CommandOpMode {
+@Autonomous(name = "Blue Left Side Pre-Load")
+public class BlueLeftDropPreloadAuto extends CommandOpMode {
 
 
     private SampleMecanumDrive drive;
@@ -50,11 +50,11 @@ public class BlueRightDropPreloadAuto extends CommandOpMode {
 
         TrajectorySequence driveToPole = drive.trajectorySequenceBuilder(startPose)
                 .forward(5)
-                .turn(toRadians(-90))
-                .forward(30)
                 .turn(toRadians(90))
+                .forward(30)
+                .turn(toRadians(-90))
                 .forward(26)
-                .turn(toRadians(-45))
+                .turn(toRadians(45))
                 .build();
 
         Trajectory forwardToPole = drive.trajectoryBuilder(driveToPole.end())
@@ -67,17 +67,17 @@ public class BlueRightDropPreloadAuto extends CommandOpMode {
 
 
         TrajectorySequence leftTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
-                .turn(toRadians(45))
+                .turn(toRadians(-45))
                 .build();
         TrajectorySequence middleTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
-                .turn(toRadians(135))
+                .turn(toRadians(-135))
                 .forward(25)
-                .turn(toRadians(-90))
+                .turn(toRadians(90))
                 .build();
         TrajectorySequence rightTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
-                .turn(toRadians(135))
+                .turn(toRadians(-135))
                 .forward(50)
-                .turn(toRadians(-90))
+                .turn(toRadians(90))
                 .build();
 
 
