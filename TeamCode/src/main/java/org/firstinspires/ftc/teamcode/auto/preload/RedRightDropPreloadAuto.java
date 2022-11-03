@@ -68,20 +68,15 @@ public class RedRightDropPreloadAuto extends CommandOpMode {
                 .build();
 
 
-        TrajectorySequence leftTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
+        TrajectorySequence leftTrajectoryAbs = drive.trajectorySequenceBuilder(backFromPole.end())
                 .turn(toRadians(-45))
                 .build();
-        TrajectorySequence middleTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
-                .turn(toRadians(-135))
-                .forward(25)
-                .turn(toRadians(90))
+        TrajectorySequence middleTrajectoryAbs = drive.trajectorySequenceBuilder(backFromPole.end())
+                .forward(1)
                 .build();
-        TrajectorySequence rightTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
-                .turn(toRadians(-135))
-                .forward(50)
-                .turn(toRadians(90))
+        TrajectorySequence rightTrajectoryAbs = drive.trajectorySequenceBuilder(backFromPole.end())
+                .forward(1)
                 .build();
-
 
         //Start vision
         beaconDetector.startStream();
