@@ -59,23 +59,26 @@ public class RedRightDropPreloadAuto extends CommandOpMode {
                 .turn(toRadians(45))
                 .build();
 
-        Trajectory forwardToPole = drive.trajectoryBuilder(driveToPole.end())
-                .forward(7)
+        TrajectorySequence forwardToPole = drive.trajectorySequenceBuilder(driveToPole.end())
+                .forward(15)
+                .back(4.5)
+                .turn(toRadians(3))
                 .build();
 
-        Trajectory backFromPole = drive.trajectoryBuilder(forwardToPole.end())
+        TrajectorySequence backFromPole = drive.trajectorySequenceBuilder(forwardToPole.end())
                 .back(7)
+                .turn(toRadians(-45))
                 .build();
 
 
         TrajectorySequence leftTrajectoryAbs = drive.trajectorySequenceBuilder(backFromPole.end())
-                .turn(toRadians(-45))
+                .forward(0.1)
                 .build();
         TrajectorySequence middleTrajectoryAbs = drive.trajectorySequenceBuilder(backFromPole.end())
-                .forward(1)
+                .strafeRight(27)
                 .build();
         TrajectorySequence rightTrajectoryAbs = drive.trajectorySequenceBuilder(backFromPole.end())
-                .forward(1)
+                .strafeRight(52)
                 .build();
 
         //Start vision
@@ -94,15 +97,17 @@ public class RedRightDropPreloadAuto extends CommandOpMode {
                 new LiftPositionCommand(lift, 200),
                 new WaitCommand(300),
                 new TrajectorySequenceCommand(drive, driveToPole),
-                new WaitCommand(1000),
+                new WaitCommand(1500),
                 new LiftPositionCommand(lift, 2800),
                 new InstantCommand(() -> lift.setLiftPower(0.1)),
-                new TrajectoryCommand(drive, forwardToPole),
-                new WaitCommand(2000),
+                new TrajectorySequenceCommand(drive, forwardToPole),
+                new WaitCommand(4000),
+                new LiftPositionCommand(lift,2750),
+                new WaitCommand(1000),
                 new InstantCommand(claw::clampOpen),
                 new WaitCommand(500),
                 new InstantCommand(claw::clampClose),
-                new TrajectoryCommand(drive, backFromPole),
+                new TrajectorySequenceCommand(drive, backFromPole),
                 new WaitCommand(500),
                 new RetractLiftCommand(lift, claw),
                 new WaitCommand(500),
