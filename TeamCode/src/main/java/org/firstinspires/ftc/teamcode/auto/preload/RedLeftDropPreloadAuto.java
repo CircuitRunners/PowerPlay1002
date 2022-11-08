@@ -51,35 +51,36 @@ public class RedLeftDropPreloadAuto extends CommandOpMode {
         TrajectorySequence driveToPole = drive.trajectorySequenceBuilder(startPose)
                 .forward(5)
                 .turn(toRadians(-90))
-                .forward(30)
+                .forward(20)
                 .turn(toRadians(90))
-                .forward(26)
-                .turn(toRadians(-45))
+                .forward(25)
+                .turn(toRadians(47))
                 .build();
 
-        Trajectory forwardToPole = drive.trajectoryBuilder(driveToPole.end())
-                .forward(7)
+        TrajectorySequence forwardToPole = drive.trajectorySequenceBuilder(driveToPole.end())
+                .forward(9.5)
                 .build();
 
-        Trajectory backFromPole = drive.trajectoryBuilder(forwardToPole.end())
-                .back(7)
+        TrajectorySequence backFromPole = drive.trajectorySequenceBuilder(forwardToPole.end())
+                .back(9.5)
                 .build();
 
 
-        TrajectorySequence leftTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
-                .turn(toRadians(45))
+        TrajectorySequence leftTrajectoryAbs = drive.trajectorySequenceBuilder(backFromPole.end())
+                .turn(toRadians(-47))
                 .build();
-        TrajectorySequence middleTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
-                .turn(toRadians(135))
+
+        TrajectorySequence middleTrajectoryAbs = drive.trajectorySequenceBuilder(backFromPole.end())
+                .turn(toRadians(43))
                 .forward(25)
                 .turn(toRadians(-90))
                 .build();
-        TrajectorySequence rightTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
-                .turn(toRadians(135))
-                .forward(50)
+
+        TrajectorySequence rightTrajectoryAbs = drive.trajectorySequenceBuilder(backFromPole.end())
+                .turn(toRadians(43))
+                .forward(49)
                 .turn(toRadians(-90))
                 .build();
-
 
         //Start vision
         beaconDetector.startStream();
@@ -97,18 +98,21 @@ public class RedLeftDropPreloadAuto extends CommandOpMode {
                 new LiftPositionCommand(lift, 200),
                 new WaitCommand(300),
                 new TrajectorySequenceCommand(drive, driveToPole),
-                new WaitCommand(1000),
-                new LiftPositionCommand(lift, 2800),
+                new WaitCommand(500),
+                new LiftPositionCommand(lift, 2000),
                 new InstantCommand(() -> lift.setLiftPower(0.1)),
-                new TrajectoryCommand(drive, forwardToPole),
-                new WaitCommand(2000),
+                new TrajectorySequenceCommand(drive, forwardToPole),
+                new WaitCommand(1000),
+                new LiftPositionCommand(lift,1900),
+                new InstantCommand(() -> lift.setLiftPower(0.1)),
+                new WaitCommand(700),
                 new InstantCommand(claw::clampOpen),
                 new WaitCommand(500),
                 new InstantCommand(claw::clampClose),
-                new TrajectoryCommand(drive, backFromPole),
+                new TrajectorySequenceCommand(drive, backFromPole),
                 new WaitCommand(500),
                 new RetractLiftCommand(lift, claw),
-                new WaitCommand(500),
+                new WaitCommand(300),
                 new SelectCommand(() -> {
                     switch (beaconId) {
                         case LEFT:
@@ -120,7 +124,6 @@ public class RedLeftDropPreloadAuto extends CommandOpMode {
                     }
                 })
         ));
-        
 
     }
 

@@ -1,9 +1,8 @@
-package org.firstinspires.ftc.teamcode.auto.preload;
+package org.firstinspires.ftc.teamcode.auto.twocycle;
 
 import static java.lang.Math.toRadians;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
@@ -14,7 +13,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.LiftPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.RetractLiftCommand;
-import org.firstinspires.ftc.teamcode.commands.TrajectoryCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -22,8 +20,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
-@Autonomous(name = "Blue Left Side Pre-Load")
-public class BlueLeftDropPreloadAuto extends CommandOpMode {
+@Autonomous(name = "Blue Left Side Two Cycle")
+public class BlueLeftDropTwoAuto extends CommandOpMode {
 
 
     private SampleMecanumDrive drive;

@@ -1,9 +1,8 @@
-package org.firstinspires.ftc.teamcode.auto.preload;
+package org.firstinspires.ftc.teamcode.auto.twocycle;
 
 import static java.lang.Math.toRadians;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
@@ -14,7 +13,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.LiftPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.RetractLiftCommand;
-import org.firstinspires.ftc.teamcode.commands.TrajectoryCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -22,8 +20,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
-@Autonomous(name = "Blue Left Side Pre-Load")
-public class BlueLeftDropPreloadAuto extends CommandOpMode {
+@Autonomous(name = "Blue Right Side Two Cycle")
+public class BlueRightDropTwoAuto extends CommandOpMode {
 
 
     private SampleMecanumDrive drive;
@@ -48,14 +46,13 @@ public class BlueLeftDropPreloadAuto extends CommandOpMode {
 
         beaconDetector = new BeaconDetector(hardwareMap);
 
-
         TrajectorySequence driveToPole = drive.trajectorySequenceBuilder(startPose)
                 .forward(5)
-                .turn(toRadians(-90))
-                .forward(20)
                 .turn(toRadians(90))
+                .forward(29.5)
+                .turn(toRadians(-90))
                 .forward(25)
-                .turn(toRadians(47))
+                .turn(toRadians(-47))
                 .build();
 
         TrajectorySequence forwardToPole = drive.trajectorySequenceBuilder(driveToPole.end())
@@ -68,20 +65,21 @@ public class BlueLeftDropPreloadAuto extends CommandOpMode {
 
 
         TrajectorySequence leftTrajectoryAbs = drive.trajectorySequenceBuilder(backFromPole.end())
-                .turn(toRadians(-47))
+                .turn(toRadians(47))
                 .build();
 
         TrajectorySequence middleTrajectoryAbs = drive.trajectorySequenceBuilder(backFromPole.end())
-                .turn(toRadians(43))
+                .turn(toRadians(-43))
                 .forward(25)
-                .turn(toRadians(-90))
+                .turn(toRadians(90))
                 .build();
 
         TrajectorySequence rightTrajectoryAbs = drive.trajectorySequenceBuilder(backFromPole.end())
-                .turn(toRadians(43))
+                .turn(toRadians(-43))
                 .forward(49)
-                .turn(toRadians(-90))
+                .turn(toRadians(90))
                 .build();
+
 
         //Start vision
         beaconDetector.startStream();
@@ -125,6 +123,7 @@ public class BlueLeftDropPreloadAuto extends CommandOpMode {
                     }
                 })
         ));
+        
 
     }
 

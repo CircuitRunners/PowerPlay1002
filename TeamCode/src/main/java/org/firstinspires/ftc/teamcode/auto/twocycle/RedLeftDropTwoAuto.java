@@ -1,9 +1,8 @@
-package org.firstinspires.ftc.teamcode.auto.preload;
+package org.firstinspires.ftc.teamcode.auto.twocycle;
 
 import static java.lang.Math.toRadians;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
@@ -14,7 +13,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.LiftPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.RetractLiftCommand;
-import org.firstinspires.ftc.teamcode.commands.TrajectoryCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -22,8 +20,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
-@Autonomous(name = "Blue Left Side Pre-Load")
-public class BlueLeftDropPreloadAuto extends CommandOpMode {
+@Autonomous(name = "Red Left Side Two Cycle")
+public class RedLeftDropTwoAuto extends CommandOpMode {
 
 
     private SampleMecanumDrive drive;
@@ -48,24 +46,29 @@ public class BlueLeftDropPreloadAuto extends CommandOpMode {
 
         beaconDetector = new BeaconDetector(hardwareMap);
 
-
         TrajectorySequence driveToPole = drive.trajectorySequenceBuilder(startPose)
-                .forward(5)
-                .turn(toRadians(-90))
-                .forward(20)
-                .turn(toRadians(90))
-                .forward(25)
-                .turn(toRadians(47))
+                .strafeLeft(6)
+                .forward(28)
+                .turn(toRadians(-46))
                 .build();
 
         TrajectorySequence forwardToPole = drive.trajectorySequenceBuilder(driveToPole.end())
-                .forward(9.5)
+                .forward(9)
                 .build();
 
         TrajectorySequence backFromPole = drive.trajectorySequenceBuilder(forwardToPole.end())
-                .back(9.5)
+                .back(9)
                 .build();
 
+        TrajectorySequence goToStack = drive.trajectorySequenceBuilder(backFromPole.end())
+                .turn(toRadians(46))
+                .forward(25)
+                .turn(toRadians(90))
+                .build();
+
+        TrajectorySequence forwardToStack = drive.trajectorySequenceBuilder(goToStack.end())
+                .forward(20)
+                .build();
 
         TrajectorySequence leftTrajectoryAbs = drive.trajectorySequenceBuilder(backFromPole.end())
                 .turn(toRadians(-47))
@@ -114,16 +117,25 @@ public class BlueLeftDropPreloadAuto extends CommandOpMode {
                 new WaitCommand(500),
                 new RetractLiftCommand(lift, claw),
                 new WaitCommand(300),
-                new SelectCommand(() -> {
-                    switch (beaconId) {
-                        case LEFT:
-                            return new TrajectorySequenceCommand(drive, leftTrajectoryAbs);
-                        case CENTER:
-                            return new TrajectorySequenceCommand(drive, middleTrajectoryAbs);
-                        default:
-                            return new TrajectorySequenceCommand(drive, rightTrajectoryAbs);
-                    }
-                })
+                new TrajectorySequenceCommand(drive, goToStack),
+                new LiftPositionCommand(lift, 1000),
+                new InstantCommand(() -> lift.setLiftPower(0.1)),
+                new TrajectorySequenceCommand(drive, forwardToStack)
+//                new LiftPositionCommand(lift, 900),
+//                new InstantCommand(claw::clampClose),
+//                new LiftPositionCommand(lift, 1000),
+//                new InstantCommand(() -> lift.setLiftPower(0.1)),
+//
+//                new SelectCommand(() -> {
+//                    switch (beaconId) {
+//                        case LEFT:
+//                            return new TrajectorySequenceCommand(drive, leftTrajectoryAbs);
+//                        case CENTER:
+//                            return new TrajectorySequenceCommand(drive, middleTrajectoryAbs);
+//                        default:
+//                            return new TrajectorySequenceCommand(drive, rightTrajectoryAbs);
+//                    }
+//                })
         ));
 
     }
