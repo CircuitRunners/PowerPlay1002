@@ -5,6 +5,7 @@ import static java.lang.Math.toRadians;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -48,7 +49,8 @@ public class RedLeftDropTwoAuto extends CommandOpMode {
 
         TrajectorySequence driveToPole = drive.trajectorySequenceBuilder(startPose)
                 .strafeLeft(6)
-                .forward(28)
+                .forward(34)
+                .back(6)
                 .turn(toRadians(-46))
                 .build();
 
@@ -61,30 +63,43 @@ public class RedLeftDropTwoAuto extends CommandOpMode {
                 .build();
 
         TrajectorySequence goToStack = drive.trajectorySequenceBuilder(backFromPole.end())
-                .turn(toRadians(46))
-                .forward(25)
+                .turn(toRadians(45))
+                .forward(33)
+                .back(8)
                 .turn(toRadians(90))
                 .build();
 
         TrajectorySequence forwardToStack = drive.trajectorySequenceBuilder(goToStack.end())
+                .forward(23.6)
+                .build();
+
+        TrajectorySequence backFromStack = drive.trajectorySequenceBuilder((forwardToStack.end()))
+                .back(24)
+                .turn(toRadians(135))
+                .build();
+
+        TrajectorySequence secondForwardToPole = drive.trajectorySequenceBuilder(backFromStack.end())
+                .forward(8)
+                .build();
+
+        TrajectorySequence secondBackFromPole = drive.trajectorySequenceBuilder(secondForwardToPole.end())
+                .back(8)
+                .turn(toRadians(-45))
                 .forward(20)
                 .build();
 
-        TrajectorySequence leftTrajectoryAbs = drive.trajectorySequenceBuilder(backFromPole.end())
-                .turn(toRadians(-47))
+        TrajectorySequence leftTrajectoryAbs = drive.trajectorySequenceBuilder(secondBackFromPole.end())
+                .strafeRight(20)
                 .build();
 
-        TrajectorySequence middleTrajectoryAbs = drive.trajectorySequenceBuilder(backFromPole.end())
-                .turn(toRadians(43))
-                .forward(25)
-                .turn(toRadians(-90))
+        TrajectorySequence middleTrajectoryAbs = drive.trajectorySequenceBuilder(secondBackFromPole.end())
+                .strafeLeft(20)
                 .build();
 
-        TrajectorySequence rightTrajectoryAbs = drive.trajectorySequenceBuilder(backFromPole.end())
-                .turn(toRadians(43))
-                .forward(49)
-                .turn(toRadians(-90))
+        TrajectorySequence rightTrajectoryAbs = drive.trajectorySequenceBuilder(secondBackFromPole.end())
+                .strafeLeft(20)
                 .build();
+
 
         //Start vision
         beaconDetector.startStream();
@@ -99,7 +114,7 @@ public class RedLeftDropTwoAuto extends CommandOpMode {
         beaconDetector.stopStream();
 
         schedule(new SequentialCommandGroup(
-                new LiftPositionCommand(lift, 200),
+                new LiftPositionCommand(lift, 600),
                 new WaitCommand(300),
                 new TrajectorySequenceCommand(drive, driveToPole),
                 new WaitCommand(500),
@@ -120,22 +135,42 @@ public class RedLeftDropTwoAuto extends CommandOpMode {
                 new TrajectorySequenceCommand(drive, goToStack),
                 new LiftPositionCommand(lift, 1000),
                 new InstantCommand(() -> lift.setLiftPower(0.1)),
-                new TrajectorySequenceCommand(drive, forwardToStack)
-//                new LiftPositionCommand(lift, 900),
-//                new InstantCommand(claw::clampClose),
-//                new LiftPositionCommand(lift, 1000),
-//                new InstantCommand(() -> lift.setLiftPower(0.1)),
-//
-//                new SelectCommand(() -> {
-//                    switch (beaconId) {
-//                        case LEFT:
-//                            return new TrajectorySequenceCommand(drive, leftTrajectoryAbs);
-//                        case CENTER:
-//                            return new TrajectorySequenceCommand(drive, middleTrajectoryAbs);
-//                        default:
-//                            return new TrajectorySequenceCommand(drive, rightTrajectoryAbs);
-//                    }
-//                })
+                new TrajectorySequenceCommand(drive, forwardToStack),
+                new LiftPositionCommand(lift, 415),
+                new WaitCommand(200),
+                new InstantCommand(() -> lift.setLiftPower(0.1)),
+                new InstantCommand(claw::clampClose),
+                new WaitCommand(400),
+                new LiftPositionCommand(lift, 1000),
+                new InstantCommand(() -> lift.setLiftPower(0.1)),
+                new ParallelCommandGroup(
+                        new TrajectorySequenceCommand(drive, backFromStack),
+                        new SequentialCommandGroup(
+                                new LiftPositionCommand(lift,2000),
+                                new InstantCommand(() -> lift.setLiftPower(0.1))
+                        )
+                ),
+                new TrajectorySequenceCommand(drive, secondForwardToPole),
+                new LiftPositionCommand(lift,1900),
+                new InstantCommand(() -> lift.setLiftPower(0.1)),
+                new WaitCommand(700),
+                new InstantCommand(claw::clampOpen),
+                new WaitCommand(500),
+                new InstantCommand(claw::clampClose),
+                new ParallelCommandGroup(
+                        new TrajectorySequenceCommand(drive, secondBackFromPole),
+                        new RetractLiftCommand(lift, claw)
+                ),
+                new SelectCommand(() -> {
+                    switch (beaconId) {
+                        case LEFT:
+                            return new TrajectorySequenceCommand(drive, leftTrajectoryAbs);
+                        case RIGHT:
+                            return new TrajectorySequenceCommand(drive, rightTrajectoryAbs);
+                        default:
+                            return new TrajectorySequenceCommand(drive, middleTrajectoryAbs);
+                    }
+                })
         ));
 
     }
