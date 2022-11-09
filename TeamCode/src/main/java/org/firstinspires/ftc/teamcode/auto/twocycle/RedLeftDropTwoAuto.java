@@ -49,8 +49,8 @@ public class RedLeftDropTwoAuto extends CommandOpMode {
 
         TrajectorySequence driveToPole = drive.trajectorySequenceBuilder(startPose)
                 .strafeLeft(6)
-                .forward(34)
-                .back(6)
+                .forward(28)
+//                .back(6)
                 .turn(toRadians(-46))
                 .build();
 
@@ -64,13 +64,13 @@ public class RedLeftDropTwoAuto extends CommandOpMode {
 
         TrajectorySequence goToStack = drive.trajectorySequenceBuilder(backFromPole.end())
                 .turn(toRadians(45))
-                .forward(33)
-                .back(8)
+                .forward(24)
+//                .back(6.5)
                 .turn(toRadians(90))
                 .build();
 
         TrajectorySequence forwardToStack = drive.trajectorySequenceBuilder(goToStack.end())
-                .forward(23.6)
+                .forward(241)
                 .build();
 
         TrajectorySequence backFromStack = drive.trajectorySequenceBuilder((forwardToStack.end()))
@@ -79,25 +79,25 @@ public class RedLeftDropTwoAuto extends CommandOpMode {
                 .build();
 
         TrajectorySequence secondForwardToPole = drive.trajectorySequenceBuilder(backFromStack.end())
-                .forward(8)
+                .forward(8.5)
                 .build();
 
         TrajectorySequence secondBackFromPole = drive.trajectorySequenceBuilder(secondForwardToPole.end())
                 .back(8)
                 .turn(toRadians(-45))
-                .forward(20)
+                .forward(24)
                 .build();
 
         TrajectorySequence leftTrajectoryAbs = drive.trajectorySequenceBuilder(secondBackFromPole.end())
-                .strafeRight(20)
+                .strafeRight(25)
                 .build();
 
         TrajectorySequence middleTrajectoryAbs = drive.trajectorySequenceBuilder(secondBackFromPole.end())
-                .strafeLeft(20)
+                .forward(1)
                 .build();
 
         TrajectorySequence rightTrajectoryAbs = drive.trajectorySequenceBuilder(secondBackFromPole.end())
-                .strafeLeft(20)
+                .strafeLeft(25)
                 .build();
 
 
@@ -115,30 +115,31 @@ public class RedLeftDropTwoAuto extends CommandOpMode {
 
         schedule(new SequentialCommandGroup(
                 new LiftPositionCommand(lift, 600),
-                new WaitCommand(300),
+                new WaitCommand(200),
                 new TrajectorySequenceCommand(drive, driveToPole),
-                new WaitCommand(500),
+                new WaitCommand(300),
                 new LiftPositionCommand(lift, 2000),
                 new InstantCommand(() -> lift.setLiftPower(0.1)),
                 new TrajectorySequenceCommand(drive, forwardToPole),
-                new WaitCommand(1000),
+                new WaitCommand(500),
                 new LiftPositionCommand(lift,1900),
                 new InstantCommand(() -> lift.setLiftPower(0.1)),
-                new WaitCommand(700),
+                new WaitCommand(300),
                 new InstantCommand(claw::clampOpen),
                 new WaitCommand(500),
                 new InstantCommand(claw::clampClose),
                 new TrajectorySequenceCommand(drive, backFromPole),
                 new WaitCommand(500),
-                new RetractLiftCommand(lift, claw),
-                new WaitCommand(300),
-                new TrajectorySequenceCommand(drive, goToStack),
+                new ParallelCommandGroup(
+                        new RetractLiftCommand(lift, claw),
+                        new TrajectorySequenceCommand(drive, goToStack)
+                ),
                 new LiftPositionCommand(lift, 1000),
                 new InstantCommand(() -> lift.setLiftPower(0.1)),
                 new TrajectorySequenceCommand(drive, forwardToStack),
-                new LiftPositionCommand(lift, 415),
-                new WaitCommand(200),
+                new LiftPositionCommand(lift, 420),
                 new InstantCommand(() -> lift.setLiftPower(0.1)),
+                new WaitCommand(200),
                 new InstantCommand(claw::clampClose),
                 new WaitCommand(400),
                 new LiftPositionCommand(lift, 1000),
@@ -153,7 +154,7 @@ public class RedLeftDropTwoAuto extends CommandOpMode {
                 new TrajectorySequenceCommand(drive, secondForwardToPole),
                 new LiftPositionCommand(lift,1900),
                 new InstantCommand(() -> lift.setLiftPower(0.1)),
-                new WaitCommand(700),
+                new WaitCommand(500),
                 new InstantCommand(claw::clampOpen),
                 new WaitCommand(500),
                 new InstantCommand(claw::clampClose),
