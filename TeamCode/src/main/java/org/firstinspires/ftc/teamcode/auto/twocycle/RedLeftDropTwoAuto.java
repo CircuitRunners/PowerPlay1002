@@ -70,7 +70,7 @@ public class RedLeftDropTwoAuto extends CommandOpMode {
                 .build();
 
         TrajectorySequence forwardToStack = drive.trajectorySequenceBuilder(goToStack.end())
-                .forward(241)
+                .forward(24.1)
                 .build();
 
         TrajectorySequence backFromStack = drive.trajectorySequenceBuilder((forwardToStack.end()))
