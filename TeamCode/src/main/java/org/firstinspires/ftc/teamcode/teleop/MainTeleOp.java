@@ -167,9 +167,7 @@ public class MainTeleOp extends CommandOpMode {
 
     //Apply a curve to the inputs
     y = cubeInput(y, 0.3);
-
     x = cubeInput(x, 0.3);
-
     rx = cubeInput(rx, 0.3);
 
     //Make a vector out of the x and y and rotate it by the heading
@@ -179,10 +177,10 @@ public class MainTeleOp extends CommandOpMode {
 
     //Ensure powers are in the range of [-1, 1] and set power
     double denominator = Math.max(abs(y) + abs(x) + abs(rx), 1.0);
-    double frontLeftPower = (y + x + rx) / denominator * 0.8;
-    double backLeftPower = (y - x + rx) / denominator * 0.8;
-    double frontRightPower = (y - x - rx) / denominator * 0.8;
-    double backRightPower = (y + x - rx) / denominator * 0.8;
+    double frontLeftPower = (y + x + rx) / denominator * 0.9;
+    double backLeftPower = (y - x + rx) / denominator * 0.9;
+    double frontRightPower = (y - x - rx) / denominator * 0.9;
+    double backRightPower = (y + x - rx) / denominator * 0.9;
 
     //Set motor powers
         lf.setPower(frontLeftPower);
