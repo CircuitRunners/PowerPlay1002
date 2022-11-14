@@ -127,7 +127,7 @@ public class MainTeleOp extends CommandOpMode {
 
 
         if (gamepad2.triangle) {
-            if(gamepad2.dpad_down) lift.setLiftPower(-0.2);
+            if(gamepad2.dpad_down) lift.setLiftPower(-0.3);
             else {
                 lift.setLiftPower(0);
                 lift.resetLiftPosition();
@@ -136,7 +136,7 @@ public class MainTeleOp extends CommandOpMode {
             if (gamepad2.dpad_up && !lift.atUpperLimit()) {
                 lift.setLiftPower((gamepad2.square) ? 0.5 : 1.0);
             } else if (gamepad2.dpad_down && !lift.atLowerLimit()) {
-                lift.setLiftPower((gamepad2.square) ? -0.4 : -0.8);
+                lift.setLiftPower((gamepad2.square) ? -0.5 : -1.0);
             } else {
                 lift.setLiftPower(0.1);
             }

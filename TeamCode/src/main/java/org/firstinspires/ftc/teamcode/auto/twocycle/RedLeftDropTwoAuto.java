@@ -147,6 +147,7 @@ public class RedLeftDropTwoAuto extends CommandOpMode {
                 new ParallelCommandGroup(
                         new TrajectorySequenceCommand(drive, backFromStack),
                         new SequentialCommandGroup(
+                                new WaitCommand(300),
                                 new LiftPositionCommand(lift,2000),
                                 new InstantCommand(() -> lift.setLiftPower(0.1))
                         )

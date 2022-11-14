@@ -1,15 +1,17 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
 
+@Config
 public class LiftPositionCommand extends CommandBase {
 
     private PIDFController liftController;
-    private PIDCoefficients coefficients = new PIDCoefficients(0.05, 0, 0);
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.0335, 0, 0.00025);
     private double kStatic = 0.1; //gravity
     private double tolerance;
     private final Lift lift;

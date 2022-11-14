@@ -50,9 +50,9 @@ public class BlueLeftDropTwoAuto extends CommandOpMode {
 
         TrajectorySequence driveToPole = drive.trajectorySequenceBuilder(startPose)
                 .strafeLeft(6)
-                .forward(28)
+                .forward(26)
 //                .back(6)
-                .turn(toRadians(-46))
+                .turn(toRadians(-45))
                 .build();
 
         TrajectorySequence forwardToPole = drive.trajectorySequenceBuilder(driveToPole.end())
@@ -132,6 +132,7 @@ public class BlueLeftDropTwoAuto extends CommandOpMode {
                 new TrajectorySequenceCommand(drive, backFromPole),
                 new WaitCommand(500),
                 new ParallelCommandGroup(
+                        new WaitCommand(300),
                         new RetractLiftCommand(lift, claw),
                         new TrajectorySequenceCommand(drive, goToStack)
                 ),

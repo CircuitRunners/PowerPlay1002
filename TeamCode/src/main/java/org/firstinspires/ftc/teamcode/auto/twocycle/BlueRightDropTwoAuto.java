@@ -50,9 +50,9 @@ public class BlueRightDropTwoAuto extends CommandOpMode {
 
         TrajectorySequence driveToPole = drive.trajectorySequenceBuilder(startPose)
                 .strafeLeft(6)
-                .forward(28)
+                .forward(30)
 //                .back(6)
-                .turn(toRadians(-46))
+                .turn(toRadians(45))
                 .build();
 
         TrajectorySequence forwardToPole = drive.trajectorySequenceBuilder(driveToPole.end())
@@ -60,32 +60,32 @@ public class BlueRightDropTwoAuto extends CommandOpMode {
                 .build();
 
         TrajectorySequence backFromPole = drive.trajectorySequenceBuilder(forwardToPole.end())
-                .back(9)
+                .back(10)
                 .build();
 
         TrajectorySequence goToStack = drive.trajectorySequenceBuilder(backFromPole.end())
-                .turn(toRadians(45))
+                .turn(toRadians(-45))
                 .forward(24)
 //                .back(6.5)
-                .turn(toRadians(90))
+                .turn(toRadians(-90))
                 .build();
 
         TrajectorySequence forwardToStack = drive.trajectorySequenceBuilder(goToStack.end())
-                .forward(24.1)
+                .forward(25.5)
                 .build();
 
         TrajectorySequence backFromStack = drive.trajectorySequenceBuilder((forwardToStack.end()))
-                .back(24)
-                .turn(toRadians(135))
+                .back(27.5)
+                .turn(toRadians(-135))
                 .build();
 
         TrajectorySequence secondForwardToPole = drive.trajectorySequenceBuilder(backFromStack.end())
-                .forward(8.5)
+                .forward(10)
                 .build();
 
         TrajectorySequence secondBackFromPole = drive.trajectorySequenceBuilder(secondForwardToPole.end())
                 .back(8)
-                .turn(toRadians(-45))
+                .turn(toRadians(45))
                 .forward(24)
                 .build();
 
@@ -138,16 +138,17 @@ public class BlueRightDropTwoAuto extends CommandOpMode {
                 new LiftPositionCommand(lift, 1000),
                 new InstantCommand(() -> lift.setLiftPower(0.1)),
                 new TrajectorySequenceCommand(drive, forwardToStack),
-                new LiftPositionCommand(lift, 420),
+                new LiftPositionCommand(lift, 425),
                 new InstantCommand(() -> lift.setLiftPower(0.1)),
                 new WaitCommand(200),
                 new InstantCommand(claw::clampClose),
                 new WaitCommand(400),
-                new LiftPositionCommand(lift, 1000),
+                new LiftPositionCommand(lift, 1050),
                 new InstantCommand(() -> lift.setLiftPower(0.1)),
                 new ParallelCommandGroup(
                         new TrajectorySequenceCommand(drive, backFromStack),
                         new SequentialCommandGroup(
+                                new WaitCommand(300),
                                 new LiftPositionCommand(lift,2000),
                                 new InstantCommand(() -> lift.setLiftPower(0.1))
                         )
@@ -161,7 +162,10 @@ public class BlueRightDropTwoAuto extends CommandOpMode {
                 new InstantCommand(claw::clampClose),
                 new ParallelCommandGroup(
                         new TrajectorySequenceCommand(drive, secondBackFromPole),
-                        new RetractLiftCommand(lift, claw)
+                        new SequentialCommandGroup(
+                                new WaitCommand(800),
+                                new RetractLiftCommand(lift, claw)
+                        )
                 ),
                 new SelectCommand(() -> {
                     switch (beaconId) {
