@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
-
+@Disabled
 @Autonomous(name = "Red Right Side Pre-Load")
 public class RedRightDropPreloadAuto extends CommandOpMode {
 
