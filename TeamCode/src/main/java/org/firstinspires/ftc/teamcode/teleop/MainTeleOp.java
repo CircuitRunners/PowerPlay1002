@@ -184,7 +184,7 @@ public class MainTeleOp extends CommandOpMode {
 
         //Set motor powers
 
-        driveBase.setMotorPowers(Arrays.asList(frontLeftPower, backLeftPower, frontRightPower, backRightPower));
+        driveBase.setMotorPowers(new Double[] {frontLeftPower, backLeftPower, frontRightPower, backRightPower});
 
 //        lf.setPower(frontLeftPower);
 //        lb.setPower(backLeftPower);

@@ -41,13 +41,17 @@ class DriveBase(hardwareMap: HardwareMap): SubsystemBase() {
      * Array in the order of lf, lb, rf, rb.
      *
      */
-    fun setMotorPowers(powers: List<Double>){
+    fun setMotorPowers(powers: Array<Double>){
         for(i in 0..4){
             if(abs(powers[i] - previousPowers[i]) >= minChange){
                 motorList[i].power = powers[i]
                 previousPowers[i] = powers[i]
             }
         }
+    }
+
+    fun stop(){
+        setMotorPowers(arrayOf(0.0, 0.0, 0.0, 0.0))
     }
 
 
