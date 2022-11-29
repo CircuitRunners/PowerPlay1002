@@ -20,8 +20,8 @@ public class MeepMeepTesting {
                 .setConstraints(40, 40, toRadians(220), toRadians(220), 11.78)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(37, -63, toRadians(90)))
-                                .splineTo(new Vector2d(36, -40), toRadians(94))
-                                .splineTo(new Vector2d(30, -30), toRadians(135))
+                                .splineTo(new Vector2d(36, -11.7), toRadians(94))
+                                .splineTo(new Vector2d(36, -30), toRadians(135))
                                 .waitSeconds(2) //drop preload
                                 .back(10)
                                 .lineToLinearHeading(new Pose2d(37, -11.7, toRadians(0))) //to stack
