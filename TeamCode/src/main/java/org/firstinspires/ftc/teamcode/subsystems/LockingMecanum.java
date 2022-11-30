@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class LockingMecanum extends SubsystemBase {
 
-    private HardwareMap hardwareMap;
 
     //Servos for the linkages
     private Servo leftLinkage;
@@ -14,14 +13,11 @@ public class LockingMecanum extends SubsystemBase {
 
 
     public LockingMecanum(HardwareMap hardwareMap){
-        this.hardwareMap = hardwareMap;
-    }
+        leftLinkage = hardwareMap.get(Servo.class, "leftLmec");
+        rightLinkage = hardwareMap.get(Servo.class, "rightLmec");
 
-    public void init() {
-        //@TODO is the check for position necessary or should it set the position to 0 everytime regardless?
-        if (leftLinkage.getPosition()!=0){
-            leftLinkage.setPosition(0);
-        }
+        unlock();
+
     }
 
     //Move servos to lock wheels

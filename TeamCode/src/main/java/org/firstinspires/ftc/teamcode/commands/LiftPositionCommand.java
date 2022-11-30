@@ -14,6 +14,7 @@ public class LiftPositionCommand extends CommandBase {
     public static PIDCoefficients coefficients = new PIDCoefficients(0.0335, 0, 0.00025);
 //    private double kStatic = 0.1; //gravity
     private double tolerance;
+    private boolean holdAtEnd = false;
     private final Lift lift;
     private final double targetPosition;
 
@@ -23,6 +24,11 @@ public class LiftPositionCommand extends CommandBase {
         this(lift, targetPosition, 10);
     }
 
+    public LiftPositionCommand(Lift lift, double targetPosition, boolean holdAtEnd){
+        this(lift, targetPosition, 10);
+        this.holdAtEnd = holdAtEnd;
+    }
+
     public LiftPositionCommand(Lift lift, double targetPosition, double tolerance){
         this.lift = lift;
         this.tolerance = tolerance;
@@ -30,7 +36,6 @@ public class LiftPositionCommand extends CommandBase {
 
         liftController = new PIDFController(coefficients);
         liftController.setOutputBounds(-0.8, 1);
-        addRequirements(lift);
     }
 
     @Override
@@ -57,7 +62,8 @@ public class LiftPositionCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted){
-        lift.stop();
+        if(holdAtEnd) lift.setLiftPower(0.1);
+        else lift.stop();
     }
 
 }

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.autocommands;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -16,32 +17,30 @@ public class DropPreloadCommand extends ParallelCommandGroup {
 
     // make trajectories static so .end
 
-    public static TrajectorySequence redTrajectory;
-    public static TrajectorySequence blueTrajectory;
-
     private SampleMecanumDrive drive;
     private Lift lift;
     private Claw claw;
 
-    public DropPreloadCommand(SampleMecanumDrive drive, Lift lift, Claw claw, boolean isRed){
+    public DropPreloadCommand(SampleMecanumDrive drive, Lift lift, Claw claw, boolean isRed) {
         this.drive = drive;
         this.lift = lift;
         this.claw = claw;
 
 
-
         addCommands(
-                new TrajectorySequenceCommand(drive, isRed ? redTrajectory : blueTrajectory),
-                new LiftPositionCommand(lift, 600),
+                new TrajectorySequenceCommand(
+                        drive, isRed ? ThreeCycleTrajectories.redPreloadToPole : ThreeCycleTrajectories.bluePreloadToPole
+                ),
+                new LiftPositionCommand(lift, 600, true),
                 new SequentialCommandGroup(
+                        new WaitCommand(1500),
+                        new LiftPositionCommand(lift, 2000, true),
                         new WaitCommand(1000),
-                        // Do things here yay!
+                        new LiftPositionCommand(lift, 1900, true),
+                        new InstantCommand(claw::clampOpen)
                 )
-
-
         );
     }
-
 
 
 }
