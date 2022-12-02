@@ -20,7 +20,13 @@ public class MeepMeepTesting {
                 .setConstraints(40, 40, toRadians(220), toRadians(220), 11.78)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(37, -63, toRadians(90)))
-                                .splineTo(new Vector2d(36, -11.7), toRadians(94))
+                                .splineTo(new Vector2d(36, -10), toRadians(94))
+                                .setReversed(true)
+                                .splineTo(new Vector2d(36, -14.7), toRadians(-94))
+//                                .setReversed(false)
+//                                .waitSeconds(20)
+                                .splineToSplineHeading(new Pose2d(36,-16, toRadians(270)), toRadians(90))
+                                .waitSeconds(20)
                                 .splineTo(new Vector2d(36, -30), toRadians(135))
                                 .waitSeconds(2) //drop preload
                                 .back(10)

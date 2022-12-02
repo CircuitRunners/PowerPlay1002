@@ -82,7 +82,7 @@ public class MeepMeepTestingRyan {
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 .addEntity(redBot)
-                .addEntity(blueBot)
+//                .addEntity(blueBot)
                 .start();
     }
 }
