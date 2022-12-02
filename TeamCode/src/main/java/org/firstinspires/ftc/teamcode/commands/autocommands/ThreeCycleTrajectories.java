@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class ThreeCycleTrajectories {
 
 
-    public static final Pose2d redStartingPosition = new Pose2d(37, -63, toRadians(90));
+    public static final Pose2d redStartingPosition = new Pose2d(37, -58, toRadians(90));
     public static final Pose2d blueStartingPosition = new Pose2d(-37, 63, toRadians(-90));
 
     public static final Pose2d redDropPosition =

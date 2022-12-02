@@ -31,6 +31,7 @@ public class RedThreeCycleAuto extends CommandOpMode {
         claw = new Claw(hardwareMap);
         lift = new Lift(hardwareMap);
         drive.setPoseEstimate(ThreeCycleTrajectories.redStartingPosition);
+        ThreeCycleTrajectories.generateTrajectories(drive);
 
         claw.clampClose();
 
