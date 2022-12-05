@@ -54,30 +54,30 @@ public class MainTeleOp extends CommandOpMode {
         claw = new Claw(hardwareMap);
         lift = new Lift(hardwareMap);
         intake = new Intake(hardwareMap);
-        driveBase = new DriveBase(hardwareMap);
+//        driveBase = new DriveBase(hardwareMap);
         claw.clampOpen();
 //        intake.closeArms();
 
 
 //        //Retrieve dt motors from the hardware map
-//        lf = hardwareMap.get(DcMotorEx.class, "lf");
-//        lb = hardwareMap.get(DcMotorEx.class, "lb");
-//        rf = hardwareMap.get(DcMotorEx.class, "rf");
-//        rb = hardwareMap.get(DcMotorEx.class, "rb");
-//
-//        //Add all the dt motors to the list
-//        List<DcMotorEx> motors = Arrays.asList(lf, lb, rf, rb);
-//
-//        for (DcMotorEx motor : motors) {
-//            //Set the zero power behavior to brake
-//            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//            //Ensure all motors are set to no encoders
-//            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        }
-//
-//        //Reverse left side motors
-//        lf.setDirection(DcMotorSimple.Direction.REVERSE);
-//        lb.setDirection(DcMotorSimple.Direction.REVERSE);
+        lf = hardwareMap.get(DcMotorEx.class, "lf");
+        lb = hardwareMap.get(DcMotorEx.class, "lb");
+        rf = hardwareMap.get(DcMotorEx.class, "rf");
+        rb = hardwareMap.get(DcMotorEx.class, "rb");
+
+        //Add all the dt motors to the list
+        List<DcMotorEx> motors = Arrays.asList(lf, lb, rf, rb);
+
+        for (DcMotorEx motor : motors) {
+            //Set the zero power behavior to brake
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            //Ensure all motors are set to no encoders
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+
+        //Reverse left side motors
+        lf.setDirection(DcMotorSimple.Direction.REVERSE);
+        lb.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //Initialize imu
         imu = hardwareMap.get(BNO055IMU.class, "imu 1");
@@ -177,19 +177,19 @@ public class MainTeleOp extends CommandOpMode {
 
         //Ensure powers are in the range of [-1, 1] and set power
         double denominator = Math.max(abs(y) + abs(x) + abs(rx), 1.0);
-        double frontLeftPower = (y + x + rx) / denominator * 0.9;
-        double backLeftPower = (y - x + rx) / denominator * 0.9;
-        double frontRightPower = (y - x - rx) / denominator * 0.9;
-        double backRightPower = (y + x - rx) / denominator * 0.9;
+        double frontLeftPower = (y + x + rx) / denominator;
+        double backLeftPower = (y - x + rx) / denominator;
+        double frontRightPower = (y - x - rx) / denominator;
+        double backRightPower = (y + x - rx) / denominator;
 
         //Set motor powers
 
-        driveBase.setMotorPowers(new Double[] {frontLeftPower, backLeftPower, frontRightPower, backRightPower});
+//        driveBase.setMotorPowers(new Double[] {frontLeftPower, backLeftPower, frontRightPower, backRightPower});
 
-//        lf.setPower(frontLeftPower);
-//        lb.setPower(backLeftPower);
-//        rf.setPower(frontRightPower);
-//        rb.setPower(backRightPower);
+        lf.setPower(frontLeftPower);
+        lb.setPower(backLeftPower);
+        rf.setPower(frontRightPower);
+        rb.setPower(backRightPower);
 
         telemetry.addData("Current Heading with offset", "%.2f", AngleUnit.DEGREES.fromRadians(heading));
         telemetry.addData("Offset", "%.2f", AngleUnit.DEGREES.fromRadians(headingOffset));
