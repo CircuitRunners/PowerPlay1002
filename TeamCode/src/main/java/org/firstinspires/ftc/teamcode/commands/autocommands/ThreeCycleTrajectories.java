@@ -15,7 +15,7 @@ public class ThreeCycleTrajectories {
     public static final Pose2d blueStartingPosition = new Pose2d(-37, 63, toRadians(-90));
 
     public static final Pose2d redDropPosition =
-            new Pose2d(29.5, -16.5, toRadians(-130));
+            new Pose2d(30, -15, toRadians(-133));
 
     public static final Pose2d blueDropPosition =
             new Pose2d(-29.5, 16.5, toRadians(50));
