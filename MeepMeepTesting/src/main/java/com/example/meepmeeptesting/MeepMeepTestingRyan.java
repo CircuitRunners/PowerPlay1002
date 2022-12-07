@@ -10,7 +10,8 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class MeepMeepTestingRyan {
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(600);
+        MeepMeep meepMeep = new MeepMeep(600);            new Pose2d(30, -15, toRadians(-133));
+
 
         System.setProperty("sun.java2d.opengl", "true");
 
@@ -18,12 +19,12 @@ public class MeepMeepTestingRyan {
         RoadRunnerBotEntity redBot = new DefaultBotBuilder(meepMeep)
                 .setDimensions(14, 14)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(40, 40, toRadians(220), toRadians(220), 11.78)
+                .setConstraints(45, 45, toRadians(220), toRadians(220), 11.78)
                 .followTrajectorySequence(drive ->
-                                drive.trajectorySequenceBuilder(new Pose2d(37, -63, toRadians(90)))
+                                drive.trajectorySequenceBuilder(new Pose2d(37, -58, toRadians(90)))
                                         .splineTo(new Vector2d(36, -30), toRadians(90))
-                                        .splineTo(new Vector2d(36, -18), toRadians(94))
-                                        .splineToSplineHeading(new Pose2d(29.5, -16.5, toRadians(-130)), toRadians(-135))
+                                        .splineTo(new Vector2d(36, -22), toRadians(94))
+                                        .splineToSplineHeading(new Pose2d(30, -15, toRadians(-130)), toRadians(-137))
                                         .waitSeconds(1) //drop preload
 
                                         .setReversed(true)
@@ -36,7 +37,7 @@ public class MeepMeepTestingRyan {
 
 
                                         .splineTo(new Vector2d(40, -11.7), toRadians(-180))
-                                        .splineToSplineHeading(new Pose2d(29.5, -16.5, toRadians(-130)), toRadians(-135))
+                                        .splineToSplineHeading(new Pose2d(30, -15, toRadians(-130)), toRadians(-135))
                                         .waitSeconds(1) //at pole 1
 
                                         .splineToSplineHeading(new Pose2d(40, -11.7, toRadians(0)), toRadians(0)) //to stack
@@ -46,7 +47,7 @@ public class MeepMeepTestingRyan {
                                         //repeat cycles
 
                                         .splineTo(new Vector2d(40, -11.7), toRadians(-180))
-                                        .splineToSplineHeading(new Pose2d(29.5, -16.5, toRadians(-130)), toRadians(-135))
+                                        .splineToSplineHeading(new Pose2d(30, -15, toRadians(-130)), toRadians(-135))
                                         .waitSeconds(1) //at pole 2
 
                                         .splineToSplineHeading(new Pose2d(40, -11.7, toRadians(0)), toRadians(0)) //to stack
@@ -54,7 +55,7 @@ public class MeepMeepTestingRyan {
                                         .waitSeconds(1) //at stack 2
 
                                         .splineTo(new Vector2d(40, -11.7), toRadians(-180))
-                                        .splineToSplineHeading(new Pose2d(29.5, -16.5, toRadians(-130)), toRadians(-135))
+                                        .splineToSplineHeading(new Pose2d(30, -15, toRadians(-130)), toRadians(-135))
                                         .waitSeconds(1) //at pole 3
 
 

@@ -15,10 +15,10 @@ public class ThreeCycleTrajectories {
     public static final Pose2d blueStartingPosition = new Pose2d(-37, 63, toRadians(-90));
 
     public static final Pose2d redDropPosition =
-            new Pose2d(30, -15, toRadians(-133));
+            new Pose2d(30, -15, toRadians(-130));
 
     public static final Pose2d blueDropPosition =
-            new Pose2d(-29.5, 16.5, toRadians(50));
+            new Pose2d(-30, 15, toRadians(50));
 
     public static final Pose2d redStackPosition =
             new Pose2d(-60, 11.7, toRadians(0));
@@ -41,15 +41,15 @@ public class ThreeCycleTrajectories {
         redPreloadToPole =
                 drive.trajectorySequenceBuilder(ThreeCycleTrajectories.redStartingPosition)
                         .splineTo(new Vector2d(36, -30), toRadians(90))
-                        .splineTo(new Vector2d(36, -18), toRadians(94))
-                        .splineToSplineHeading(redDropPosition, toRadians(-135))
+                        .splineTo(new Vector2d(36, -22), toRadians(94))
+                        .splineToSplineHeading(redDropPosition, toRadians(-137))
                         .build();
 
         bluePreloadToPole =
                 drive.trajectorySequenceBuilder(ThreeCycleTrajectories.blueStartingPosition)
                         .splineTo(new Vector2d(-36, 30), toRadians(-90))
-                        .splineTo(new Vector2d(-36, 18), toRadians(-86))
-                        .splineToSplineHeading(blueDropPosition, toRadians(45))
+                        .splineTo(new Vector2d(-36, 22), toRadians(-86))
+                        .splineToSplineHeading(blueDropPosition, toRadians(42))
                         .build();
 
         redToStack =
