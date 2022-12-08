@@ -29,18 +29,18 @@ public class DropPreloadCommand extends ParallelCommandGroup {
 
         addCommands(
 
-                new LiftPositionCommand(lift, 600, true),
+                new LiftPositionCommand(lift, 150, true),
                 new TrajectorySequenceCommand(
                         drive, isRed ? ThreeCycleTrajectories.redPreloadToPole : ThreeCycleTrajectories.bluePreloadToPole
+                ),
+                new SequentialCommandGroup(
+                        new WaitCommand(1500),
+                        new LiftPositionCommand(lift, 2000, true),
+                        new WaitCommand(1500),
+                        new LiftPositionCommand(lift, 1900, true),
+                        new WaitCommand(500),
+                        new InstantCommand(claw::clampOpen)
                 )
-//                new SequentialCommandGroup(
-//                        new WaitCommand(1500),
-//                        new LiftPositionCommand(lift, 2000, true),
-//                        new WaitCommand(1000),
-//                        new LiftPositionCommand(lift, 1900, true),
-//                        new WaitCommand(100),
-//                        new InstantCommand(claw::clampOpen)
-//                )
         );
     }
 

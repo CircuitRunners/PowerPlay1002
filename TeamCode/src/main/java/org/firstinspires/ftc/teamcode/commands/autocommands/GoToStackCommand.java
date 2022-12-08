@@ -26,9 +26,11 @@ public class GoToStackCommand extends ParallelCommandGroup {
         this.claw = claw;
 
         int liftPos = 0;
-        switch (cycle){
-            case 1: liftPos = 1000;
-            case 2: liftPos = 800;
+        switch (cycle) {
+            case 1:
+                liftPos = 1000;
+            case 2:
+                liftPos = 800;
         }
 
         addCommands(
@@ -37,11 +39,11 @@ public class GoToStackCommand extends ParallelCommandGroup {
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(500),
-                        new RetractLiftCommand(lift, claw),
-                        new WaitCommand(300),
-                        new LiftPositionCommand(lift, liftPos, true),
-                        new WaitCommand(500),
-                        new InstantCommand(claw::clampClose)
+                        new RetractLiftCommand(lift, claw)
+//                        new WaitCommand(300),
+//                        new LiftPositionCommand(lift, liftPos, true),
+//                        new WaitCommand(500),
+//                        new InstantCommand(claw::clampClose)
                 )
         );
     }
