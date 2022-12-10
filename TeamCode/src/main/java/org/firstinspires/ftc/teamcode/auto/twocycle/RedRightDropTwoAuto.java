@@ -52,7 +52,7 @@ public class RedRightDropTwoAuto extends CommandOpMode {
                 .strafeLeft(6)
                 .forward(28)
 //                .back(6)
-                .turn(toRadians(47))
+                .turn(toRadians(42.5))
                 .build();
 
         TrajectorySequence forwardToPole = drive.trajectorySequenceBuilder(driveToPole.end())
@@ -64,28 +64,28 @@ public class RedRightDropTwoAuto extends CommandOpMode {
                 .build();
 
         TrajectorySequence goToStack = drive.trajectorySequenceBuilder(backFromPole.end())
-                .turn(toRadians(-51.69))
+                .turn(toRadians(-45))
                 .forward(24)
 //                .back(6.5)
-                .turn(toRadians(-90.33))
+                .turn(toRadians(-95))
                 .build();
 
         TrajectorySequence forwardToStack = drive.trajectorySequenceBuilder(goToStack.end())
-                .forward(29.1)
+                .forward(29.4)
                 .build();
 
         TrajectorySequence backFromStack = drive.trajectorySequenceBuilder((forwardToStack.end()))
                 .back(27.5)
-                .turn(toRadians(-138))
+                .turn(toRadians(-130))
                 .build();
 
         TrajectorySequence secondForwardToPole = drive.trajectorySequenceBuilder(backFromStack.end())
-                .forward(14.2)
+                .forward(13.5)
                 .build();
 
         TrajectorySequence secondBackFromPole = drive.trajectorySequenceBuilder(secondForwardToPole.end())
                 .back(8)
-                .turn(toRadians(55))
+                .turn(toRadians(50))
                 .forward(24)
                 .build();
 
