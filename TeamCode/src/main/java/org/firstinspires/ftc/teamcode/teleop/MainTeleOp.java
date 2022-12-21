@@ -22,9 +22,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.DriveBase;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
+import org.firstinspires.ftc.teamcode.subsystems.LockingMecanum;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,17 +32,15 @@ import java.util.List;
 @TeleOp
 public class MainTeleOp extends CommandOpMode {
 
+    private LockingMecanum lockingMecanum;
     //Drive motors and list to hold them
     private DcMotorEx lf, lb, rf, rb;
     //IMU sensor
     private BNO055IMU imu;
-    private Claw claw;
-    private Lift lift;
-    private Intake intake;
-    private DriveBase driveBase;
     //Offset variable for resetting heading;
     private double headingOffset = toRadians(-90);
     private boolean prevHeadingReset = false;
+    private boolean lmecOn = false;
 
 
     @Override
@@ -51,12 +49,7 @@ public class MainTeleOp extends CommandOpMode {
         //Set the bulk cache command to continuously run
         schedule(new BulkCacheCommand(hardwareMap));
 
-        claw = new Claw(hardwareMap);
-        lift = new Lift(hardwareMap);
-        intake = new Intake(hardwareMap);
-//        driveBase = new DriveBase(hardwareMap);
-        claw.clampOpen();
-//        intake.closeArms();
+        lockingMecanum = new LockingMecanum(hardwareMap);
 
 
 //        //Retrieve dt motors from the hardware map
@@ -93,12 +86,14 @@ public class MainTeleOp extends CommandOpMode {
 
 
         //control to rnu intake whenever the trigger is pressed
-        new Trigger(() -> driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
+        new Trigger(() -> driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.7)
                 .whenActive(() -> {
-                    intake.intake();
+                    lockingMecanum.lock();
+                    lmecOn = true;
                 })
                 .whenInactive(() -> {
-                    intake.stop();
+                    lockingMecanum.unlock();
+                    lmecOn = false;
                 });
 
         //control to outtake whenever Y is pressed (for safety)
@@ -108,8 +103,8 @@ public class MainTeleOp extends CommandOpMode {
 
 
 //        //TODO: toggle control for the claw
-        manipulator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .toggleWhenActive(claw::clampClose, claw::clampOpen);
+//        manipulator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+//                .toggleWhenActive(claw::clampClose, claw::clampOpen);
 
         //Control the intake arms (manually for now)
 //        manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
@@ -127,28 +122,28 @@ public class MainTeleOp extends CommandOpMode {
         //Run the other functions in the superclass
         super.run();
 
-
-        if (gamepad2.triangle) {
-            if (gamepad2.dpad_down) lift.setLiftPower(-0.3);
-            else {
-                lift.setLiftPower(0);
-                lift.resetLiftPosition();
-            }
-        } else {
-            if (gamepad2.dpad_up && !lift.atUpperLimit()) {
-                lift.setLiftPower((gamepad2.square) ? 0.5 : 1.0);
-            } else if (gamepad2.dpad_down && !lift.atLowerLimit()) {
-                lift.setLiftPower((gamepad2.square) ? -0.5 : -1.0);
-            } else {
-                lift.setLiftPower(0.1);
-            }
-        }
+//
+//        if (gamepad2.triangle) {
+//            if (gamepad2.dpad_down) lift.setLiftPower(-0.3);
+//            else {
+//                lift.setLiftPower(0);
+//                lift.resetLiftPosition();
+//            }
+//        } else {
+//            if (gamepad2.dpad_up && !lift.atUpperLimit()) {
+//                lift.setLiftPower((gamepad2.square) ? 0.5 : 1.0);
+//            } else if (gamepad2.dpad_down && !lift.atLowerLimit()) {
+//                lift.setLiftPower((gamepad2.square) ? -0.5 : -1.0);
+//            } else {
+//                lift.setLiftPower(0.1);
+//            }
+//        }
 
 
         //Read heading and subtract offset, then normalize again
         Orientation orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
 
-        double heading = AngleUnit.normalizeRadians(orientation.firstAngle - headingOffset);
+        double heading = (lmecOn) ? 0.0 : AngleUnit.normalizeRadians(orientation.firstAngle - headingOffset);
 
         //Reset the zero point for field centric by making the current heading the offset
         if (gamepad1.x && !prevHeadingReset) {
@@ -161,9 +156,9 @@ public class MainTeleOp extends CommandOpMode {
 
         //Read gamepad joysticks
         //Check the deadband of the controller
-        double y = (abs(gamepad1.left_stick_y) > 0.02) ? -gamepad1.left_stick_y : 0.0; // Remember, this is reversed!
-        double x = (abs(gamepad1.left_stick_x) > 0.02) ? gamepad1.left_stick_x * 1.06 : 0.0; // Counteract imperfect strafing
-        double rx = (abs(gamepad1.right_stick_x) > 0.02) ? gamepad1.right_stick_x : 0.0;
+        double y = -gamepad1.left_stick_y; // Remember, this is reversed!
+        double x = (lmecOn) ? 0 : gamepad1.left_stick_x * 1.06; // Counteract imperfect strafing
+        double rx = gamepad1.right_stick_x;
 
         //Apply a curve to the inputs
         y = cubeInput(y, 0.3);

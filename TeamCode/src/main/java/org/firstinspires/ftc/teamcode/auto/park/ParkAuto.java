@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
+
 @Autonomous (name="Parking Auto")
 public class ParkAuto extends CommandOpMode {
 

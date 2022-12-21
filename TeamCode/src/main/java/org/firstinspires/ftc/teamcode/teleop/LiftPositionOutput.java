@@ -9,21 +9,28 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 public class LiftPositionOutput extends LinearOpMode {
 
 
-    private DcMotorEx liftMotor;
+    private DcMotorEx leftMotor;
+    private DcMotorEx rightMotor;
+
 
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        liftMotor = hardwareMap.get(DcMotorEx.class, "liftMotor");
-        liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftMotor = hardwareMap.get(DcMotorEx.class, "liftMotor");
+        leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        rightMotor = hardwareMap.get(DcMotorEx.class, "liftMotor");
+        leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
         while (opModeIsActive()){
-            telemetry.addData("Lift Position", liftMotor.getCurrentPosition());
+            telemetry.addData("Lift Position", leftMotor.getCurrentPosition());
             telemetry.update();
         }
     }
