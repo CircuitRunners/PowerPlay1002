@@ -30,7 +30,7 @@ public class LockingMecanum extends SubsystemBase {
     //Move servos to unlock wheels
     public void unlock(){
         //@TODO Replace 0 with the position of the servo where it is unlocked
-        leftLinkage.setPosition(0);
+        leftLinkage.setPosition(0.05);
         rightLinkage.setPosition(0.95);
     }
 

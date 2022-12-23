@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 public class LiftPositionCommand extends CommandBase {
 
     private PIDFController liftController;
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.0335, 0, 0.00025);
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.03, 0, 0);
 //    private double kStatic = 0.1; //gravity
     private double tolerance;
     private boolean holdAtEnd = false;

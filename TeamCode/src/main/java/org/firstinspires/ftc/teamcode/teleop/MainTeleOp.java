@@ -33,6 +33,7 @@ import java.util.List;
 public class MainTeleOp extends CommandOpMode {
 
     private LockingMecanum lockingMecanum;
+    private Lift lift;
     //Drive motors and list to hold them
     private DcMotorEx lf, lb, rf, rb;
     //IMU sensor
@@ -50,6 +51,7 @@ public class MainTeleOp extends CommandOpMode {
         schedule(new BulkCacheCommand(hardwareMap));
 
         lockingMecanum = new LockingMecanum(hardwareMap);
+        lift = new Lift(hardwareMap);
 
 
 //        //Retrieve dt motors from the hardware map
@@ -122,22 +124,22 @@ public class MainTeleOp extends CommandOpMode {
         //Run the other functions in the superclass
         super.run();
 
-//
-//        if (gamepad2.triangle) {
-//            if (gamepad2.dpad_down) lift.setLiftPower(-0.3);
-//            else {
-//                lift.setLiftPower(0);
-//                lift.resetLiftPosition();
-//            }
-//        } else {
-//            if (gamepad2.dpad_up && !lift.atUpperLimit()) {
-//                lift.setLiftPower((gamepad2.square) ? 0.5 : 1.0);
-//            } else if (gamepad2.dpad_down && !lift.atLowerLimit()) {
-//                lift.setLiftPower((gamepad2.square) ? -0.5 : -1.0);
-//            } else {
-//                lift.setLiftPower(0.1);
-//            }
-//        }
+
+        if (gamepad2.triangle) {
+            if (gamepad2.dpad_down) lift.setLiftPower(-0.3);
+            else {
+                lift.setLiftPower(0);
+                lift.resetLiftPosition();
+            }
+        } else {
+            if (gamepad2.dpad_up && !lift.atUpperLimit()) {
+                lift.setLiftPower((gamepad2.square) ? 0.5 : 1.0);
+            } else if (gamepad2.dpad_down && !lift.atLowerLimit()) {
+                lift.setLiftPower((gamepad2.square) ? -0.5 : -0.8);
+            } else {
+                lift.setLiftPower(0.1);
+            }
+        }
 
 
         //Read heading and subtract offset, then normalize again
@@ -181,17 +183,17 @@ public class MainTeleOp extends CommandOpMode {
 
 //        driveBase.setMotorPowers(new Double[] {frontLeftPower, backLeftPower, frontRightPower, backRightPower});
 
-        lf.setPower(frontLeftPower);
-        lb.setPower(backLeftPower);
-        rf.setPower(frontRightPower);
-        rb.setPower(backRightPower);
+        lf.setPower((Math.signum(frontLeftPower) * 0.03) + frontLeftPower);
+        lb.setPower((Math.signum(backLeftPower) * 0.03) + backLeftPower);
+        rf.setPower((Math.signum(frontRightPower) * 0.03) + frontRightPower);
+        rb.setPower((Math.signum(backRightPower) * 0.03) + backRightPower);
 
         telemetry.addData("Current Heading with offset", "%.2f", AngleUnit.DEGREES.fromRadians(heading));
         telemetry.addData("Offset", "%.2f", AngleUnit.DEGREES.fromRadians(headingOffset));
         telemetry.addLine("Press A on Gamepad 1 to reset heading");
-//        telemetry.addData("Z deg",AngleUnit.DEGREES.fromRadians(orientation.firstAngle));
-//        telemetry.addData("Y deg",AngleUnit.DEGREES.fromRadians(orientation.secondAngle));
-//        telemetry.addData("X deg",AngleUnit.DEGREES.fromRadians(orientation.thirdAngle));
+        telemetry.addData("Z deg",AngleUnit.DEGREES.fromRadians(orientation.firstAngle));
+        telemetry.addData("Y deg",AngleUnit.DEGREES.fromRadians(orientation.secondAngle));
+        telemetry.addData("X deg",AngleUnit.DEGREES.fromRadians(orientation.thirdAngle));
         telemetry.update();
 
     }

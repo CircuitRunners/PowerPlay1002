@@ -1,27 +1,33 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.acmerobotics.roadrunner.control.PIDCoefficients;
-import com.acmerobotics.roadrunner.control.PIDFController;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 public class Lift extends SubsystemBase {
 
     private HardwareMap hardwareMap;
 
-    private DcMotorEx liftMotor;
+    private DcMotorEx leftMotor;
+    private DcMotorEx rightMotor;
 
     public Lift(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
-        liftMotor = hardwareMap.get(DcMotorEx.class, "liftMotor");
-        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        leftMotor = hardwareMap.get(DcMotorEx.class, "leftLift");
+        rightMotor = hardwareMap.get(DcMotorEx.class, "rightLift");
+
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
     }
 
     @Override
@@ -30,24 +36,27 @@ public class Lift extends SubsystemBase {
     }
 
     public void setLiftPower(double power){
-        liftMotor.setPower(power);
+        leftMotor.setPower(power);
+        rightMotor.setPower(-power);
     }
 
     public void stop(){
-        liftMotor.setPower(0);
+        setLiftPower(0);
     }
 
     public double getLiftPosition(){
-        return liftMotor.getCurrentPosition();
+        return leftMotor.getCurrentPosition();
     }
 
     public void resetLiftPosition(){
-        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public boolean atUpperLimit(){
-        return getLiftPosition() > 3200;
+        return getLiftPosition() > 860;
     }
 
     public boolean atLowerLimit(){
