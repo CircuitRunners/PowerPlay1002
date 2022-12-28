@@ -9,10 +9,9 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup
 import com.arcrobotics.ftclib.command.WaitCommand
 import com.arcrobotics.ftclib.gamepad.GamepadEx
 import com.arcrobotics.ftclib.gamepad.GamepadKeys
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.commands.LiftPositionCommand
-import org.firstinspires.ftc.teamcode.commands.RetractLiftCommand
+import org.firstinspires.ftc.teamcode.commands.OldRetractLiftCommand
 import org.firstinspires.ftc.teamcode.subsystems.Claw
 import org.firstinspires.ftc.teamcode.subsystems.Lift
 
@@ -45,7 +44,7 @@ class LiftPIDTuner : CommandOpMode() {
                                 LiftPositionCommand(lift, 3000.0),
                                 WaitCommand(1000),
                                 InstantCommand({target = 0.0}),
-                                RetractLiftCommand(lift, claw)
+                                OldRetractLiftCommand(lift, claw)
                         )
                 )
     }

@@ -8,6 +8,7 @@ public class Claw{
     private HardwareMap hardwareMap;
 
     private Servo claw;
+    private Servo angleServo;
 
     //Servos for the linkages
 
@@ -15,6 +16,10 @@ public class Claw{
         this.hardwareMap = hardwareMap;
         //Retrieve servos from the hardware map
         claw = hardwareMap.get(Servo.class, "clawServo");
+        angleServo = hardwareMap.get(Servo.class, "angleServo");
+
+        clampOpen();
+        angleDown();
     }
 
     public void clampClose(){
@@ -22,6 +27,14 @@ public class Claw{
     }
     public void clampOpen(){
         claw.setPosition(0);
+    }
+
+    public void angleDown(){
+        angleServo.setPosition(0);
+    }
+
+    public void angleUp(){
+        angleServo.setPosition(0.3);
     }
 
 

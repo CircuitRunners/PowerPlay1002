@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.LiftPositionCommand;
-import org.firstinspires.ftc.teamcode.commands.RetractLiftCommand;
+import org.firstinspires.ftc.teamcode.commands.OldRetractLiftCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -134,7 +134,7 @@ public class RedRightDropTwoAuto extends CommandOpMode {
                 new TrajectorySequenceCommand(drive, backFromPole),
                 new WaitCommand(500),
                 new ParallelCommandGroup(
-                        new RetractLiftCommand(lift, claw),
+                        new OldRetractLiftCommand(lift, claw),
                         new TrajectorySequenceCommand(drive, goToStack)
                 ),
                 new LiftPositionCommand(lift, 1000),
@@ -166,7 +166,7 @@ public class RedRightDropTwoAuto extends CommandOpMode {
                         new TrajectorySequenceCommand(drive, secondBackFromPole),
                         new SequentialCommandGroup(
                                 new WaitCommand(800),
-                                new RetractLiftCommand(lift, claw)
+                                new OldRetractLiftCommand(lift, claw)
                         )
                 ),
                 new SelectCommand(() -> {

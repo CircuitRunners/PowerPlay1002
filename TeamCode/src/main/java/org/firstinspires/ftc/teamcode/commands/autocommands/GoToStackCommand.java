@@ -1,13 +1,10 @@
 package org.firstinspires.ftc.teamcode.commands.autocommands;
 
-import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.commands.LiftPositionCommand;
-import org.firstinspires.ftc.teamcode.commands.RetractLiftCommand;
+import org.firstinspires.ftc.teamcode.commands.OldRetractLiftCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -39,7 +36,7 @@ public class GoToStackCommand extends ParallelCommandGroup {
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(500),
-                        new RetractLiftCommand(lift, claw)
+                        new OldRetractLiftCommand(lift, claw)
 //                        new WaitCommand(300),
 //                        new LiftPositionCommand(lift, liftPos, true),
 //                        new WaitCommand(500),

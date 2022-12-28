@@ -8,25 +8,23 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Lift extends SubsystemBase {
 
-    private HardwareMap hardwareMap;
 
     private DcMotorEx leftMotor;
     private DcMotorEx rightMotor;
 
     public Lift(HardwareMap hardwareMap){
-        this.hardwareMap = hardwareMap;
 
         leftMotor = hardwareMap.get(DcMotorEx.class, "leftLift");
         rightMotor = hardwareMap.get(DcMotorEx.class, "rightLift");
 
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
     }
 
@@ -48,19 +46,16 @@ public class Lift extends SubsystemBase {
         return leftMotor.getCurrentPosition();
     }
 
-    public void resetLiftPosition(){
-        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
     public boolean atUpperLimit(){
         return getLiftPosition() > 860;
     }
 
     public boolean atLowerLimit(){
-        return getLiftPosition() < 5;
+        return getLiftPosition() < 3;
     }
-    //@TODO find ticks to inches conversion and add levels.
+
+    public void resetLiftPosition(){
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 }

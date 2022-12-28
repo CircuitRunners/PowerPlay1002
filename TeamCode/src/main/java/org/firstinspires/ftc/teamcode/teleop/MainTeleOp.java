@@ -6,6 +6,7 @@ import static java.lang.Math.toRadians;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -21,6 +22,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
+import org.firstinspires.ftc.teamcode.commands.ManualLiftCommand;
+import org.firstinspires.ftc.teamcode.commands.ManualLiftResetCommand;
+import org.firstinspires.ftc.teamcode.commands.RetractLiftCommand;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
@@ -34,6 +39,10 @@ public class MainTeleOp extends CommandOpMode {
 
     private LockingMecanum lockingMecanum;
     private Lift lift;
+    private Claw claw;
+    private Arm arm;
+    private Intake intake;
+
     //Drive motors and list to hold them
     private DcMotorEx lf, lb, rf, rb;
     //IMU sensor
@@ -42,6 +51,10 @@ public class MainTeleOp extends CommandOpMode {
     private double headingOffset = toRadians(-90);
     private boolean prevHeadingReset = false;
     private boolean lmecOn = false;
+
+    private ManualLiftCommand manualLiftCommand;
+    private ManualLiftResetCommand manualLiftResetCommand;
+    private RetractLiftCommand retractLiftCommand;
 
 
     @Override
@@ -52,6 +65,9 @@ public class MainTeleOp extends CommandOpMode {
 
         lockingMecanum = new LockingMecanum(hardwareMap);
         lift = new Lift(hardwareMap);
+        arm = new Arm(hardwareMap);
+        claw = new Claw(hardwareMap);
+        intake = new Intake(hardwareMap);
 
 
 //        //Retrieve dt motors from the hardware map
@@ -86,8 +102,14 @@ public class MainTeleOp extends CommandOpMode {
         GamepadEx driver = new GamepadEx(gamepad1);
         GamepadEx manipulator = new GamepadEx(gamepad2);
 
+        manualLiftCommand = new ManualLiftCommand(lift, manipulator);
+        manualLiftResetCommand = new ManualLiftResetCommand(lift, manipulator);
+        retractLiftCommand = new RetractLiftCommand(lift, arm, claw);
 
-        //control to rnu intake whenever the trigger is pressed
+        lift.setDefaultCommand(manualLiftCommand);
+
+
+        //Lmec Control
         new Trigger(() -> driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.7)
                 .whenActive(() -> {
                     lockingMecanum.lock();
@@ -98,19 +120,40 @@ public class MainTeleOp extends CommandOpMode {
                     lmecOn = false;
                 });
 
+
+        //Intake control
+        driver.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .whenActive(intake::intake)
+                .whenInactive(intake::stop);
+
         //control to outtake whenever Y is pressed (for safety)
-//        driver.getGamepadButton(GamepadKeys.Button.Y)
-//                .whenActive(intake::outtake)
-//                .whenInactive(intake::stop);
+        driver.getGamepadButton(GamepadKeys.Button.Y)
+                .whenActive(intake::outtake)
+                .whenInactive(intake::stop);
 
 
-//        //TODO: toggle control for the claw
-//        manipulator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-//                .toggleWhenActive(claw::clampClose, claw::clampOpen);
+        //Claw control
+        manipulator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .toggleWhenActive(claw::clampClose, claw::clampOpen);
 
-        //Control the intake arms (manually for now)
-//        manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-//                .toggleWhenActive(intake::openArms, intake::closeArms);
+        //Bottom limit lift reset
+        manipulator.getGamepadButton(GamepadKeys.Button.Y)
+                .whenHeld(manualLiftResetCommand);
+
+
+        //Arm control (and maybe lift)
+        new Trigger(() -> manipulator.getLeftY() > 0.5)
+                .whenActive(() -> arm.setLevel(Arm.ArmPositions.HIGH));
+
+        new Trigger(() -> manipulator.getLeftY() < -0.5)
+                .whenActive(retractLiftCommand);
+
+        new Trigger(() -> manipulator.getRightY() > 0.5)
+                .whenActive(() -> arm.setLevel(Arm.ArmPositions.MID));
+
+        new Trigger(() -> manipulator.getRightY() < -0.5)
+                .whenActive(() -> arm.setLevel(Arm.ArmPositions.SHORT));
+
 
 
         //Send line to telemetry indicating initialization is done
@@ -125,6 +168,7 @@ public class MainTeleOp extends CommandOpMode {
         super.run();
 
 
+        //Lift contorls
         if (gamepad2.triangle) {
             if (gamepad2.dpad_down) lift.setLiftPower(-0.3);
             else {
@@ -145,6 +189,7 @@ public class MainTeleOp extends CommandOpMode {
         //Read heading and subtract offset, then normalize again
         Orientation orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
 
+        //If lmec is on, force robot centric control
         double heading = (lmecOn) ? 0.0 : AngleUnit.normalizeRadians(orientation.firstAngle - headingOffset);
 
         //Reset the zero point for field centric by making the current heading the offset
@@ -157,7 +202,6 @@ public class MainTeleOp extends CommandOpMode {
 
 
         //Read gamepad joysticks
-        //Check the deadband of the controller
         double y = -gamepad1.left_stick_y; // Remember, this is reversed!
         double x = (lmecOn) ? 0 : gamepad1.left_stick_x * 1.06; // Counteract imperfect strafing
         double rx = gamepad1.right_stick_x;
@@ -191,9 +235,9 @@ public class MainTeleOp extends CommandOpMode {
         telemetry.addData("Current Heading with offset", "%.2f", AngleUnit.DEGREES.fromRadians(heading));
         telemetry.addData("Offset", "%.2f", AngleUnit.DEGREES.fromRadians(headingOffset));
         telemetry.addLine("Press A on Gamepad 1 to reset heading");
-        telemetry.addData("Z deg",AngleUnit.DEGREES.fromRadians(orientation.firstAngle));
-        telemetry.addData("Y deg",AngleUnit.DEGREES.fromRadians(orientation.secondAngle));
-        telemetry.addData("X deg",AngleUnit.DEGREES.fromRadians(orientation.thirdAngle));
+        telemetry.addData("Z deg", AngleUnit.DEGREES.fromRadians(orientation.firstAngle));
+        telemetry.addData("Y deg", AngleUnit.DEGREES.fromRadians(orientation.secondAngle));
+        telemetry.addData("X deg", AngleUnit.DEGREES.fromRadians(orientation.thirdAngle));
         telemetry.update();
 
     }

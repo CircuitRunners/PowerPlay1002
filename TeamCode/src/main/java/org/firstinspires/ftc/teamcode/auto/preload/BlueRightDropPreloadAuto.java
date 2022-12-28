@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.auto.preload;
 import static java.lang.Math.toRadians;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
@@ -14,8 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.LiftPositionCommand;
-import org.firstinspires.ftc.teamcode.commands.RetractLiftCommand;
-import org.firstinspires.ftc.teamcode.commands.TrajectoryCommand;
+import org.firstinspires.ftc.teamcode.commands.OldRetractLiftCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -114,7 +112,7 @@ public class BlueRightDropPreloadAuto extends CommandOpMode {
                 new InstantCommand(claw::clampClose),
                 new TrajectorySequenceCommand(drive, backFromPole),
                 new WaitCommand(500),
-                new RetractLiftCommand(lift, claw),
+                new OldRetractLiftCommand(lift, claw),
                 new WaitCommand(300),
                 new SelectCommand(() -> {
                     switch (beaconId) {
