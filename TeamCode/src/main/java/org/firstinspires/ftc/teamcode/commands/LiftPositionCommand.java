@@ -35,7 +35,7 @@ public class LiftPositionCommand extends CommandBase {
         this.targetPosition = targetPosition;
 
         liftController = new PIDFController(coefficients);
-        liftController.setOutputBounds(-0.8, 1);
+        liftController.setOutputBounds(-0.7, 1);
     }
 
     @Override

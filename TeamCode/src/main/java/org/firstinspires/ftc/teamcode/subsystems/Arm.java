@@ -4,15 +4,18 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Arm extends SubsystemBase {
 
     public enum ArmPositions {
-        SHORT(0.8),
-        MID(0.7),
-        HIGH(0.6);
+        DOWN(0.15),
+        SHORT(0.7),
+        MID(0.8),
+        HIGH(0.75);
 
         public double position;
 
@@ -22,19 +25,27 @@ public class Arm extends SubsystemBase {
     }
 
 
-    private Servo leftServo;
-    private Servo rightServo;
+    private ServoImplEx leftServo;
+    private ServoImplEx rightServo;
 
-    private TrapezoidProfile armProfile;
-    private TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(0.3, 0.3);
+
+    private TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(0.9, 0.85);
+    private TrapezoidProfile armProfile =
+            new TrapezoidProfile(constraints, new TrapezoidProfile.State(ArmPositions.DOWN.position, 0),
+                    new TrapezoidProfile.State(ArmPositions.DOWN.position, 0)
+            );
 
     private ElapsedTime timer = new ElapsedTime();
 
 
+
     public Arm(HardwareMap hardwareMap){
     
-        leftServo = hardwareMap.get(Servo.class, "leftServo");
-        rightServo = hardwareMap.get(Servo.class, "rightServo");
+        leftServo = hardwareMap.get(ServoImplEx.class, "leftArm");
+        rightServo = hardwareMap.get(ServoImplEx.class, "rightArm");
+
+        leftServo.setPwmRange(new PwmControl.PwmRange(500, 2500));
+        rightServo.setPwmRange(new PwmControl.PwmRange(500, 2500));
 
         forceDown();
 
@@ -68,12 +79,12 @@ public class Arm extends SubsystemBase {
 
     //All the way to the rest position
     public void down(){
-        setPosition(0);
+        setPosition(ArmPositions.DOWN.position);
     }
 
     public void forceDown(){
-        leftServo.setPosition(0);
-        rightServo.setPosition(0);
+        leftServo.setPosition(0.15);
+        rightServo.setPosition(0.15);
     }
 
     //Set a preset level

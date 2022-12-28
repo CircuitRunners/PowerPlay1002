@@ -24,7 +24,9 @@ public class ManualLiftCommand extends CommandBase {
     public void execute() {
         //Two dpad buttons cant be pressed at the same time so we don't have to worry about that.
 
-        double multiplier = manipulator.getButton(GamepadKeys.Button.X) ? 0.5 : 1.0;
+        double multiplier = manipulator.getButton(GamepadKeys.Button.X) ? 0.6 : 1.0;
+
+
 
         //Check if the up button is pressed
         if (manipulator.getButton(GamepadKeys.Button.DPAD_UP) && !lift.atUpperLimit()) {
@@ -32,12 +34,12 @@ public class ManualLiftCommand extends CommandBase {
         }
         //Then check if the down is pressed
         else if (manipulator.getButton(GamepadKeys.Button.DPAD_DOWN) && !lift.atLowerLimit()) {
-            lift.setLiftPower(-0.8 * multiplier);
+            lift.setLiftPower(-0.7 * multiplier);
         }
 
         //Otherwise, do nothing
         else {
-            lift.stop();
+            lift.setLiftPower(0.22);
         }
     }
 

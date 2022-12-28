@@ -124,7 +124,7 @@ public class MainTeleOp extends CommandOpMode {
 
 
         //Intake control
-        driver.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+        driver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenActive(intake::intake)
                 .whenInactive(intake::stop);
 
@@ -148,13 +148,15 @@ public class MainTeleOp extends CommandOpMode {
                 .whenActive(() -> arm.setLevel(Arm.ArmPositions.HIGH));
 
         new Trigger(() -> manipulator.getLeftY() < -0.5)
-                .whenActive(retractLiftCommand);
+                .whenActive(retractLiftCommand)
+                .whenActive(arm::down)
+                .whenActive(claw::clampOpen);
 
         new Trigger(() -> manipulator.getRightY() > 0.5)
-                .whenActive(() -> arm.setLevel(Arm.ArmPositions.MID));
+                .whenActive(() -> arm.setLevel(Arm.ArmPositions.SHORT));
 
         new Trigger(() -> manipulator.getRightY() < -0.5)
-                .whenActive(() -> arm.setLevel(Arm.ArmPositions.SHORT));
+                .whenActive(() -> arm.setLevel(Arm.ArmPositions.MID));
 
 
 
@@ -171,21 +173,21 @@ public class MainTeleOp extends CommandOpMode {
 
 
         //Lift contorls
-        if (gamepad2.triangle) {
-            if (gamepad2.dpad_down) lift.setLiftPower(-0.3);
-            else {
-                lift.setLiftPower(0);
-                lift.resetLiftPosition();
-            }
-        } else {
-            if (gamepad2.dpad_up && !lift.atUpperLimit()) {
-                lift.setLiftPower((gamepad2.square) ? 0.5 : 1.0);
-            } else if (gamepad2.dpad_down && !lift.atLowerLimit()) {
-                lift.setLiftPower((gamepad2.square) ? -0.5 : -0.8);
-            } else {
-                lift.setLiftPower(0.1);
-            }
-        }
+//        if (gamepad2.triangle) {
+//            if (gamepad2.dpad_down) lift.setLiftPower(-0.3);
+//            else {
+//                lift.setLiftPower(0);
+//                lift.resetLiftPosition();
+//            }
+//        } else {
+//            if (gamepad2.dpad_up && !lift.atUpperLimit()) {
+//                lift.setLiftPower((gamepad2.square) ? 0.5 : 1.0);
+//            } else if (gamepad2.dpad_down && !lift.atLowerLimit()) {
+//                lift.setLiftPower((gamepad2.square) ? -0.5 : -0.8);
+//            } else {
+//                lift.setLiftPower(0.1);
+//            }
+//        }
 
 
         //Read heading and subtract offset, then normalize again

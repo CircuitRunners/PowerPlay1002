@@ -15,8 +15,8 @@ public class Intake extends SubsystemBase {
 
     public Intake(HardwareMap hardwareMap){
 
-        leftMotor = hardwareMap.get(DcMotorSimple.class, "leftMotor");
-        rightMotor = hardwareMap.get(DcMotorSimple.class, "rightMotor");
+        leftMotor = hardwareMap.get(DcMotorSimple.class, "leftIntake");
+        rightMotor = hardwareMap.get(DcMotorSimple.class, "rightIntake");
         rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
