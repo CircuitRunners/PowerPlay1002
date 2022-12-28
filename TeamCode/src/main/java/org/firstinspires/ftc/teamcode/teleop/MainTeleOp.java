@@ -99,9 +99,11 @@ public class MainTeleOp extends CommandOpMode {
 
         //Commands
 
+        //Set up gamepads
         GamepadEx driver = new GamepadEx(gamepad1);
         GamepadEx manipulator = new GamepadEx(gamepad2);
 
+        //Set up commands
         manualLiftCommand = new ManualLiftCommand(lift, manipulator);
         manualLiftResetCommand = new ManualLiftResetCommand(lift, manipulator);
         retractLiftCommand = new RetractLiftCommand(lift, arm, claw);
