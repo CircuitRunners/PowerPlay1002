@@ -9,6 +9,19 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Lift extends SubsystemBase {
 
 
+    public enum LiftPositions {
+        DOWN(0),
+        SHORT(200),
+        MID(500),
+        HIGH(750);
+
+        public int position;
+
+        LiftPositions(int position){
+            this.position = position;
+        }
+    }
+
     private DcMotorEx leftMotor;
     private DcMotorEx rightMotor;
 

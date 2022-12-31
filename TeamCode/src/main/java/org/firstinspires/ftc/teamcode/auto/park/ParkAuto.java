@@ -3,12 +3,10 @@ package org.firstinspires.ftc.teamcode.auto.park;
 import static java.lang.Math.toRadians;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
-import org.firstinspires.ftc.teamcode.commands.TrajectoryCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -59,7 +57,7 @@ public class ParkAuto extends CommandOpMode {
                 .build();
 
         //Close the claw
-        claw.clampClose();
+        claw.close();
 
         while(opModeInInit()){
             beaconId = beaconDetector.update();

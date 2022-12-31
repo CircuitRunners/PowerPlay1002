@@ -3,15 +3,12 @@ package org.firstinspires.ftc.teamcode.teleop;
 import static java.lang.Math.abs;
 import static java.lang.Math.toRadians;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -22,9 +19,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
-import org.firstinspires.ftc.teamcode.commands.ManualLiftCommand;
-import org.firstinspires.ftc.teamcode.commands.ManualLiftResetCommand;
-import org.firstinspires.ftc.teamcode.commands.RetractLiftCommand;
+import org.firstinspires.ftc.teamcode.commands.liftcommands.LiftPositionCommand;
+import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftCommand;
+import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftResetCommand;
+import org.firstinspires.ftc.teamcode.commands.RetractOuttakeCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -54,7 +52,7 @@ public class MainTeleOp extends CommandOpMode {
 
     private ManualLiftCommand manualLiftCommand;
     private ManualLiftResetCommand manualLiftResetCommand;
-    private RetractLiftCommand retractLiftCommand;
+    private RetractOuttakeCommand retractOuttakeCommand;
 
 
     @Override
@@ -106,7 +104,7 @@ public class MainTeleOp extends CommandOpMode {
         //Set up commands
         manualLiftCommand = new ManualLiftCommand(lift, manipulator);
         manualLiftResetCommand = new ManualLiftResetCommand(lift, manipulator);
-        retractLiftCommand = new RetractLiftCommand(lift, arm, claw);
+        retractOuttakeCommand = new RetractOuttakeCommand(lift, arm, claw);
 
         lift.setDefaultCommand(manualLiftCommand);
 
@@ -136,27 +134,36 @@ public class MainTeleOp extends CommandOpMode {
 
         //Claw control
         manipulator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .toggleWhenActive(claw::clampClose, claw::clampOpen);
+                .toggleWhenActive(claw::close, claw::open);
 
         //Bottom limit lift reset
         manipulator.getGamepadButton(GamepadKeys.Button.Y)
                 .whenHeld(manualLiftResetCommand);
 
 
-        //Arm control (and maybe lift)
+        //High preset
         new Trigger(() -> manipulator.getLeftY() > 0.5)
-                .whenActive(() -> arm.setLevel(Arm.ArmPositions.HIGH));
+                .whenActive(() -> arm.setLevel(Arm.ArmPositions.HIGH))
+                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.HIGH.position, true));
 
+        //Full retract preset
         new Trigger(() -> manipulator.getLeftY() < -0.5)
-                .whenActive(retractLiftCommand)
-                .whenActive(arm::down)
-                .whenActive(claw::clampOpen);
+                .or(new Trigger(() -> manipulator.getRightY() < -0.5))
+                .whenActive(retractOuttakeCommand);
 
+        //Mid preset
         new Trigger(() -> manipulator.getRightY() > 0.5)
-                .whenActive(() -> arm.setLevel(Arm.ArmPositions.SHORT));
+                .whenActive(() -> arm.setLevel(Arm.ArmPositions.MID))
+                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.MID.position, true));
 
+        //Short preset
         new Trigger(() -> manipulator.getRightY() < -0.5)
-                .whenActive(() -> arm.setLevel(Arm.ArmPositions.MID));
+                .whenActive(() -> arm.setLevel(Arm.ArmPositions.SHORT))
+                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.SHORT.position, true));
+
+        //Ground (terminal dropping) arm preset
+        manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
+                .whenActive(() -> arm.setLevel(Arm.ArmPositions.GROUND));
 
 
 
@@ -170,24 +177,6 @@ public class MainTeleOp extends CommandOpMode {
     public void run() {
         //Run the other functions in the superclass
         super.run();
-
-
-        //Lift contorls
-//        if (gamepad2.triangle) {
-//            if (gamepad2.dpad_down) lift.setLiftPower(-0.3);
-//            else {
-//                lift.setLiftPower(0);
-//                lift.resetLiftPosition();
-//            }
-//        } else {
-//            if (gamepad2.dpad_up && !lift.atUpperLimit()) {
-//                lift.setLiftPower((gamepad2.square) ? 0.5 : 1.0);
-//            } else if (gamepad2.dpad_down && !lift.atLowerLimit()) {
-//                lift.setLiftPower((gamepad2.square) ? -0.5 : -0.8);
-//            } else {
-//                lift.setLiftPower(0.1);
-//            }
-//        }
 
 
         //Read heading and subtract offset, then normalize again

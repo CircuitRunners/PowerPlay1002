@@ -4,9 +4,10 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.commands.OldRetractLiftCommand;
+
 import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
 
@@ -15,12 +16,14 @@ public class GoToStackCommand extends ParallelCommandGroup {
     private SampleMecanumDrive drive;
     private Lift lift;
     private Claw claw;
+    private Arm arm;
 
-    public GoToStackCommand(SampleMecanumDrive drive, Lift lift, Claw claw, boolean isRed, int cycle){
+    public GoToStackCommand(SampleMecanumDrive drive, Lift lift, Claw claw, Arm arm, boolean isLeft, int cycle){
 
         this.drive = drive;
         this.lift = lift;
         this.claw = claw;
+        this.arm = arm;
 
         int liftPos = 0;
         switch (cycle) {
@@ -31,12 +34,12 @@ public class GoToStackCommand extends ParallelCommandGroup {
         }
 
         addCommands(
-                new TrajectorySequenceCommand(
-                        drive, isRed ? ThreeCycleTrajectories.redToStack : ThreeCycleTrajectories.blueToStack
-                ),
+//                new TrajectorySequenceCommand(
+//                        drive, isRed ? ThreeCycleTrajectories.redToStack : ThreeCycleTrajectories.blueToStack
+//                ),
                 new SequentialCommandGroup(
-                        new WaitCommand(500),
-                        new OldRetractLiftCommand(lift, claw)
+                        new WaitCommand(500)
+//                        new OldRetractLiftCommand(lift, claw)
 //                        new WaitCommand(300),
 //                        new LiftPositionCommand(lift, liftPos, true),
 //                        new WaitCommand(500),

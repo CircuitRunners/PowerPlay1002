@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.threecycle;
+package org.firstinspires.ftc.teamcode.auto.cycle;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -9,17 +9,20 @@ import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.autocommands.DropPreloadCommand;
 import org.firstinspires.ftc.teamcode.commands.autocommands.ThreeCycleTrajectories;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
 @Disabled
-@Autonomous(name = "Red Three Cycle")
-public class RedThreeCycleAuto extends CommandOpMode {
+@Autonomous(name = "Blue Three Cycle")
+public class LeftThreeCycleAuto extends CommandOpMode {
+
 
     private SampleMecanumDrive drive;
     private Claw claw;
     private Lift lift;
+    private Arm arm;
 
 
     private BeaconDetector beaconDetector;
@@ -32,15 +35,15 @@ public class RedThreeCycleAuto extends CommandOpMode {
         drive = new SampleMecanumDrive(hardwareMap);
         claw = new Claw(hardwareMap);
         lift = new Lift(hardwareMap);
-        drive.setPoseEstimate(ThreeCycleTrajectories.redStartingPosition);
-        ThreeCycleTrajectories.generateTrajectories(drive);
+        arm = new Arm(hardwareMap);
 
-        claw.clampClose();
+        drive.setPoseEstimate(ThreeCycleTrajectories.blueStartingPosition);
+        ThreeCycleTrajectories.generateTrajectories(drive);
+        claw.close();
 
         beaconDetector = new BeaconDetector(hardwareMap);
 
-
-        DropPreloadCommand preloadCommand = new DropPreloadCommand(drive, lift, claw, true);
+        DropPreloadCommand preloadCommand = new DropPreloadCommand(drive, lift, claw, arm, false);
 
 
         //Start vision

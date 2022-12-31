@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PwmControl;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 public class Claw extends SubsystemBase {
@@ -24,14 +23,14 @@ public class Claw extends SubsystemBase {
         claw.setPwmRange(new PwmControl.PwmRange(500, 2500));
         angleServo.setPwmRange(new PwmControl.PwmRange(500, 2500));
 
-        clampOpen();
+        open();
         angleDown();
     }
 
-    public void clampClose(){
+    public void close(){
         claw.setPosition(0.2);
     }
-    public void clampOpen(){
+    public void open(){
         claw.setPosition(0);
     }
 

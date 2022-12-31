@@ -12,10 +12,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Arm extends SubsystemBase {
 
     public enum ArmPositions {
-        DOWN(0.15),
-        SHORT(0.7),
+        DOWN(0.17),
+        SHORT(0.8),
         MID(0.8),
-        HIGH(0.75);
+        HIGH(0.78),
+        GROUND(0.9);
 
         public double position;
 
@@ -29,7 +30,8 @@ public class Arm extends SubsystemBase {
     private ServoImplEx rightServo;
 
 
-    private TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(0.9, 0.85);
+    private TrapezoidProfile.Constraints constraints =
+            new TrapezoidProfile.Constraints(1.3, 0.95);
     private TrapezoidProfile armProfile =
             new TrapezoidProfile(constraints, new TrapezoidProfile.State(ArmPositions.DOWN.position, 0),
                     new TrapezoidProfile.State(ArmPositions.DOWN.position, 0)
@@ -83,8 +85,8 @@ public class Arm extends SubsystemBase {
     }
 
     public void forceDown(){
-        leftServo.setPosition(0.15);
-        rightServo.setPosition(0.15);
+        leftServo.setPosition(ArmPositions.DOWN.position);
+        rightServo.setPosition(ArmPositions.DOWN.position);
     }
 
     //Set a preset level
