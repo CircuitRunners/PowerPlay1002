@@ -15,7 +15,7 @@ public class Arm extends SubsystemBase {
         DOWN(0.17),
         SHORT(0.8),
         MID(0.8),
-        HIGH(0.78),
+        HIGH(0.8),
         GROUND(0.9);
 
         public double position;
@@ -30,8 +30,11 @@ public class Arm extends SubsystemBase {
     private ServoImplEx rightServo;
 
 
+    //motion profile constraints
     private TrapezoidProfile.Constraints constraints =
             new TrapezoidProfile.Constraints(1.3, 0.95);
+
+    //Motion profile, initialize to down
     private TrapezoidProfile armProfile =
             new TrapezoidProfile(constraints, new TrapezoidProfile.State(ArmPositions.DOWN.position, 0),
                     new TrapezoidProfile.State(ArmPositions.DOWN.position, 0)
@@ -46,6 +49,7 @@ public class Arm extends SubsystemBase {
         leftServo = hardwareMap.get(ServoImplEx.class, "leftArm");
         rightServo = hardwareMap.get(ServoImplEx.class, "rightArm");
 
+        //Set the maximum pwm range
         leftServo.setPwmRange(new PwmControl.PwmRange(500, 2500));
         rightServo.setPwmRange(new PwmControl.PwmRange(500, 2500));
 
@@ -84,6 +88,7 @@ public class Arm extends SubsystemBase {
         setPosition(ArmPositions.DOWN.position);
     }
 
+    //Bypasses the profile
     public void forceDown(){
         leftServo.setPosition(ArmPositions.DOWN.position);
         rightServo.setPosition(ArmPositions.DOWN.position);

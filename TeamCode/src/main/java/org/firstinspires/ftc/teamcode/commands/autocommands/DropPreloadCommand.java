@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
+import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.LiftPositionCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
@@ -30,16 +31,15 @@ public class DropPreloadCommand extends ParallelCommandGroup {
 
         addCommands(
 
-                new LiftPositionCommand(lift, 150, true),
-//                new TrajectorySequenceCommand(
-//                        drive, isRed ? ThreeCycleTrajectories.redPreloadToPole : ThreeCycleTrajectories.bluePreloadToPole
-//                ),
+                new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.HIGH)),
+                new TrajectorySequenceCommand(
+                        drive, isLeft ? ThreeCycleTrajectories.leftPreloadToPole : ThreeCycleTrajectories.rightPreloadToPole
+                ),
                 new SequentialCommandGroup(
-                        new WaitCommand(1500),
-                        new LiftPositionCommand(lift, 2000, true),
-                        new WaitCommand(1500),
-                        new LiftPositionCommand(lift, 1900, true),
-                        new WaitCommand(500),
+                        new WaitCommand(1000),
+                        new LiftPositionCommand(lift, Lift.LiftPositions.HIGH.position, true),
+                        new InstantCommand(claw::angleUp),
+                        new WaitCommand(1000),
                         new InstantCommand(claw::open)
                 )
         );

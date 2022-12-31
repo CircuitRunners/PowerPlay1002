@@ -28,15 +28,15 @@ public class GoToStackCommand extends ParallelCommandGroup {
         int liftPos = 0;
         switch (cycle) {
             case 1:
-                liftPos = 1000;
+                liftPos = 400;
             case 2:
                 liftPos = 800;
         }
 
         addCommands(
-//                new TrajectorySequenceCommand(
-//                        drive, isRed ? ThreeCycleTrajectories.redToStack : ThreeCycleTrajectories.blueToStack
-//                ),
+                new TrajectorySequenceCommand(
+                        drive, isLeft ? ThreeCycleTrajectories.leftToStack : ThreeCycleTrajectories.rightToStack
+                ),
                 new SequentialCommandGroup(
                         new WaitCommand(500)
 //                        new OldRetractLiftCommand(lift, claw)

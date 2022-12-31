@@ -17,18 +17,17 @@ public class Intake extends SubsystemBase {
 
         leftMotor = hardwareMap.get(DcMotorSimple.class, "leftIntake");
         rightMotor = hardwareMap.get(DcMotorSimple.class, "rightIntake");
-        rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
 
     public void intake(){
         leftMotor.setPower(0.7);
-        rightMotor.setPower(0.7);
+        rightMotor.setPower(-0.7);
     }
 
     public void outtake(){
         leftMotor.setPower(-0.7);
-        rightMotor.setPower(-0.7);
+        rightMotor.setPower(0.7);
     }
 
     public void stop(){

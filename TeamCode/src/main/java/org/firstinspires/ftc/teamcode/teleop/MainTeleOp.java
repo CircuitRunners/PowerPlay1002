@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -58,6 +59,7 @@ public class MainTeleOp extends CommandOpMode {
     @Override
     public void initialize() {
 
+        PhotonCore.enable();
         //Set the bulk cache command to continuously run
         schedule(new BulkCacheCommand(hardwareMap));
 

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.auto.cycle;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
@@ -30,6 +31,7 @@ public class LeftThreeCycleAuto extends CommandOpMode {
 
     @Override
     public void initialize() {
+        PhotonCore.enable();
         schedule(new BulkCacheCommand(hardwareMap));
 
         drive = new SampleMecanumDrive(hardwareMap);
@@ -37,7 +39,7 @@ public class LeftThreeCycleAuto extends CommandOpMode {
         lift = new Lift(hardwareMap);
         arm = new Arm(hardwareMap);
 
-        drive.setPoseEstimate(ThreeCycleTrajectories.blueStartingPosition);
+        drive.setPoseEstimate(ThreeCycleTrajectories.leftStartingPosition);
         ThreeCycleTrajectories.generateTrajectories(drive);
         claw.close();
 
