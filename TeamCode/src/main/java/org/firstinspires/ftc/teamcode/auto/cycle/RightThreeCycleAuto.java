@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
 
-@Autonomous(name = "Blue Three Cycle")
+@Autonomous(name = "Right Three Cycle")
 public class RightThreeCycleAuto extends CommandOpMode {
 
 
