@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.commands.autocommands;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 
+import org.firstinspires.ftc.teamcode.commands.RetractOuttakeCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
+import org.firstinspires.ftc.teamcode.commands.liftcommands.LiftPositionCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -28,22 +31,29 @@ public class GoToStackCommand extends ParallelCommandGroup {
         int liftPos = 0;
         switch (cycle) {
             case 1:
-                liftPos = 400;
+                liftPos = 300;
+                break;
             case 2:
-                liftPos = 800;
+                liftPos = 250;
+                break;
+            case 3:
+                liftPos = 200;
+                break;
         }
 
         addCommands(
                 new TrajectorySequenceCommand(
                         drive, isLeft ? ThreeCycleTrajectories.leftToStack : ThreeCycleTrajectories.rightToStack
                 ),
+                new InstantCommand(claw::angleDown),
+                new InstantCommand(claw::open),
                 new SequentialCommandGroup(
-                        new WaitCommand(500)
-//                        new OldRetractLiftCommand(lift, claw)
-//                        new WaitCommand(300),
-//                        new LiftPositionCommand(lift, liftPos, true),
-//                        new WaitCommand(500),
-//                        new InstantCommand(claw::clampClose)
+                        new WaitCommand(400),
+                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.DOWN))
+                ),
+                new SequentialCommandGroup(
+                        new WaitCommand(400),
+                        new LiftPositionCommand(lift, liftPos, true)
                 )
         );
     }

@@ -11,7 +11,6 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(600);
-        new Pose2d(30, -15, toRadians(-133));
 
         System.setProperty("sun.java2d.opengl", "true");
 
