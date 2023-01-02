@@ -12,10 +12,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Arm extends SubsystemBase {
 
     public enum ArmPositions {
-        DOWN(0.18),
-        SHORT(0.75),
-        MID(0.75),
-        HIGH(0.75),
+        DOWN(0.17),
+        SHORT(0.68),
+        MID(0.68),
+        HIGH(0.68),
         GROUND(0.9);
 
         public double position;

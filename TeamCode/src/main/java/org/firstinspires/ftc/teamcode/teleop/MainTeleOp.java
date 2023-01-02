@@ -149,7 +149,7 @@ public class MainTeleOp extends CommandOpMode {
                 .whenActive(() -> arm.setLevel(Arm.ArmPositions.HIGH))
                 .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.HIGH.position, true))
                 .whenActive(new SequentialCommandGroup(
-                        new WaitCommand(700),
+                        new WaitCommand(900),
                         new InstantCommand(claw::angleUp)
                 ));
 
@@ -163,7 +163,7 @@ public class MainTeleOp extends CommandOpMode {
                 .whenActive(() -> arm.setLevel(Arm.ArmPositions.MID))
                 .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.MID.position, true))
                 .whenActive(new SequentialCommandGroup(
-                        new WaitCommand(700),
+                        new WaitCommand(900),
                         new InstantCommand(claw::angleUp)
                 ));
 
@@ -173,7 +173,7 @@ public class MainTeleOp extends CommandOpMode {
                 .whenActive(() -> arm.setLevel(Arm.ArmPositions.SHORT))
                 .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.SHORT.position, true))
                 .whenActive(new SequentialCommandGroup(
-                        new WaitCommand(700),
+                        new WaitCommand(900),
                         new InstantCommand(claw::angleUp)
                 ));
 
