@@ -11,9 +11,9 @@ public class Lift extends SubsystemBase {
 
     public enum LiftPositions {
         DOWN(0),
-        SHORT(200),
-        MID(500),
-        HIGH(750);
+        SHORT(135),
+        MID(378),
+        HIGH(669);
 
         public int position;
 
@@ -60,7 +60,7 @@ public class Lift extends SubsystemBase {
     }
 
     public boolean atUpperLimit(){
-        return getLiftPosition() > 860;
+        return getLiftPosition() > 845;
     }
 
     public boolean atLowerLimit(){

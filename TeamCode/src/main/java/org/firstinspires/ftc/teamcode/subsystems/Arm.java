@@ -12,10 +12,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Arm extends SubsystemBase {
 
     public enum ArmPositions {
-        DOWN(0.17),
-        SHORT(0.8),
-        MID(0.8),
-        HIGH(0.8),
+        DOWN(0.18),
+        SHORT(0.75),
+        MID(0.75),
+        HIGH(0.75),
         GROUND(0.9);
 
         public double position;
@@ -32,7 +32,7 @@ public class Arm extends SubsystemBase {
 
     //motion profile constraints
     private TrapezoidProfile.Constraints constraints =
-            new TrapezoidProfile.Constraints(1.3, 1);
+            new TrapezoidProfile.Constraints(1.2, 1);
 
     //Motion profile, initialize to down
     private TrapezoidProfile armProfile =

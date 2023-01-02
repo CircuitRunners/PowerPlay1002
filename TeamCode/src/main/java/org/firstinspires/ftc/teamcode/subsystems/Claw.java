@@ -28,18 +28,19 @@ public class Claw extends SubsystemBase {
     }
 
     public void close(){
-        claw.setPosition(0.2);
-    }
-    public void open(){
         claw.setPosition(0);
     }
 
+    public void open(){
+        claw.setPosition(0.34);
+    }
+
     public void angleDown(){
-        angleServo.setPosition(0);
+        angleServo.setPosition(0.19);
     }
 
     public void angleUp(){
-        angleServo.setPosition(0.3);
+        angleServo.setPosition(0.5);
     }
 
 

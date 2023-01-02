@@ -5,6 +5,9 @@ import static java.lang.Math.toRadians;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -53,7 +56,6 @@ public class MainTeleOp extends CommandOpMode {
 
     private ManualLiftCommand manualLiftCommand;
     private ManualLiftResetCommand manualLiftResetCommand;
-    private RetractOuttakeCommand retractOuttakeCommand;
 
 
     @Override
@@ -106,7 +108,6 @@ public class MainTeleOp extends CommandOpMode {
         //Set up commands
         manualLiftCommand = new ManualLiftCommand(lift, manipulator);
         manualLiftResetCommand = new ManualLiftResetCommand(lift, manipulator);
-        retractOuttakeCommand = new RetractOuttakeCommand(lift, arm, claw);
 
         lift.setDefaultCommand(manualLiftCommand);
 
@@ -146,27 +147,39 @@ public class MainTeleOp extends CommandOpMode {
         //High preset
         new Trigger(() -> manipulator.getLeftY() > 0.5)
                 .whenActive(() -> arm.setLevel(Arm.ArmPositions.HIGH))
-                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.HIGH.position, true));
+                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.HIGH.position, true))
+                .whenActive(new SequentialCommandGroup(
+                        new WaitCommand(700),
+                        new InstantCommand(claw::angleUp)
+                ));
 
         //Full retract preset
         new Trigger(() -> manipulator.getLeftY() < -0.5)
                 .or(new Trigger(() -> manipulator.getRightY() < -0.5))
-                .whenActive(retractOuttakeCommand);
+                .whenActive(new RetractOuttakeCommand(lift, arm, claw));
 
         //Mid preset
         new Trigger(() -> manipulator.getRightY() > 0.5)
                 .whenActive(() -> arm.setLevel(Arm.ArmPositions.MID))
-                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.MID.position, true));
+                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.MID.position, true))
+                .whenActive(new SequentialCommandGroup(
+                        new WaitCommand(700),
+                        new InstantCommand(claw::angleUp)
+                ));
+
 
         //Short preset
         new Trigger(() -> manipulator.getRightY() < -0.5)
                 .whenActive(() -> arm.setLevel(Arm.ArmPositions.SHORT))
-                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.SHORT.position, true));
+                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.SHORT.position, true))
+                .whenActive(new SequentialCommandGroup(
+                        new WaitCommand(700),
+                        new InstantCommand(claw::angleUp)
+                ));
 
         //Ground (terminal dropping) arm preset
         manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
                 .whenActive(() -> arm.setLevel(Arm.ArmPositions.GROUND));
-
 
 
         //Send line to telemetry indicating initialization is done
