@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 public class Claw extends SubsystemBase {
 
-    private HardwareMap hardwareMap;
 
     private ServoImplEx claw;
     private ServoImplEx angleServo;
@@ -15,7 +14,6 @@ public class Claw extends SubsystemBase {
     //Servos for the linkages
 
     public Claw(HardwareMap hardwareMap){
-        this.hardwareMap = hardwareMap;
         //Retrieve servos from the hardware map
         claw = hardwareMap.get(ServoImplEx.class, "clawServo");
         angleServo = hardwareMap.get(ServoImplEx.class, "angleServo");
@@ -32,7 +30,7 @@ public class Claw extends SubsystemBase {
     }
 
     public void open(){
-        claw.setPosition(0.34);
+        claw.setPosition(0.3);
     }
 
     public void angleDown(){

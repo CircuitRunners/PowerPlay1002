@@ -18,7 +18,7 @@ public class ThreeCycleTrajectories {
             new Pose2d(31, -7, toRadians(135));
 
     public static final Pose2d leftPreloadPosition =
-            new Pose2d(-31, -7, toRadians(45));
+            new Pose2d(-29, -5.5, toRadians(45));
 
     //TODO: Change to be the left side auto, not the blue
     public static final Pose2d rightDropPosition =
@@ -48,18 +48,18 @@ public class ThreeCycleTrajectories {
         rightPreloadToPole =
                 drive.trajectorySequenceBuilder(ThreeCycleTrajectories.rightStartingPosition)
                         .setReversed(true)
-                        .splineTo(new Vector2d(36, -25), toRadians(91))
-                        .splineTo(new Vector2d(36, -16), toRadians(94))
-                        .splineTo(rightPreloadPosition.vec(), toRadians(135))
+//                        .splineTo(new Vector2d(36, -25), toRadians(91))
+                        .splineTo(new Vector2d(36, -16), toRadians(91))
+                        .splineTo(rightPreloadPosition.vec(), toRadians(131))
                         .build();
 
         //TODO: this
         leftPreloadToPole =
                 drive.trajectorySequenceBuilder(ThreeCycleTrajectories.leftStartingPosition)
                         .setReversed(true)
-                        .splineTo(new Vector2d(-36, -25), toRadians(89))
-                        .splineTo(new Vector2d(-36, -16), toRadians(86))
-                        .splineTo(leftPreloadPosition.vec(), toRadians(45))
+//                        .splineTo(new Vector2d(-36, -25), toRadians(89))
+                        .splineTo(new Vector2d(-36, -16), toRadians(89))
+                        .splineTo(leftPreloadPosition.vec(), toRadians(49.5))
                         .build();
 
         rightToStack =

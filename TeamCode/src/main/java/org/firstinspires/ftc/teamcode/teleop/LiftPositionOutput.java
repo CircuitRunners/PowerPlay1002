@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp
 public class LiftPositionOutput extends LinearOpMode {
@@ -31,9 +32,18 @@ public class LiftPositionOutput extends LinearOpMode {
 
         waitForStart();
 
+        ElapsedTime timer = new ElapsedTime();
+
         while (opModeIsActive()){
-            telemetry.addData("Left Position", leftMotor.getCurrentPosition());
-            telemetry.addData("Right Position", rightMotor.getCurrentPosition());
+            double position = leftMotor.getCurrentPosition();
+            double velocity = leftMotor.getVelocity();
+            double acceleration = velocity / timer.seconds();
+
+            timer.reset();
+
+            telemetry.addData("Lift Position", position );
+            telemetry.addData("Lift Velocity", velocity );
+            telemetry.addData("Lift Acceleration", acceleration );
             telemetry.update();
         }
     }

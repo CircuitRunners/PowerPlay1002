@@ -61,7 +61,7 @@ public class MainTeleOp extends CommandOpMode {
     @Override
     public void initialize() {
 
-        PhotonCore.enable();
+//        PhotonCore.enable();
         //Set the bulk cache command to continuously run
         schedule(new BulkCacheCommand(hardwareMap));
 
@@ -155,7 +155,6 @@ public class MainTeleOp extends CommandOpMode {
 
         //Full retract preset
         new Trigger(() -> manipulator.getLeftY() < -0.5)
-                .or(new Trigger(() -> manipulator.getRightY() < -0.5))
                 .whenActive(new RetractOuttakeCommand(lift, arm, claw));
 
         //Mid preset
@@ -242,7 +241,7 @@ public class MainTeleOp extends CommandOpMode {
 
         telemetry.addData("Current Heading with offset", "%.2f", AngleUnit.DEGREES.fromRadians(heading));
         telemetry.addData("Offset", "%.2f", AngleUnit.DEGREES.fromRadians(headingOffset));
-        telemetry.addLine("Press A on Gamepad 1 to reset heading");
+        telemetry.addLine("Press Square on Gamepad 1 to reset heading");
         telemetry.addData("Z deg", AngleUnit.DEGREES.fromRadians(orientation.firstAngle));
         telemetry.addData("Y deg", AngleUnit.DEGREES.fromRadians(orientation.secondAngle));
         telemetry.addData("X deg", AngleUnit.DEGREES.fromRadians(orientation.thirdAngle));

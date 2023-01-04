@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto.cycle;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -68,13 +69,21 @@ public class LeftThreeCycleAuto extends CommandOpMode {
         beaconDetector.stopStream();
 
         schedule(new SequentialCommandGroup(
-                preloadCommand,
-                goToStackCommand1,
-                dropPoleCommand,
-                goToStackCommand2,
-                dropPoleCommand,
-                goToStackCommand3,
-                dropPoleCommand
+                preloadCommand
+//                goToStackCommand1,
+//                dropPoleCommand,
+//                goToStackCommand2,
+//                dropPoleCommand,
+//                goToStackCommand3,
+//                dropPoleCommand
         ));
+    }
+
+    @Override
+    public void run(){
+        CommandScheduler.getInstance().run();
+
+        telemetry.addData("lift", lift.getLiftPosition());
+        telemetry.update();
     }
 }

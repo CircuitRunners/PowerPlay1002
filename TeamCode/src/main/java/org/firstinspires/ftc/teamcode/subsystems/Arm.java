@@ -12,11 +12,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Arm extends SubsystemBase {
 
     public enum ArmPositions {
-        DOWN(0.17),
-        SHORT(0.68),
-        MID(0.68),
-        HIGH(0.68),
-        GROUND(0.9);
+        DOWN(0.105),
+        SHORT(0.6),
+        MID(0.6),
+        HIGH(0.6),
+        GROUND(0.8);
 
         public double position;
 
@@ -32,7 +32,7 @@ public class Arm extends SubsystemBase {
 
     //motion profile constraints
     private TrapezoidProfile.Constraints constraints =
-            new TrapezoidProfile.Constraints(1.2, 1);
+            new TrapezoidProfile.Constraints(1, 0.9);
 
     //Motion profile, initialize to down
     private TrapezoidProfile armProfile =
@@ -41,6 +41,7 @@ public class Arm extends SubsystemBase {
             );
 
     private ElapsedTime timer = new ElapsedTime();
+    private double prevTarget = ArmPositions.DOWN.position;
 
 
 
@@ -73,14 +74,18 @@ public class Arm extends SubsystemBase {
     public void setPosition(double target) {
 
         //Create a new profile starting from the last position command
-        armProfile = new TrapezoidProfile(
-                constraints,
-                new TrapezoidProfile.State(target, 0),
-                new TrapezoidProfile.State(leftServo.getPosition(), 0)
-        );
+        if(prevTarget != target){
+            armProfile = new TrapezoidProfile(
+                    constraints,
+                    new TrapezoidProfile.State(target, 0),
+                    new TrapezoidProfile.State(leftServo.getPosition(), 0)
+            );
 
-        //Reset the timer
-        timer.reset();
+            //Reset the timer
+            timer.reset();
+        }
+
+
     }
 
     //All the way to the rest position
