@@ -85,6 +85,7 @@ public class Arm extends SubsystemBase {
             timer.reset();
         }
 
+        prevTarget = target;
 
     }
 

@@ -11,9 +11,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 public class LiftPositionCommand extends CommandBase {
 
     private PIDFController liftController;
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.05, 0, 0);
-    private double kG = 0.14; //gravity
-    private double tolerance = 3;
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.03, 0, 0.001);
+    private double kG = 0.17; //gravity
+    private double tolerance = 4;
     private boolean holdAtEnd;
     private final Lift lift;
     private final double targetPosition;
@@ -25,12 +25,14 @@ public class LiftPositionCommand extends CommandBase {
     }
 
     public LiftPositionCommand(Lift lift, double targetPosition, boolean holdAtEnd){
+        addRequirements(lift);
+
         this.holdAtEnd = holdAtEnd;
         this.lift = lift;
         this.targetPosition = targetPosition;
 
         //Add a feedforward term to counteract gravity
-        liftController = new PIDFController(coefficients, 0, 0, 0, (x, v) -> kG);
+        liftController = new PIDFController(coefficients, 0.0017, 0, 0.04, (x, v) -> kG);
         liftController.setOutputBounds(-0.9, 0.95);
     }
     @Override

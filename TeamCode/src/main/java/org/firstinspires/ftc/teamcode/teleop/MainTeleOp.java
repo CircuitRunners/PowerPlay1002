@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.teleop;
 import static java.lang.Math.abs;
 import static java.lang.Math.toRadians;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -27,6 +30,7 @@ import org.firstinspires.ftc.teamcode.commands.liftcommands.LiftPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftResetCommand;
 import org.firstinspires.ftc.teamcode.commands.RetractOuttakeCommand;
+import org.firstinspires.ftc.teamcode.commands.liftcommands.ProfiledLiftPositionCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -239,12 +243,23 @@ public class MainTeleOp extends CommandOpMode {
         rf.setPower((Math.signum(frontRightPower) * 0.03) + frontRightPower);
         rb.setPower((Math.signum(backRightPower) * 0.03) + backRightPower);
 
+
+        TelemetryPacket packet = new TelemetryPacket();
+
         telemetry.addData("Current Heading with offset", "%.2f", AngleUnit.DEGREES.fromRadians(heading));
         telemetry.addData("Offset", "%.2f", AngleUnit.DEGREES.fromRadians(headingOffset));
         telemetry.addLine("Press Square on Gamepad 1 to reset heading");
-        telemetry.addData("Z deg", AngleUnit.DEGREES.fromRadians(orientation.firstAngle));
-        telemetry.addData("Y deg", AngleUnit.DEGREES.fromRadians(orientation.secondAngle));
-        telemetry.addData("X deg", AngleUnit.DEGREES.fromRadians(orientation.thirdAngle));
+//        telemetry.addData("Z deg", AngleUnit.DEGREES.fromRadians(orientation.firstAngle));
+//        telemetry.addData("Y deg", AngleUnit.DEGREES.fromRadians(orientation.secondAngle));
+//        telemetry.addData("X deg", AngleUnit.DEGREES.fromRadians(orientation.thirdAngle));
+        telemetry.addData("Lift Position", lift.getLiftPosition());
+
+        packet.put("Lift Position", lift.getLiftPosition());
+        packet.put("Lift velocity", lift.getLiftVelocity());
+        packet.put("Lift target position", ProfiledLiftPositionCommand.setpointPos);
+        packet.put("Lift target velocity", ProfiledLiftPositionCommand.setpointVel);
+
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
         telemetry.update();
 
     }

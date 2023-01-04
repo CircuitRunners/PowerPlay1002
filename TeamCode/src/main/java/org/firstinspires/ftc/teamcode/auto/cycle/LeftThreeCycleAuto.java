@@ -69,9 +69,9 @@ public class LeftThreeCycleAuto extends CommandOpMode {
         beaconDetector.stopStream();
 
         schedule(new SequentialCommandGroup(
-                preloadCommand
-//                goToStackCommand1,
-//                dropPoleCommand,
+                preloadCommand,
+                goToStackCommand1,
+                dropPoleCommand
 //                goToStackCommand2,
 //                dropPoleCommand,
 //                goToStackCommand3,

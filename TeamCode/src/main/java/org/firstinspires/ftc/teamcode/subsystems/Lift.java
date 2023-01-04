@@ -59,6 +59,10 @@ public class Lift extends SubsystemBase {
         return leftMotor.getCurrentPosition();
     }
 
+    public double getLiftVelocity(){
+        return leftMotor.getVelocity();
+    }
+
     public boolean atUpperLimit(){
         return getLiftPosition() > 845;
     }
