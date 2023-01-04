@@ -13,9 +13,11 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 public class ProfiledLiftPositionCommand extends CommandBase {
 
     private ProfiledPIDController liftController;
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.043, 0.025, 0.001);
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.043, 0.01, 0.001);
     private double kG = 0.17; //gravity
-    private double tolerance = 5;
+    private double kStatic = 0.01;
+
+    private double tolerance = 3;
     private boolean holdAtEnd;
     private final Lift lift;
     private final double targetPosition;
@@ -31,11 +33,12 @@ public class ProfiledLiftPositionCommand extends CommandBase {
         this.lift = lift;
         this.targetPosition = targetPosition;
 
-        //Add a feedforward term to counteract gravity
+
         liftController = new ProfiledPIDController(coefficients.kP, coefficients.kI, coefficients.kD,
-                new TrapezoidProfile.Constraints(400, 430));
-        liftController.setTolerance(tolerance);
+                new TrapezoidProfile.Constraints(600, 600));
     }
+
+
     @Override
     public void initialize(){
         //once
@@ -44,12 +47,18 @@ public class ProfiledLiftPositionCommand extends CommandBase {
         liftController.setGoal(targetPosition);
     }
 
-    //Run repeatedly while the command is active
     @Override
     public void execute(){
         liftPosition = lift.getLiftPosition();
+
+        //Get the controller output and add the gravity feedforward
+        double controllerOutput = liftController.calculate(liftPosition) + kG;
+
+        //Add the kStatic term
+        controllerOutput += (Math.signum(controllerOutput) * kStatic);
+
         //Update the lift power with the controller
-        lift.setLiftPower(liftController.calculate(liftPosition) + kG);
+        lift.setLiftPower(controllerOutput);
     }
 
     @Override

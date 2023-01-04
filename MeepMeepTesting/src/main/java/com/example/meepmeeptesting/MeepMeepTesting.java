@@ -22,13 +22,13 @@ public class MeepMeepTesting {
                 .followTrajectorySequence(drive ->
                                 drive.trajectorySequenceBuilder(new Pose2d(37, -58, toRadians(-90)))
                                         .setReversed(true)
-                                        .splineTo(new Vector2d(36, -25), toRadians(91))
-                                        .splineTo(new Vector2d(36, -16), toRadians(94))
-                                        .splineTo(new Vector2d(31, -7), toRadians(135))
+//                                        .splineTo(new Vector2d(36, -25), toRadians(91))
+                                        .splineTo(new Vector2d(36, -16), toRadians(93))
+                                        .splineTo(new Vector2d(29, -4.5), toRadians(141))
                                         .waitSeconds(1) //drop preload
 
                                         .setReversed(false)
-                                        .splineTo(new Vector2d(40, -11.7), toRadians(0)) //to stack
+//                                        .splineTo(new Vector2d(40, -11.7), toRadians(-2)) //to stack
                                         .splineTo(new Vector2d(60, -11.7), toRadians(0))
                                         .waitSeconds(1) //at stack 1
 
