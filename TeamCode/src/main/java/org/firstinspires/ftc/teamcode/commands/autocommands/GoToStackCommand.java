@@ -24,7 +24,7 @@ public class GoToStackCommand extends ParallelCommandGroup {
         int liftPos = 0;
         switch (cycle) {
             case 1:
-                liftPos = 171;
+                liftPos = 172;
                 break;
             case 2:
                 liftPos = 170;
@@ -46,7 +46,7 @@ public class GoToStackCommand extends ParallelCommandGroup {
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(400),
-                        new InstantCommand(claw::angleMore),
+                        new InstantCommand(claw::angleDown),
                         new InstantCommand(claw::open)
                 ),
                 new SequentialCommandGroup(

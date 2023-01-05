@@ -34,7 +34,7 @@ public class LeftThreeCycleAuto extends CommandOpMode {
 
     @Override
     public void initialize() {
-        PhotonCore.enable();
+//        PhotonCore.enable();
         schedule(new BulkCacheCommand(hardwareMap));
 
         drive = new SampleMecanumDrive(hardwareMap);

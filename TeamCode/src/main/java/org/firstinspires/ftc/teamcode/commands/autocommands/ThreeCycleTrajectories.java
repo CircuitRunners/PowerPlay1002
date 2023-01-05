@@ -27,14 +27,14 @@ public class ThreeCycleTrajectories {
             new Pose2d(29, -4.5, toRadians(135));
 
     public static final Pose2d leftPreloadPosition =
-            new Pose2d(-30, -4.9, toRadians(-120));
+            new Pose2d(-31.3, -5.5, toRadians(-119));
 
     //TODO: Change to be the left side auto, not the blue
     public static final Pose2d rightDropPosition =
             new Pose2d(31, -15, toRadians(-132));
 
     public static final Pose2d leftDropPosition =
-            new Pose2d(-35, -6.5, toRadians(-51));
+            new Pose2d(-34, -7.5, toRadians(-51));
 
     public static final Pose2d rightStackPosition =
             new Pose2d(60, -11.7, toRadians(0));
@@ -71,7 +71,7 @@ public class ThreeCycleTrajectories {
                         .setReversed(true)
 //                        .splineTo(new Vector2d(-36, -25), toRadians(89))
                         .splineTo(new Vector2d(-36, -25), toRadians(87))
-                        .splineToSplineHeading(leftPreloadPosition, toRadians(41))
+                        .splineToSplineHeading(leftPreloadPosition, toRadians(42))
                         .build();
 
         rightToStack =
