@@ -11,6 +11,11 @@ public class ManualLiftCommand extends CommandBase {
     private final Lift lift;
     private final GamepadEx manipulator;
 
+    private final double up = 1.0;
+    private final double down = -0.7;
+
+    private final double slowUp = 0.7;
+    private final double slowDown = -0.1;
 
     public ManualLiftCommand(Lift lift, GamepadEx manipulator){
 
@@ -24,22 +29,21 @@ public class ManualLiftCommand extends CommandBase {
     public void execute() {
         //Two dpad buttons cant be pressed at the same time so we don't have to worry about that.
 
-        double multiplier = manipulator.getButton(GamepadKeys.Button.X) ? 0.6 : 1.0;
-
-
+        boolean slow = manipulator.getButton(GamepadKeys.Button.X);
 
         //Check if the up button is pressed
-        if (manipulator.getButton(GamepadKeys.Button.DPAD_UP) && !lift.atUpperLimit()) {
-            lift.setLiftPower(1.0 * multiplier);
+        if(manipulator.getButton(GamepadKeys.Button.DPAD_UP) && !lift.atUpperLimit()){
+            lift.setLiftPower((slow) ? slowUp : up);
         }
+
         //Then check if the down is pressed
         else if (manipulator.getButton(GamepadKeys.Button.DPAD_DOWN) && !lift.atLowerLimit()) {
-            lift.setLiftPower(-0.7 * multiplier);
+            lift.setLiftPower((slow) ? slowDown : down);
         }
 
         //Otherwise, do nothing
         else {
-            if(lift.getLiftPosition() < 270) lift.setLiftPower(0.12);
+            if(lift.getLiftPosition() < 270) lift.setLiftPower(0.14);
             else if(lift.getLiftPosition() > 600) lift.setLiftPower(0.18);
             else lift.setLiftPower(0.17);
         }

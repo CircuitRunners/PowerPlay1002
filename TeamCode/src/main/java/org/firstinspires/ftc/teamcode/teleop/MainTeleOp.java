@@ -7,8 +7,10 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.PerpetualCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
@@ -60,6 +62,7 @@ public class MainTeleOp extends CommandOpMode {
 
     private ManualLiftCommand manualLiftCommand;
     private ManualLiftResetCommand manualLiftResetCommand;
+    private LiftPositionCommand liftPositionCommand;
 
 
     @Override
@@ -109,12 +112,6 @@ public class MainTeleOp extends CommandOpMode {
         GamepadEx driver = new GamepadEx(gamepad1);
         GamepadEx manipulator = new GamepadEx(gamepad2);
 
-        //Set up commands
-        manualLiftCommand = new ManualLiftCommand(lift, manipulator);
-        manualLiftResetCommand = new ManualLiftResetCommand(lift, manipulator);
-
-        lift.setDefaultCommand(manualLiftCommand);
-
 
         //Lmec Control
         new Trigger(() -> driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.7)
@@ -139,6 +136,12 @@ public class MainTeleOp extends CommandOpMode {
                 .whenInactive(intake::stop);
 
 
+        //Set up commands
+        manualLiftCommand = new ManualLiftCommand(lift, manipulator);
+        manualLiftResetCommand = new ManualLiftResetCommand(lift, manipulator);
+
+        lift.setDefaultCommand(new PerpetualCommand(manualLiftCommand));
+
         //Claw control
         manipulator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .toggleWhenActive(claw::close, claw::open);
@@ -147,38 +150,33 @@ public class MainTeleOp extends CommandOpMode {
         manipulator.getGamepadButton(GamepadKeys.Button.Y)
                 .whenHeld(manualLiftResetCommand);
 
-
-        //High preset
+         //High preset
         new Trigger(() -> manipulator.getLeftY() > 0.5)
-                .whenActive(() -> arm.setLevel(Arm.ArmPositions.HIGH))
                 .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.HIGH.position, true))
                 .whenActive(new SequentialCommandGroup(
-                        new WaitCommand(900),
+                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.HIGH)),
+                        new InstantCommand(claw::angleUp)
+                ));
+
+        //Mid preset
+        new Trigger(() -> manipulator.getRightY() > 0.5)
+                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.MID.position, true))
+                .whenActive(new SequentialCommandGroup(
+                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.MID)),
+                        new InstantCommand(claw::angleUp)
+                ));
+
+        //Short preset
+        new Trigger(() -> manipulator.getRightY() < -0.5)
+                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.SHORT.position, true))
+                .whenActive(new SequentialCommandGroup(
+                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.SHORT)),
                         new InstantCommand(claw::angleUp)
                 ));
 
         //Full retract preset
         new Trigger(() -> manipulator.getLeftY() < -0.5)
                 .whenActive(new RetractOuttakeCommand(lift, arm, claw));
-
-        //Mid preset
-        new Trigger(() -> manipulator.getRightY() > 0.5)
-                .whenActive(() -> arm.setLevel(Arm.ArmPositions.MID))
-                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.MID.position, true))
-                .whenActive(new SequentialCommandGroup(
-                        new WaitCommand(900),
-                        new InstantCommand(claw::angleUp)
-                ));
-
-
-        //Short preset
-        new Trigger(() -> manipulator.getRightY() < -0.5)
-                .whenActive(() -> arm.setLevel(Arm.ArmPositions.SHORT))
-                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.SHORT.position, true))
-                .whenActive(new SequentialCommandGroup(
-                        new WaitCommand(900),
-                        new InstantCommand(claw::angleUp)
-                ));
 
         //Ground (terminal dropping) arm preset
         manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
