@@ -81,12 +81,17 @@ public class Arm extends SubsystemBase {
                     new TrapezoidProfile.State(leftServo.getPosition(), 0)
             );
 
+
             //Reset the timer
             timer.reset();
         }
 
         prevTarget = target;
 
+    }
+
+    public double getPosition(){
+        return leftServo.getPosition();
     }
 
     //All the way to the rest position

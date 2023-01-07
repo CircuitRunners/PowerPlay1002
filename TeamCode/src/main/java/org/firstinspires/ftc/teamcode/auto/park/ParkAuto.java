@@ -41,19 +41,19 @@ public class ParkAuto extends CommandOpMode {
         beaconDetector.startStream();
 
         TrajectorySequence leftTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
-                .forward(26)
+                .back(27)
                 .turn(toRadians(90))
-                .forward(25)
-                .turn(toRadians(-90))
+                .back(25)
+//                .turn(toRadians(-90))
                 .build();
         TrajectorySequence middleTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
-                .forward(25)
+                .back(27)
                 .build();
         TrajectorySequence rightTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
-                .forward(25)
+                .back(28)
                 .turn(toRadians(-90))
-                .forward(25)
-                .turn(toRadians(90))
+                .back(24)
+//                .turn(toRadians(90))
                 .build();
 
         //Close the claw

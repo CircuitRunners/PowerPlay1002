@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.autocommands.DropPoleCommand;
 import org.firstinspires.ftc.teamcode.commands.autocommands.DropPreloadCommand;
 import org.firstinspires.ftc.teamcode.commands.autocommands.GoToStackCommand;
+import org.firstinspires.ftc.teamcode.commands.autocommands.ParkCommand;
 import org.firstinspires.ftc.teamcode.commands.autocommands.ThreeCycleTrajectories;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
@@ -53,6 +54,7 @@ public class LeftThreeCycleAuto extends CommandOpMode {
         GoToStackCommand goToStackCommand2 = new GoToStackCommand(drive, lift, claw, arm, true, 2);
         GoToStackCommand goToStackCommand3 = new GoToStackCommand(drive, lift, claw, arm, true, 3);
         DropPoleCommand dropPoleCommand = new DropPoleCommand(drive, lift, claw, arm, true);
+        ParkCommand parkCommand = new ParkCommand(drive, lift, arm, claw, beaconId);
 
 
 
@@ -71,11 +73,12 @@ public class LeftThreeCycleAuto extends CommandOpMode {
         schedule(new SequentialCommandGroup(
                 preloadCommand,
                 goToStackCommand1,
-                dropPoleCommand
+                dropPoleCommand,
 //                goToStackCommand2,
 //                dropPoleCommand,
 //                goToStackCommand3,
-//                dropPoleCommand
+//                dropPoleCommand,
+                parkCommand
         ));
     }
 

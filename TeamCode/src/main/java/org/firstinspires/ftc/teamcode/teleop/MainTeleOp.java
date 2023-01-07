@@ -150,28 +150,25 @@ public class MainTeleOp extends CommandOpMode {
         manipulator.getGamepadButton(GamepadKeys.Button.Y)
                 .whenHeld(manualLiftResetCommand);
 
-         //High preset
+        //High preset
         new Trigger(() -> manipulator.getLeftY() > 0.5)
-                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.HIGH.position, true))
+//                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.HIGH.position, true))
                 .whenActive(new SequentialCommandGroup(
-                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.HIGH)),
-                        new InstantCommand(claw::angleUp)
+                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.HIGH))
                 ));
 
         //Mid preset
         new Trigger(() -> manipulator.getRightY() > 0.5)
-                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.MID.position, true))
+//                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.MID.position, true))
                 .whenActive(new SequentialCommandGroup(
-                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.MID)),
-                        new InstantCommand(claw::angleUp)
+                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.MID))
                 ));
 
         //Short preset
         new Trigger(() -> manipulator.getRightY() < -0.5)
-                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.SHORT.position, true))
+//                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.SHORT.position, true))
                 .whenActive(new SequentialCommandGroup(
-                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.SHORT)),
-                        new InstantCommand(claw::angleUp)
+                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.SHORT))
                 ));
 
         //Full retract preset
@@ -209,6 +206,11 @@ public class MainTeleOp extends CommandOpMode {
 
         prevHeadingReset = gamepad1.x;
 
+        if (arm.getPosition() > 0.5) {
+            claw.angleUp();
+        } else {
+            claw.angleDown();
+        }
 
         //Read gamepad joysticks
         double y = -gamepad1.left_stick_y; // Remember, this is reversed!

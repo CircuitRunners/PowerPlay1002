@@ -24,13 +24,13 @@ public class GoToStackCommand extends ParallelCommandGroup {
         int liftPos = 0;
         switch (cycle) {
             case 1:
-                liftPos = 172;
+                liftPos = 162;
                 break;
             case 2:
-                liftPos = 170;
+                liftPos = 156;
                 break;
             case 3:
-                liftPos = 155;
+                liftPos = 150;
                 break;
         }
 
@@ -51,7 +51,7 @@ public class GoToStackCommand extends ParallelCommandGroup {
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(400),
-                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.DOWN))
+                        new InstantCommand(() -> arm.setPosition(Arm.ArmPositions.DOWN.position + 0.03))
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(400),

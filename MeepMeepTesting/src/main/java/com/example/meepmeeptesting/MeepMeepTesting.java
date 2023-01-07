@@ -28,8 +28,8 @@ public class MeepMeepTesting {
                                         .waitSeconds(1) //drop preload
 
                                         .setReversed(false)
-//                                        .splineTo(new Vector2d(40, -11.7), toRadians(-2)) //to stack
-                                        .splineTo(new Vector2d(60, -11.7), toRadians(0))
+                                        .splineTo(new Vector2d(40, -4), toRadians(-2)) //to stack
+                                        .splineTo(new Vector2d(60, -4), toRadians(0))
                                         .waitSeconds(1) //at stack 1
 
 
