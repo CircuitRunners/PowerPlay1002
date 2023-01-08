@@ -17,8 +17,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
+// Boeing 777-300ER or A350-900
 
-@Autonomous(name = "Left Three Cycle")
+@Autonomous(name = "Left Five Cycle")
 public class LeftFiveCycleAuto extends CommandOpMode {
 
 
