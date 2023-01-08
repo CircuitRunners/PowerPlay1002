@@ -59,7 +59,7 @@ public class LiftPositionCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted){
-        if(holdAtEnd) lift.setLiftPower(0.18);
+        if (holdAtEnd) lift.setLiftPower(0.18);
         else lift.stop();
     }
 

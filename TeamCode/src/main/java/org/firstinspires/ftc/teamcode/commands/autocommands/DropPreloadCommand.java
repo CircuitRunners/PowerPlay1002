@@ -20,7 +20,7 @@ public class DropPreloadCommand extends ParallelCommandGroup {
     public DropPreloadCommand(SampleMecanumDrive drive, Lift lift, Claw claw, Arm arm, boolean isLeft) {
 
         addCommands(
-
+                new InstantCommand(claw::close), // Attempt to close claw again to make sure ting is secure
                 new SequentialCommandGroup(
                         new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.HIGH)),
                         new WaitCommand(1500),

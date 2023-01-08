@@ -21,16 +21,25 @@ public class GoToStackCommand extends ParallelCommandGroup {
     public GoToStackCommand(SampleMecanumDrive drive, Lift lift, Claw claw, Arm arm, boolean isLeft, int cycle) {
 
 
-        int liftPos = 0;
+        // Have the liftPos set to something relevant in case something goes wonky
+        int liftPos = 162;
+
         switch (cycle) {
             case 1:
                 liftPos = 162;
                 break;
             case 2:
-                liftPos = 156;
+                liftPos = 156; // -6
                 break;
             case 3:
-                liftPos = 150;
+                liftPos = 150; // -6
+                break;
+            // Theoretical Values based on Pattern Analysis
+            case 4:
+                liftPos = 144; // **-6
+                break;
+            case 5:
+                liftPos = 138; // **-6
                 break;
         }
 
