@@ -44,6 +44,8 @@ public class Arm extends SubsystemBase {
     private double prevTarget = ArmPositions.DOWN.position;
 
 
+    private double clawFullOpenLimit = 0.3;
+
 
     public Arm(HardwareMap hardwareMap){
     
@@ -88,6 +90,11 @@ public class Arm extends SubsystemBase {
 
         prevTarget = target;
 
+    }
+
+
+    public boolean canFullOpenClaw(){
+        return getPosition() < clawFullOpenLimit;
     }
 
     public double getPosition(){

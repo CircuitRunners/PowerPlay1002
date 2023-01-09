@@ -56,11 +56,12 @@ public class GoToStackCommand extends ParallelCommandGroup {
                 new SequentialCommandGroup(
                         new WaitCommand(400),
                         new InstantCommand(claw::angleDown),
-                        new InstantCommand(claw::open)
+                        new WaitCommand(1000),
+                        new InstantCommand(claw::fullOpen) //Wait for the arm to get all the way down before fully opening the claw
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(400),
-                        new InstantCommand(() -> arm.setPosition(Arm.ArmPositions.DOWN.position + 0.03))
+                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.DOWN))
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(400),

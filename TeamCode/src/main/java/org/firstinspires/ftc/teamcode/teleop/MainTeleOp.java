@@ -144,7 +144,10 @@ public class MainTeleOp extends CommandOpMode {
 
         //Claw control
         manipulator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .toggleWhenActive(claw::close, claw::open);
+                .toggleWhenActive(claw::close, () -> {
+                    if(arm.canFullOpenClaw()) claw.fullOpen();
+                    else claw.open();
+                });
 
         //Bottom limit lift reset
         manipulator.getGamepadButton(GamepadKeys.Button.Y)
