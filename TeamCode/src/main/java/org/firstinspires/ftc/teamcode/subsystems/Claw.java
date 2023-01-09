@@ -22,20 +22,20 @@ public class Claw extends SubsystemBase {
         claw.setPwmRange(new PwmControl.PwmRange(500, 2500));
         angleServo.setPwmRange(new PwmControl.PwmRange(500, 2500));
 
-        open();
+        fullOpen();
         angleDown();
     }
 
     public void close(){
-        claw.setPosition(0.69);
+        claw.setPosition(0.61);
     }
 
     public void open(){
-        claw.setPosition(0.5);
+        claw.setPosition(0.58);
     }
 
     public void fullOpen(){
-        claw.setPosition(0.8);
+        claw.setPosition(0.42);
     }
 
     public void angleDown(){

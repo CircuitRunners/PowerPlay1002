@@ -256,6 +256,7 @@ public class MainTeleOp extends CommandOpMode {
 //        telemetry.addData("Y deg", AngleUnit.DEGREES.fromRadians(orientation.secondAngle));
 //        telemetry.addData("X deg", AngleUnit.DEGREES.fromRadians(orientation.thirdAngle));
         telemetry.addData("Lift Position", lift.getLiftPosition());
+        telemetry.addData("can open full claw", arm.canFullOpenClaw());
 
         packet.put("Lift Position", lift.getLiftPosition());
         packet.put("Lift velocity", lift.getLiftVelocity());
