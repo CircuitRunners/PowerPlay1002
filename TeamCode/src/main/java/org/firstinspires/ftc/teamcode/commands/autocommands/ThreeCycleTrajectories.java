@@ -72,7 +72,7 @@ public class ThreeCycleTrajectories {
                         .splineTo(rightPreloadPosition.vec(), toRadians(141))
                         .build();
 
-        //TODO: this
+
         leftPreloadToPole =
                 drive.trajectorySequenceBuilder(ThreeCycleTrajectories.leftStartingPosition)
                         .setReversed(true)
@@ -91,8 +91,8 @@ public class ThreeCycleTrajectories {
         leftToStack =
                 drive.trajectorySequenceBuilder(leftDropPosition)
                         .setReversed(false)
-                        .splineTo(new Vector2d(-40, -4), toRadians(180)) //to stack
-                        .splineTo(leftStackPosition.vec(), toRadians(180))
+                        .lineToLinearHeading(new Pose2d(-40, -7, toRadians(180))) //to stack
+                        .lineToLinearHeading(leftStackPosition)
                         .build();
 
         rightToStackPreload =
@@ -105,8 +105,8 @@ public class ThreeCycleTrajectories {
         leftToStackPreload =
                 drive.trajectorySequenceBuilder(leftPreloadPosition)
                         .setReversed(false)
-                        .splineTo(new Vector2d(-40, -7), toRadians(-130)) //to stack
-                        .splineTo(leftStackPosition.vec(), toRadians(180))
+                        .lineToLinearHeading(new Pose2d(-40, -7, toRadians(180))) //to stack
+                        .lineToLinearHeading(leftStackPosition)
                         .build();
 
         rightToPole =
