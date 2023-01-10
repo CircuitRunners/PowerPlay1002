@@ -7,6 +7,20 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 public class Claw extends SubsystemBase {
 
+    public enum ClawPosition {
+        CLOSE(0.61),
+        OPEN(0.58),
+        FULL_OPEN(0.42);
+
+        public double position;
+
+        ClawPosition(double position){
+            this.position = position;
+        }
+    }
+
+    private ClawPosition clawPosition;
+
 
     private ServoImplEx claw;
     private ServoImplEx angleServo;
@@ -23,19 +37,27 @@ public class Claw extends SubsystemBase {
         angleServo.setPwmRange(new PwmControl.PwmRange(500, 2500));
 
         fullOpen();
+        clawPosition = ClawPosition.FULL_OPEN;
         angleDown();
     }
 
+    public ClawPosition getClawPosition(){
+        return clawPosition;
+    }
+
     public void close(){
-        claw.setPosition(0.61);
+        claw.setPosition(ClawPosition.CLOSE.position);
+        clawPosition = ClawPosition.CLOSE;
     }
 
     public void open(){
-        claw.setPosition(0.58);
+        claw.setPosition(ClawPosition.OPEN.position);
+        clawPosition = ClawPosition.OPEN;
     }
 
     public void fullOpen(){
-        claw.setPosition(0.42);
+        claw.setPosition(ClawPosition.FULL_OPEN.position);
+        clawPosition = ClawPosition.FULL_OPEN;
     }
 
     public void angleDown(){

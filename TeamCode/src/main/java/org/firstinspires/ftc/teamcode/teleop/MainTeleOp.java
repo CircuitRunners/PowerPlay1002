@@ -4,19 +4,15 @@ import static java.lang.Math.abs;
 import static java.lang.Math.toRadians;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.PerpetualCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -31,7 +27,8 @@ import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.LiftPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftResetCommand;
-import org.firstinspires.ftc.teamcode.commands.RetractOuttakeCommand;
+import org.firstinspires.ftc.teamcode.commands.presets.MoveToScoringCommand;
+import org.firstinspires.ftc.teamcode.commands.presets.RetractOuttakeCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ProfiledLiftPositionCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -155,32 +152,25 @@ public class MainTeleOp extends CommandOpMode {
 
         //High preset
         new Trigger(() -> manipulator.getLeftY() > 0.5)
-//                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.HIGH.position, true))
-                .whenActive(new SequentialCommandGroup(
-                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.HIGH))
-                ));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.HIGH));
 
         //Mid preset
         new Trigger(() -> manipulator.getRightY() > 0.5)
-//                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.MID.position, true))
-                .whenActive(new SequentialCommandGroup(
-                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.MID))
-                ));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.MID));
 
         //Short preset
         new Trigger(() -> manipulator.getRightY() < -0.5)
-//                .whenActive(new LiftPositionCommand(lift, Lift.LiftPositions.SHORT.position, true))
-                .whenActive(new SequentialCommandGroup(
-                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.SHORT))
-                ));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.SHORT));
+
+        //Ground (terminal dropping) arm preset
+        manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.GROUND));
 
         //Full retract preset
         new Trigger(() -> manipulator.getLeftY() < -0.5)
                 .whenActive(new RetractOuttakeCommand(lift, arm, claw));
 
-        //Ground (terminal dropping) arm preset
-        manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
-                .whenActive(() -> arm.setLevel(Arm.ArmPositions.GROUND));
+
 
 
         //Send line to telemetry indicating initialization is done

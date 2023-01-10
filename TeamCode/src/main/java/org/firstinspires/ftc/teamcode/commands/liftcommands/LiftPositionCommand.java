@@ -20,11 +20,11 @@ public class LiftPositionCommand extends CommandBase {
 
     private double liftPosition;
 
-    public LiftPositionCommand(Lift lift, double targetPosition){
+    public LiftPositionCommand(Lift lift, int targetPosition){
         this(lift, targetPosition, false);
     }
 
-    public LiftPositionCommand(Lift lift, double targetPosition, boolean holdAtEnd){
+    public LiftPositionCommand(Lift lift, int targetPosition, boolean holdAtEnd){
         addRequirements(lift);
 
         this.holdAtEnd = holdAtEnd;

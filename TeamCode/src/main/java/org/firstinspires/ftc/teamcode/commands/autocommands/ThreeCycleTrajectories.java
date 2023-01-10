@@ -81,20 +81,6 @@ public class ThreeCycleTrajectories {
                         .splineToSplineHeading(leftPreloadPosition, toRadians(42))
                         .build();
 
-        rightToStack =
-                drive.trajectorySequenceBuilder(rightDropPosition)
-                        .setReversed(false)
-                        .splineTo(new Vector2d(40, -11.7), toRadians(0)) //to stack
-                        .splineTo(rightStackPosition.vec(), toRadians(0))
-                        .build();
-
-        leftToStack =
-                drive.trajectorySequenceBuilder(leftDropPosition)
-                        .setReversed(false)
-                        .lineToLinearHeading(new Pose2d(-40, -7, toRadians(180))) //to stack
-                        .lineToLinearHeading(leftStackPosition)
-                        .build();
-
         rightToStackPreload =
                 drive.trajectorySequenceBuilder(rightPreloadPosition)
                         .setReversed(false)
@@ -119,25 +105,40 @@ public class ThreeCycleTrajectories {
         leftToPole =
                 drive.trajectorySequenceBuilder(leftStackPosition)
                         .setReversed(true)
-                        .splineTo(new Vector2d(-40, -7.5), toRadians(0))
-                        .splineTo(leftDropPosition.vec(), toRadians(-52))
+                        .lineTo(new Vector2d(-40, -7.5))
+                        .lineToLinearHeading(leftDropPosition)
                         .build();
 
+        rightToStack =
+                drive.trajectorySequenceBuilder(rightDropPosition)
+                        .setReversed(false)
+                        .splineTo(new Vector2d(40, -11.7), toRadians(0)) //to stack
+                        .splineTo(rightStackPosition.vec(), toRadians(0))
+                        .build();
+
+        leftToStack =
+                drive.trajectorySequenceBuilder(leftDropPosition)
+                        .setReversed(false)
+                        .lineToLinearHeading(new Pose2d(-40, -7, toRadians(180))) //to stack
+                        .lineToLinearHeading(leftStackPosition)
+                        .build();
+
+        //PARKING
         leftLeftPark =
-                drive.trajectorySequenceBuilder(new Pose2d(leftDropPosition.vec(), toRadians(130)))
+                drive.trajectorySequenceBuilder(leftDropPosition)
                         .forward(6)
                         .turn(toRadians(45))
                         .strafeLeft(25)
                         .build();
 
         leftMiddlePark =
-                drive.trajectorySequenceBuilder(new Pose2d(leftDropPosition.vec(), toRadians(130)))
+                drive.trajectorySequenceBuilder(leftDropPosition)
                         .forward(6)
                         .turn(toRadians(45))
                         .build();
 
         leftLeftPark =
-                drive.trajectorySequenceBuilder(new Pose2d(leftDropPosition.vec(), toRadians(130)))
+                drive.trajectorySequenceBuilder(leftDropPosition)
                         .forward(6)
                         .turn(toRadians(45))
                         .strafeRight(25)
