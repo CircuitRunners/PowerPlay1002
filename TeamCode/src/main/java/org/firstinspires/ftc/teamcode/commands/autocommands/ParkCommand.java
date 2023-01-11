@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.commands.autocommands;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.presets.RetractOuttakeCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
@@ -16,7 +18,13 @@ public class ParkCommand extends ParallelCommandGroup {
 
     public ParkCommand(SampleMecanumDrive drive, Lift lift, Arm arm, Claw claw, BeaconDetector.BeaconTags tag){
 
-        addCommands(new RetractOuttakeCommand(lift, arm, claw));
+        addCommands(
+                new SequentialCommandGroup(
+                        new WaitCommand(500),
+                        new RetractOuttakeCommand(lift, arm, claw)
+                )
+
+        );
 
         switch (tag){
             case LEFT:

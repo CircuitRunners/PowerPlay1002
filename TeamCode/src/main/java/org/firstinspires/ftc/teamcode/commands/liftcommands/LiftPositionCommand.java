@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.commands.liftcommands;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
+import com.acmerobotics.roadrunner.kinematics.Kinematics;
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.controller.wpilibcontroller.ElevatorFeedforward;
 
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
 
@@ -11,9 +13,10 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 public class LiftPositionCommand extends CommandBase {
 
     private PIDFController liftController;
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.031, 0, 0.001);
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.037, 0, 0.002);
     private double kG = 0.176; //gravity
-    private double tolerance = 4;
+    //Bottom 0.14, 0.145, 0.176
+    private double tolerance = 3;
     private boolean holdAtEnd;
     private final Lift lift;
     private final double targetPosition;
@@ -27,12 +30,17 @@ public class LiftPositionCommand extends CommandBase {
     public LiftPositionCommand(Lift lift, int targetPosition, boolean holdAtEnd){
         addRequirements(lift);
 
+
         this.holdAtEnd = holdAtEnd;
         this.lift = lift;
         this.targetPosition = targetPosition;
 
         //Add a feedforward term to counteract gravity
-        liftController = new PIDFController(coefficients, 0.00175, 0.002, 0.055, (x, v) -> kG);
+        liftController = new PIDFController(coefficients, 0.00175, 0.002, 0.15, (x, v) -> {
+            if(x < 283) return 0.12;
+            else if(x < 580) return 0.13;
+            else return 0.14;
+        });
         liftController.setOutputBounds(-0.9, 0.95);
     }
     @Override
@@ -59,7 +67,7 @@ public class LiftPositionCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted){
-        if (holdAtEnd) lift.setLiftPower(0.18);
+        if (holdAtEnd) lift.setLiftPower(0.19);
         else lift.stop();
     }
 

@@ -21,16 +21,16 @@ class MoveToScoringCommand(lift: Lift, arm: Arm, claw: Claw, preset: Presets) : 
 
     init {
         addCommands(
-//                when (preset) {
-//                    Presets.GROUND -> InstantCommand({}) //do nothing
-//                    Presets.SHORT ->
-//                        LiftPositionCommand(lift, LiftPositions.SHORT.position, true)
-//                    Presets.MID ->
-//                        LiftPositionCommand(lift, LiftPositions.MID.position, true)
-//                    Presets.HIGH ->
-//                        LiftPositionCommand(lift, LiftPositions.HIGH.position, true)
-//
-//                },
+                when (preset) {
+                    Presets.GROUND -> InstantCommand({}) //do nothing
+                    Presets.SHORT ->
+                        LiftPositionCommand(lift, LiftPositions.SHORT.position, true)
+                    Presets.MID ->
+                        LiftPositionCommand(lift, LiftPositions.MID.position, true)
+                    Presets.HIGH ->
+                        LiftPositionCommand(lift, LiftPositions.HIGH.position, true)
+
+                },
 
                 InstantCommand({
                     when (preset) {

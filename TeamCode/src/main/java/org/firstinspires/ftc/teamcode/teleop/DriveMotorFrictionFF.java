@@ -4,30 +4,25 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import java.util.ArrayList;
 
 @TeleOp
 public class DriveMotorFrictionFF extends LinearOpMode {
 
-    private double currentPower = 0;
 
-    DcMotorEx lf;
-    DcMotorEx lb;
-    DcMotorEx rf;
-    DcMotorEx rb;
+    DcMotorEx left;
+    DcMotorEx right;
 
 
-    private boolean prevLF = false;
-    private boolean prevLB = false;
-    private boolean prevRF = false;
-    private boolean prevRB = false;
+    private boolean prevUp = false;
+    private boolean prevSet = false;
 
 
     ArrayList<DcMotorEx> motors = new ArrayList<>();
 
-    /*
+    /*03
+    0
     LF: 0.
     LB: 0.03265
     RF: 0.0434
@@ -37,63 +32,40 @@ public class DriveMotorFrictionFF extends LinearOpMode {
     public void runOpMode() {
 
 
-        lf = hardwareMap.get(DcMotorEx.class, "lf");
-        lb = hardwareMap.get(DcMotorEx.class, "lb");
-        rf = hardwareMap.get(DcMotorEx.class, "rf");
-        rb = hardwareMap.get(DcMotorEx.class, "rb");
+        left = hardwareMap.get(DcMotorEx.class, "leftLift");
+        right = hardwareMap.get(DcMotorEx.class, "rightLift");
 
 
-        motors.add(lf);
-        motors.add(lb);
-        motors.add(rf);
-        motors.add(rb);
+        motors.add(left);
+        motors.add(right);
 
+        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motors.forEach((motor) -> motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER));
         motors.forEach((motor) -> motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT));
 
-        lf.setDirection(DcMotorSimple.Direction.REVERSE);
-        lb.setDirection(DcMotorSimple.Direction.REVERSE);
-
-//        motors.forEach((motor) -> {motor.setPower(0.3);});
-//        rb.setPower(0.043);
 
         waitForStart();
 
         if (isStopRequested()) return;
 
 
-
         while (opModeIsActive()) {
 
-            telemetry.addData("Current LF", lf.getPower());
-            telemetry.addData("Current LB", lb.getPower());
-            telemetry.addData("Current RF", rf.getPower());
-            telemetry.addData("Current RB", rb.getPower());
+            telemetry.addData("Current left", left.getPower());
+            telemetry.addData("Current right", right.getPower());
 
 
-            if(gamepad1.a && !prevLF){
-                lf.setPower(lf.getPower() + 0.0005);
-            }
-            if(gamepad1.b && !prevLB){
-                lb.setPower(lb.getPower() + 0.0005);
-            }
-            if(gamepad1.x && !prevRF){
-                rf.setPower(rf.getPower() + 0.0005);
-            }
-            if(gamepad1.y && !prevRB){
-                rb.setPower(rb.getPower() + 0.0005);
+            if (gamepad1.dpad_up && !prevUp) {
+                left.setPower(left.getPower() + 0.005);
+                right.setPower(right.getPower() - 0.005);
+                prevSet = true;
             }
 
-            prevLF = gamepad1.a;
-            prevLB = gamepad1.b;
-            prevRF = gamepad1.x;
-            prevRB = gamepad1.y;
+            prevUp = gamepad1.dpad_up;
 
-            if(gamepad1.left_bumper){
-                lf.setPower(0);
-                lb.setPower(0);
-                rf.setPower(0);
-                rb.setPower(0);
+            if (gamepad1.left_bumper) {
+                left.setPower(0);
+                right.setPower(0);
             }
 
 
