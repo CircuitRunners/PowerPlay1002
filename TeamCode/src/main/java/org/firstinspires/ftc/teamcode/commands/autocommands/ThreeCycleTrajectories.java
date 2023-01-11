@@ -27,7 +27,7 @@ public class ThreeCycleTrajectories {
             new Pose2d(29, -4.5, toRadians(135));
 
     public static final Pose2d leftPreloadPosition =
-            new Pose2d(-33.9, -5.4, toRadians(-119.2));
+            new Pose2d(-29.8, -5.4, toRadians(-119.2));
 
     //TODO: Change to be the left side auto, not the blue
     public static final Pose2d rightDropPosition =
