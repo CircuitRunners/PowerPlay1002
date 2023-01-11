@@ -13,7 +13,7 @@ public class Lift extends SubsystemBase {
         DOWN(0),
         SHORT(135),
         MID(405),
-        HIGH(713);
+        HIGH(715);
 
         public int position;
 

@@ -40,7 +40,7 @@ public class ThreeCycleTrajectories {
             new Pose2d(60, -11.7, toRadians(0));
 
     public static final Pose2d leftStackPosition =
-            new Pose2d(-64, -6.5, toRadians(180));
+            new Pose2d(-64.1, -6.5, toRadians(180));
 
     public static TrajectorySequence rightPreloadToPole;
     public static TrajectorySequence leftPreloadToPole;
