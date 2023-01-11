@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 public class Claw extends SubsystemBase {
 
     public enum ClawPosition {
-        CLOSE(0.61),
-        OPEN(0.58),
+        CLOSE(0.6205),
+        OPEN(0.575),
         FULL_OPEN(0.42);
 
         public double position;
@@ -65,7 +65,7 @@ public class Claw extends SubsystemBase {
     }
 
     public void angleUp(){
-        angleServo.setPosition(0.55);
+        angleServo.setPosition(0.53);
     }
 
     public void angleMore(){

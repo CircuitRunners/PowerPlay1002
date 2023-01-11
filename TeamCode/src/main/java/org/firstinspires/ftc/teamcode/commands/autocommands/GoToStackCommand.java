@@ -20,19 +20,19 @@ public class GoToStackCommand extends ParallelCommandGroup {
 
 
         // Have the liftPos set to something relevant in case something goes wonky
-        int liftPos = 162;
+        int liftPos = 161;
 
         switch (cycle) {
             case 1:
-                liftPos = 162;
+                liftPos = 161;
                 break;
             case 2:
-                liftPos = 156; // -6
+                liftPos = 112;
                 break;
             case 3:
-                liftPos = 150; // -6
+                liftPos = 76;
                 break;
-            // Theoretical Values based on Pattern Analysis
+            // Theoretical Values based on Pattern
             case 4:
                 liftPos = 144; // **-6
                 break;

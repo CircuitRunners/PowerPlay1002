@@ -53,7 +53,9 @@ public class LeftThreeCycleAuto extends CommandOpMode {
         GoToStackCommand goToStackCommand1 = new GoToStackCommand(drive, lift, claw, arm, true, 1);
         GoToStackCommand goToStackCommand2 = new GoToStackCommand(drive, lift, claw, arm, true, 2);
         GoToStackCommand goToStackCommand3 = new GoToStackCommand(drive, lift, claw, arm, true, 3);
-        DropPoleCommand dropPoleCommand = new DropPoleCommand(drive, lift, claw, arm, true);
+        DropPoleCommand dropPoleCommand1 = new DropPoleCommand(drive, lift, claw, arm, true);
+        DropPoleCommand dropPoleCommand2 = new DropPoleCommand(drive, lift, claw, arm, true);
+        DropPoleCommand dropPoleCommand3 = new DropPoleCommand(drive, lift, claw, arm, true);
         ParkCommand parkCommand = new ParkCommand(drive, lift, arm, claw, beaconId);
 
 
@@ -73,11 +75,11 @@ public class LeftThreeCycleAuto extends CommandOpMode {
         schedule(new SequentialCommandGroup(
                 preloadCommand,
                 goToStackCommand1,
-                dropPoleCommand,
-//                goToStackCommand2,
-//                dropPoleCommand,
-//                goToStackCommand3,
-//                dropPoleCommand,
+                dropPoleCommand1,
+                goToStackCommand2,
+                dropPoleCommand2,
+                goToStackCommand3,
+                dropPoleCommand3,
                 parkCommand
         ));
     }
