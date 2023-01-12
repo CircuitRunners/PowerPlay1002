@@ -18,18 +18,18 @@ public class MeepMeepTesting {
         RoadRunnerBotEntity redBot = new DefaultBotBuilder(meepMeep)
                 .setDimensions(14, 15)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(45, 45, toRadians(220), toRadians(220), 11.78)
+                .setConstraints(40, 40, toRadians(220), toRadians(220), 11.78)
                 .followTrajectorySequence(drive ->
                                 drive.trajectorySequenceBuilder(new Pose2d(37, -58, toRadians(-90)))
                                         .setReversed(true)
 //                                        .splineTo(new Vector2d(36, -25), toRadians(91))
-//                                        .splineTo(new Vector2d(36, -25), toRadians(93))
-                                        .splineToLinearHeading(new Pose2d(30, -4.5, toRadians(-49)), toRadians(141))
+                                        .splineTo(new Vector2d(36, -25), toRadians(91))
+                                        .splineToSplineHeading(new Pose2d(32, -5.4, toRadians(-49)), toRadians(130))
                                         .waitSeconds(1) //drop preload
 
                                         .setReversed(false)
-                                        .splineTo(new Vector2d(40, -4), toRadians(-2)) //to stack
-                                        .splineTo(new Vector2d(60, -4), toRadians(0))
+                                        .splineTo(new Vector2d(40, -6.5), toRadians(-2)) //to stack
+                                        .splineTo(new Vector2d(60, -6.5), toRadians(0))
                                         .waitSeconds(1) //at stack 1
 
 
