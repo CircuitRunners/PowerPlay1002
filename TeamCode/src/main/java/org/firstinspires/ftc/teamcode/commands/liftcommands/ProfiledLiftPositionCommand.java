@@ -14,16 +14,16 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 @Config
 public class ProfiledLiftPositionCommand extends CommandBase {
 
-    private ProfiledPIDController liftController;
-    private ElevatorFeedforward feedforward;
+    private ProfiledPIDController profileController;
+    private PIDFController liftController;
 
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.001, 0, 0);
-    public static double kV = 0.00003;
-    public static double kA = 0.006;
-    public static double kStatic = 0.02;
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.0305, 0.0045, 0.00066);
+    public static double kV = 0;
+    public static double kA = 0;
+    public static double kStatic = 0.0; //0.14
     public static double kG = 0.17; //gravity
 
-    private double tolerance = 3;
+    private double tolerance = 4;
     private boolean holdAtEnd;
     private final Lift lift;
     private final double targetPosition;
@@ -33,68 +33,80 @@ public class ProfiledLiftPositionCommand extends CommandBase {
     public static double setpointPos = 0;
     public static double setpointVel = 0;
 
-    private ElapsedTime timer = new ElapsedTime();
+    private final ElapsedTime timer = new ElapsedTime();
     private double lastVelocity = 0;
     private double lastTime = 0;
 
 
-    public ProfiledLiftPositionCommand(Lift lift, double targetPosition){
+    public ProfiledLiftPositionCommand(Lift lift, double targetPosition) {
         this(lift, targetPosition, false);
     }
 
-    public ProfiledLiftPositionCommand(Lift lift, double targetPosition, boolean holdAtEnd){
+    public ProfiledLiftPositionCommand(Lift lift, double targetPosition, boolean holdAtEnd) {
         this.holdAtEnd = holdAtEnd;
         this.lift = lift;
         this.targetPosition = targetPosition;
 
         addRequirements(lift);
 
-        liftController = new ProfiledPIDController(coefficients.kP, coefficients.kI, coefficients.kD,
-                new TrapezoidProfile.Constraints(550, 550));
-        feedforward = new ElevatorFeedforward(kStatic, kG, kV, kA);
+        liftController = new PIDFController(coefficients, kV, kA, kStatic, (x, v) -> {
+            if (liftPosition < 283) return 0.13;
+            else if (liftPosition < 580) return 0.14;
+            else return 0.15;
+        });
+        liftController.setOutputBounds(-0.84, 0.95);
+
+        profileController = new ProfiledPIDController(0, 0, 0,
+                new TrapezoidProfile.Constraints(680, 630));
     }
 
 
     @Override
-    public void initialize(){
+    public void initialize() {
         //once
         timer.reset();
 
-        liftController.reset(lift.getLiftPosition(), lift.getLiftVelocity());
-        liftController.setGoal(targetPosition);
-        liftController.setTolerance(3, 2);
+        profileController.reset(lift.getLiftPosition(), lift.getLiftVelocity());
+        profileController.setGoal(targetPosition);
+        profileController.setTolerance(3);
+
+        liftController.reset();
     }
 
     @Override
-    public void execute(){
+    public void execute() {
         liftPosition = lift.getLiftPosition();
-        double acceleration = (liftController.getSetpoint().velocity - lastVelocity) / (timer.seconds() - lastTime);
 
-        double feedforwardOutput = feedforward.calculate(liftController.getSetpoint().velocity, acceleration);
+        //Update the profile (ignore the output)
+        profileController.calculate(liftPosition);
 
+        double acceleration = (profileController.getSetpoint().velocity - lastVelocity) / (timer.seconds() - lastTime);
 
-        //Get the controller output and add the gravity feedforward
-        double controllerOutput = liftController.calculate(liftPosition) + feedforwardOutput;
+        //Update the real controller target
+        liftController.setTargetPosition(profileController.getSetpoint().position);
+
+        //Get the controller output
+        double controllerOutput = liftController.update(liftPosition);
 
         //Update the lift power with the controller
         lift.setLiftPower(controllerOutput);
 
-        setpointPos = liftController.getSetpoint().position;
-        setpointVel = liftController.getSetpoint().velocity;
+        setpointPos = profileController.getSetpoint().position;
+        setpointVel = profileController.getSetpoint().velocity;
 
-        lastVelocity = liftController.getSetpoint().velocity;
+        lastVelocity = profileController.getSetpoint().velocity;
         lastTime = timer.seconds();
     }
 
     @Override
-    public boolean isFinished(){
+    public boolean isFinished() {
         //End if the lift position is within the tolerance
         return Math.abs(targetPosition - liftPosition) <= tolerance;
     }
 
     @Override
-    public void end(boolean interrupted){
-        if(holdAtEnd) lift.setLiftPower(0.18);
+    public void end(boolean interrupted) {
+        if (holdAtEnd) lift.setLiftPower(0.185);
         else lift.stop();
     }
 

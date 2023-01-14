@@ -35,7 +35,7 @@ public class DropPoleCommand extends ParallelCommandGroup {
                 new SequentialCommandGroup(
                         new WaitCommand(200),
                         new LiftPositionCommand(lift, Lift.LiftPositions.MID.position, true),
-                        new WaitCommand(2200),
+                        new WaitCommand(2000),
                         new InstantCommand(claw::open),
                         new WaitCommand(400)
                 )

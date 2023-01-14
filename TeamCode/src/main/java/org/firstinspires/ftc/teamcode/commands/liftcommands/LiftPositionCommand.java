@@ -36,10 +36,10 @@ public class LiftPositionCommand extends CommandBase {
         this.targetPosition = targetPosition;
 
         //Add a feedforward term to counteract gravity
-        liftController = new PIDFController(coefficients, 0.00175, 0.002, 0.145, (x, v) -> {
-            if(x < 283) return 0.125;
-            else if(x < 580) return 0.135;
-            else return 0.145;
+        liftController = new PIDFController(coefficients, 0, 0, 0.12, (x, v) -> {
+            if(x < 283) return 0.128;
+            else if(x < 580) return 0.137;
+            else return 0.148;
         });
         liftController.setOutputBounds(-0.9, 0.95);
     }
@@ -67,7 +67,7 @@ public class LiftPositionCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted){
-        if (holdAtEnd) lift.setLiftPower(0.19);
+        if (holdAtEnd) lift.setLiftPower(0.18);
         else lift.stop();
     }
 

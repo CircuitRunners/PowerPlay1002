@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.commands.presets.MoveToScoringCommand.Pres
 import com.arcrobotics.ftclib.command.ParallelCommandGroup
 import org.firstinspires.ftc.teamcode.commands.liftcommands.LiftPositionCommand
 import com.arcrobotics.ftclib.command.InstantCommand
+import org.firstinspires.ftc.teamcode.commands.liftcommands.ProfiledLiftPositionCommand
 import org.firstinspires.ftc.teamcode.subsystems.Arm.ArmPositions
 import org.firstinspires.ftc.teamcode.subsystems.Lift.LiftPositions
 
@@ -24,11 +25,11 @@ class MoveToScoringCommand(lift: Lift, arm: Arm, claw: Claw, preset: Presets) : 
                 when (preset) {
                     Presets.GROUND -> InstantCommand({}) //do nothing
                     Presets.SHORT ->
-                        LiftPositionCommand(lift, LiftPositions.SHORT.position, true)
+                        ProfiledLiftPositionCommand(lift, LiftPositions.SHORT.position.toDouble(), true)
                     Presets.MID ->
-                        LiftPositionCommand(lift, LiftPositions.MID.position, true)
+                        ProfiledLiftPositionCommand(lift, LiftPositions.MID.position.toDouble(), true)
                     Presets.HIGH ->
-                        LiftPositionCommand(lift, LiftPositions.HIGH.position, true)
+                        ProfiledLiftPositionCommand(lift, LiftPositions.HIGH.position.toDouble(), true)
 
                 },
 

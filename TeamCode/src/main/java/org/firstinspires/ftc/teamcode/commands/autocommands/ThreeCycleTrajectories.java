@@ -40,7 +40,7 @@ public class ThreeCycleTrajectories {
             new Pose2d(60, -11.7, toRadians(0));
 
     public static final Pose2d leftStackPosition =
-            new Pose2d(-65, -6.7, toRadians(180));
+            new Pose2d(-64, -7.2, toRadians(180));
 
     public static TrajectorySequence rightPreloadToPole;
     public static TrajectorySequence leftPreloadToPole;
@@ -118,7 +118,7 @@ public class ThreeCycleTrajectories {
         leftToStack =
                 drive.trajectorySequenceBuilder(leftDropPosition)
                         .setReversed(false)
-                        .lineToLinearHeading(new Pose2d(-39.95, -6.5, toRadians(180))) //to stack
+                        .lineToLinearHeading(new Pose2d(-40, -6.5, toRadians(180))) //to stack
                         .lineToLinearHeading(leftStackPosition)
                         .build();
 
