@@ -23,11 +23,11 @@ public class DropPreloadCommand extends ParallelCommandGroup {
                 new InstantCommand(claw::close), // Attempt to close claw again to make sure ting is secure
                 new SequentialCommandGroup(
                         new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.HIGH)),
-                        new WaitCommand(2000),
+                        new WaitCommand(1700),
                         new InstantCommand(claw::angleUp)
                 ),
                 new SequentialCommandGroup(
-                        new WaitCommand(100),
+                        new WaitCommand(200),
                         new TrajectorySequenceCommand(
                                 drive, isLeft ? ThreeCycleTrajectories.leftPreloadToPole : ThreeCycleTrajectories.rightPreloadToPole
                         )
@@ -35,7 +35,7 @@ public class DropPreloadCommand extends ParallelCommandGroup {
                 new SequentialCommandGroup(
                         new WaitCommand(200),
                         new ProfiledLiftPositionCommand(lift, Lift.LiftPositions.HIGH.position, true),
-                        new WaitCommand(1300),
+                        new WaitCommand(800),
                         new InstantCommand(claw::open),
                         new WaitCommand(400)
                 )

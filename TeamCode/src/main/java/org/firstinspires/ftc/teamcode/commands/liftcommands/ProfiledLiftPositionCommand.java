@@ -17,7 +17,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
     private ProfiledPIDController profileController;
     private PIDFController liftController;
 
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.0305, 0.0045, 0.00066);
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.03045, 0.00443, 0.000653);
     public static double kV = 0;
     public static double kA = 0;
     public static double kStatic = 0.0; //0.14
@@ -52,12 +52,13 @@ public class ProfiledLiftPositionCommand extends CommandBase {
         liftController = new PIDFController(coefficients, kV, kA, kStatic, (x, v) -> {
             if (liftPosition < 283) return 0.13;
             else if (liftPosition < 580) return 0.14;
+
             else return 0.15;
         });
         liftController.setOutputBounds(-0.84, 0.95);
 
         profileController = new ProfiledPIDController(0, 0, 0,
-                new TrapezoidProfile.Constraints(680, 630));
+                new TrapezoidProfile.Constraints(690, 640));
     }
 
 

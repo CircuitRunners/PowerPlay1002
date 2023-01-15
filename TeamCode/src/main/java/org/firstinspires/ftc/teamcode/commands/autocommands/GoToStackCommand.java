@@ -25,20 +25,19 @@ public class GoToStackCommand extends ParallelCommandGroup {
 
         switch (cycle) {
             case 1:
-                liftPos = 161;
+                liftPos = 158;
                 break;
             case 2:
-                liftPos = 112;
+                liftPos = 111;
                 break;
             case 3:
-                liftPos = 76;
+                liftPos = 75;
                 break;
-            // Theoretical Values based on Pattern
             case 4:
-                liftPos = 144; // **-6
+                liftPos = 36;
                 break;
             case 5:
-                liftPos = 138; // **-6
+                liftPos = 0;
                 break;
         }
 
@@ -55,7 +54,7 @@ public class GoToStackCommand extends ParallelCommandGroup {
                 new SequentialCommandGroup(
                         new WaitCommand(200),
                         new InstantCommand(claw::angleDown),
-                        new WaitCommand(1100), ////changed from 1200
+                        new WaitCommand(900), ////changed from 1200
                         new InstantCommand(claw::fullOpen) //Wait for the arm to get all the way down before fully opening the claw
                 ),
                 new SequentialCommandGroup(
@@ -63,7 +62,7 @@ public class GoToStackCommand extends ParallelCommandGroup {
                         new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.DOWN))
                 ),
                 new SequentialCommandGroup(
-                        new WaitCommand(400),
+                        new WaitCommand(300),
                         new ProfiledLiftPositionCommand(lift, liftPos, true)
                 )
         );
