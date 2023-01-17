@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
 
 @Autonomous(name = "Left Three Cycle")
-public class LeftThreeCycleAuto extends CommandOpMode {
+public class LeftFourCycleAuto extends CommandOpMode {
 
 
     private SampleMecanumDrive drive;

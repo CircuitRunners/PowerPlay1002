@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.autocommands.DropPoleCommand;
 import org.firstinspires.ftc.teamcode.commands.autocommands.DropPreloadCommand;
 import org.firstinspires.ftc.teamcode.commands.autocommands.GoToStackCommand;
+import org.firstinspires.ftc.teamcode.commands.autocommands.ParkCommand;
 import org.firstinspires.ftc.teamcode.commands.autocommands.ThreeCycleTrajectories;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
@@ -19,7 +20,7 @@ import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
 
 @Autonomous(name = "Right Three Cycle")
-public class RightThreeCycleAuto extends CommandOpMode {
+public class RightFourCycleAuto extends CommandOpMode {
 
 
     private SampleMecanumDrive drive;
@@ -33,7 +34,7 @@ public class RightThreeCycleAuto extends CommandOpMode {
 
     @Override
     public void initialize() {
-        PhotonCore.enable();
+//        PhotonCore.enable();
         schedule(new BulkCacheCommand(hardwareMap));
 
         drive = new SampleMecanumDrive(hardwareMap);
@@ -52,7 +53,11 @@ public class RightThreeCycleAuto extends CommandOpMode {
         GoToStackCommand goToStackCommand1 = new GoToStackCommand(drive, lift, claw, arm, false, 1);
         GoToStackCommand goToStackCommand2 = new GoToStackCommand(drive, lift, claw, arm, false, 2);
         GoToStackCommand goToStackCommand3 = new GoToStackCommand(drive, lift, claw, arm, false, 3);
-        DropPoleCommand dropPoleCommand = new DropPoleCommand(drive, lift, claw, arm, false);
+        GoToStackCommand goToStackCommand4 = new GoToStackCommand(drive, lift, claw, arm, false, 4);
+        DropPoleCommand dropPoleCommand1 = new DropPoleCommand(drive, lift, claw, arm, false);
+        DropPoleCommand dropPoleCommand2 = new DropPoleCommand(drive, lift, claw, arm, false);
+        DropPoleCommand dropPoleCommand3 = new DropPoleCommand(drive, lift, claw, arm, false);
+        DropPoleCommand dropPoleCommand4 = new DropPoleCommand(drive, lift, claw, arm, false);
 
         //Start vision
         beaconDetector.startStream();
@@ -69,11 +74,14 @@ public class RightThreeCycleAuto extends CommandOpMode {
         schedule(new SequentialCommandGroup(
                 preloadCommand,
                 goToStackCommand1,
-                dropPoleCommand,
+                dropPoleCommand1,
                 goToStackCommand2,
-                dropPoleCommand,
+                dropPoleCommand2,
                 goToStackCommand3,
-                dropPoleCommand
+                dropPoleCommand3,
+                goToStackCommand4,
+                dropPoleCommand4,
+                new ParkCommand(drive, lift, arm, claw, beaconId)
         ));
     }
 }
