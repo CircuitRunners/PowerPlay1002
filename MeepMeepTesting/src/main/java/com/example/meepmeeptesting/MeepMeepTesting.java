@@ -20,9 +20,9 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(40, 40, toRadians(220), toRadians(220), 11.78)
                 .followTrajectorySequence(drive ->
-                                drive.trajectorySequenceBuilder(new Pose2d(37, -58, toRadians(-90)))
+                                drive.trajectorySequenceBuilder(new Pose2d(40, -58, toRadians(-90)))
                                         .setReversed(true)
-//                                        .splineTo(new Vector2d(36, -25), toRadians(91))
+                                        .splineToConstantHeading(new Vector2d(37, -48), toRadians(90))
                                         .splineTo(new Vector2d(36, -25), toRadians(91))
                                         .splineToSplineHeading(new Pose2d(32, -5.4, toRadians(-49)), toRadians(130))
                                         .waitSeconds(1) //drop preload

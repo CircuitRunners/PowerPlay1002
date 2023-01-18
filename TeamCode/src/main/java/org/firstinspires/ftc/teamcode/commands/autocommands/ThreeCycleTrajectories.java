@@ -21,7 +21,7 @@ public class ThreeCycleTrajectories {
 
 
     public static final Pose2d rightStartingPosition = new Pose2d(37, -56.8, toRadians(-90));
-    public static final Pose2d leftStartingPosition = new Pose2d(-37, -56.8, toRadians(-90));
+    public static final Pose2d leftStartingPosition = new Pose2d(-40, -56.8, toRadians(-90));
 
     public static final Pose2d rightPreloadPosition =
             new Pose2d(31.5, -5.0, toRadians(135));
@@ -75,6 +75,7 @@ public class ThreeCycleTrajectories {
                 drive.trajectorySequenceBuilder(ThreeCycleTrajectories.leftStartingPosition)
                         .setReversed(true)
                         .setAccelConstraint(getAccelerationConstraint(35))
+                        .splineToConstantHeading(new Vector2d(-37, -48), toRadians(90))
                         .splineTo(new Vector2d(-36, -30), toRadians(89))
                         .splineTo(leftPreloadPosition.vec(), toRadians(58))
                         .resetAccelConstraint()
