@@ -5,15 +5,16 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 public class Lift extends SubsystemBase {
 
 
     public enum LiftPositions {
         DOWN(0),
-        SHORT(135),
+        SHORT(95),
         MID(405),
-        HIGH(710);
+        HIGH(708);
 
         public int position;
 
@@ -24,6 +25,8 @@ public class Lift extends SubsystemBase {
 
     private DcMotorEx leftMotor;
     private DcMotorEx rightMotor;
+
+    private VoltageSensor voltageSensor;
 
     public Lift(HardwareMap hardwareMap){
 
@@ -39,6 +42,7 @@ public class Lift extends SubsystemBase {
         rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
+        voltageSensor = hardwareMap.voltageSensor.iterator().next();
     }
 
     @Override
@@ -74,5 +78,9 @@ public class Lift extends SubsystemBase {
     public void resetLiftPosition(){
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public double getVoltage(){
+        return voltageSensor.getVoltage();
     }
 }

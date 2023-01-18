@@ -155,11 +155,11 @@ public class MainTeleOp extends CommandOpMode {
                 .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.HIGH));
 
         //Mid preset
-        new Trigger(() -> manipulator.getRightY() > 0.5)
+        new Trigger(() -> manipulator.getRightY() > -0.5)
                 .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.MID));
 
         //Short preset
-        new Trigger(() -> manipulator.getRightY() < -0.5)
+        new Trigger(() -> manipulator.getRightY() < 0.5)
                 .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.SHORT));
 
         //Ground (terminal dropping) arm preset

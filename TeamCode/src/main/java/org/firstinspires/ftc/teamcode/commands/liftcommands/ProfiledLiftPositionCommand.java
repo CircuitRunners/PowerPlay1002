@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.wpilibcontroller.ElevatorFeedforward;
 import com.arcrobotics.ftclib.controller.wpilibcontroller.ProfiledPIDController;
 import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
@@ -21,7 +22,6 @@ public class ProfiledLiftPositionCommand extends CommandBase {
     public static double kV = 0;
     public static double kA = 0;
     public static double kStatic = 0.0; //0.14
-    public static double kG = 0.17; //gravity
 
     private double tolerance = 4;
     private boolean holdAtEnd;
@@ -50,15 +50,18 @@ public class ProfiledLiftPositionCommand extends CommandBase {
         addRequirements(lift);
 
         liftController = new PIDFController(coefficients, kV, kA, kStatic, (x, v) -> {
-            if (liftPosition < 283) return 0.13;
-            else if (liftPosition < 580) return 0.14;
+            double kG = 0;
+            if (liftPosition < 283) kG = 0.13;
+            else if (liftPosition < 580) kG = 0.14;
+            else kG = 0.15;
 
-            else return 0.15;
+            return kG * 12 / lift.getVoltage();
         });
         liftController.setOutputBounds(-0.84, 0.95);
 
         profileController = new ProfiledPIDController(0, 0, 0,
-                new TrapezoidProfile.Constraints(690, 640));
+                new TrapezoidProfile.Constraints(690, 700));
+
     }
 
 
@@ -110,5 +113,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
         if (holdAtEnd) lift.setLiftPower(0.185);
         else lift.stop();
     }
+
+
 
 }
