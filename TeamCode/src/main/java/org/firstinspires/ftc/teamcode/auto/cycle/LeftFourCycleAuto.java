@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
 
-@Autonomous(name = "Left Three Cycle")
+@Autonomous(name = "Left Four Cycle")
 public class LeftFourCycleAuto extends CommandOpMode {
 
 
@@ -54,10 +54,12 @@ public class LeftFourCycleAuto extends CommandOpMode {
         GoToStackCommand goToStackCommand2 = new GoToStackCommand(drive, lift, claw, arm, true, 2);
         GoToStackCommand goToStackCommand3 = new GoToStackCommand(drive, lift, claw, arm, true, 3);
         GoToStackCommand goToStackCommand4 = new GoToStackCommand(drive, lift, claw, arm, true, 4);
+        GoToStackCommand goToStackCommand5 = new GoToStackCommand(drive, lift, claw, arm, true, 5);
         DropPoleCommand dropPoleCommand1 = new DropPoleCommand(drive, lift, claw, arm, true);
         DropPoleCommand dropPoleCommand2 = new DropPoleCommand(drive, lift, claw, arm, true);
         DropPoleCommand dropPoleCommand3 = new DropPoleCommand(drive, lift, claw, arm, true);
         DropPoleCommand dropPoleCommand4 = new DropPoleCommand(drive, lift, claw, arm, true);
+        DropPoleCommand dropPoleCommand5 = new DropPoleCommand(drive, lift, claw, arm, true);
 
 
 
@@ -83,6 +85,8 @@ public class LeftFourCycleAuto extends CommandOpMode {
                 dropPoleCommand3,
                 goToStackCommand4,
                 dropPoleCommand4,
+                goToStackCommand5,
+                dropPoleCommand5,
                 new ParkCommand(drive, lift, arm, claw, beaconId)
         ));
     }

@@ -30,6 +30,7 @@ public class ManualLiftCommand extends CommandBase {
         //Two dpad buttons cant be pressed at the same time so we don't have to worry about that.
 
         boolean slow = manipulator.getButton(GamepadKeys.Button.X);
+        double voltageFactor = 12 / lift.getVoltage();
 
         //Check if the up button is pressed
         if(manipulator.getButton(GamepadKeys.Button.DPAD_UP) && !lift.atUpperLimit()){
@@ -43,9 +44,9 @@ public class ManualLiftCommand extends CommandBase {
 
         //Otherwise, do nothing
         else {
-            if(lift.getLiftPosition() < 283) lift.setLiftPower(0.155);
-            else if(lift.getLiftPosition() < 580) lift.setLiftPower(0.165);
-            else lift.setLiftPower(0.188);
+            if(lift.getLiftPosition() < 283) lift.setLiftPower(0.158 * voltageFactor);
+            else if(lift.getLiftPosition() < 580) lift.setLiftPower(0.168 * voltageFactor);
+            else lift.setLiftPower(0.188 * voltageFactor);
         }
     }
 

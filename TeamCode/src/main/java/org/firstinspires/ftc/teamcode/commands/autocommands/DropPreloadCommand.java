@@ -35,7 +35,7 @@ public class DropPreloadCommand extends ParallelCommandGroup {
                 new SequentialCommandGroup(
                         new WaitCommand(200),
                         new ProfiledLiftPositionCommand(lift, Lift.LiftPositions.HIGH.position, true),
-                        new WaitCommand(800),
+                        new WaitCommand(500),
                         new InstantCommand(claw::open),
                         new WaitCommand(400)
                 )

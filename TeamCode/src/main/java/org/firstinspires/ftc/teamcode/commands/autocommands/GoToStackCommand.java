@@ -47,15 +47,15 @@ public class GoToStackCommand extends ParallelCommandGroup {
                                 drive, isLeft ? ThreeCycleTrajectories.leftToStack : ThreeCycleTrajectories.rightToStack
                         ) : new TrajectorySequenceCommand(
                                 drive, isLeft ? ThreeCycleTrajectories.leftToStackPreload : ThreeCycleTrajectories.rightToStackPreload
-                        ),
-                        new InstantCommand(claw::close),
-                        new WaitCommand(400)
+                        )
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(200),
                         new InstantCommand(claw::angleDown),
-                        new WaitCommand(900), ////changed from 1200
-                        new InstantCommand(claw::fullOpen) //Wait for the arm to get all the way down before fully opening the claw
+                        new WaitCommand(900),
+                        new InstantCommand(claw::fullOpen), //Wait for the arm to get all the way down before fully opening the claw
+                        new WaitCommand(500),
+                        new InstantCommand(claw::close)
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(100),

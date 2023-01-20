@@ -200,7 +200,7 @@ public class MainTeleOp extends CommandOpMode {
         prevHeadingReset = gamepad1.x;
 
         if (arm.getPosition() > 0.5) {
-            claw.angleUp();
+            claw.angleMore();
         } else {
             claw.angleDown();
         }

@@ -23,8 +23,8 @@ public class MeepMeepTesting {
                                 drive.trajectorySequenceBuilder(new Pose2d(40, -58, toRadians(-90)))
                                         .setReversed(true)
                                         .splineToConstantHeading(new Vector2d(37, -48), toRadians(90))
-                                        .splineTo(new Vector2d(36, -25), toRadians(91))
-                                        .splineToSplineHeading(new Pose2d(32, -5.4, toRadians(-49)), toRadians(130))
+                                        .splineToConstantHeading(new Vector2d(36, -25), toRadians(91))
+                                        .splineTo(new Vector2d(32, -5.4), toRadians(130))
                                         .waitSeconds(1) //drop preload
 
                                         .setReversed(false)
