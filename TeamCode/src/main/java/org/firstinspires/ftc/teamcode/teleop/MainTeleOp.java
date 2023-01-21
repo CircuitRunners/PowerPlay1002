@@ -152,23 +152,23 @@ public class MainTeleOp extends CommandOpMode {
 
         //High preset
         new Trigger(() -> manipulator.getLeftY() > 0.5)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.HIGH));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.HIGH).withTimeout(2000));
 
         //Mid preset
         new Trigger(() -> manipulator.getRightY() > -0.5)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.MID));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.MID).withTimeout(2000));
 
         //Short preset
         new Trigger(() -> manipulator.getRightY() < 0.5)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.SHORT));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.SHORT).withTimeout(2000));
 
         //Ground (terminal dropping) arm preset
         manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.GROUND));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.GROUND).withTimeout(2000));
 
         //Full retract preset
         new Trigger(() -> manipulator.getLeftY() < -0.5)
-                .whenActive(new RetractOuttakeCommand(lift, arm, claw));
+                .whenActive(new RetractOuttakeCommand(lift, arm, claw).withTimeout(2000));
 
 
 
@@ -252,6 +252,8 @@ public class MainTeleOp extends CommandOpMode {
         packet.put("Lift velocity", lift.getLiftVelocity());
         packet.put("Lift target position", ProfiledLiftPositionCommand.setpointPos);
         packet.put("Lift target velocity", ProfiledLiftPositionCommand.setpointVel);
+        packet.put("Lift position error", ProfiledLiftPositionCommand.setpointPosError);
+        packet.put("Lift acceleration", ProfiledLiftPositionCommand.acceleration);
 
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
         telemetry.update();

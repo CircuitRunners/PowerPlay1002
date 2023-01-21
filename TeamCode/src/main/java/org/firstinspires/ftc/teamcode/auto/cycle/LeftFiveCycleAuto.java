@@ -3,9 +3,7 @@ package org.firstinspires.ftc.teamcode.auto.cycle;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.autocommands.DropPoleCommand;
@@ -20,8 +18,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
 
-@Autonomous(name = "Left 4+1")
-public class LeftFourCycleAuto extends CommandOpMode {
+@Autonomous(name = "Left 1+5")
+public class LeftFiveCycleAuto extends CommandOpMode {
 
 
     private SampleMecanumDrive drive;
@@ -54,10 +52,12 @@ public class LeftFourCycleAuto extends CommandOpMode {
         GoToStackCommand goToStackCommand2 = new GoToStackCommand(drive, lift, claw, arm, true, 2);
         GoToStackCommand goToStackCommand3 = new GoToStackCommand(drive, lift, claw, arm, true, 3);
         GoToStackCommand goToStackCommand4 = new GoToStackCommand(drive, lift, claw, arm, true, 4);
+        GoToStackCommand goToStackCommand5 = new GoToStackCommand(drive, lift, claw, arm, true, 5);
         DropPoleCommand dropPoleCommand1 = new DropPoleCommand(drive, lift, claw, arm, true);
         DropPoleCommand dropPoleCommand2 = new DropPoleCommand(drive, lift, claw, arm, true);
         DropPoleCommand dropPoleCommand3 = new DropPoleCommand(drive, lift, claw, arm, true);
         DropPoleCommand dropPoleCommand4 = new DropPoleCommand(drive, lift, claw, arm, true);
+        DropPoleCommand dropPoleCommand5 = new DropPoleCommand(drive, lift, claw, arm, true);
 
 
 
@@ -72,6 +72,7 @@ public class LeftFourCycleAuto extends CommandOpMode {
         }
 
         beaconDetector.stopStream();
+        beaconId = BeaconDetector.BeaconTags.LEFT;
 
         schedule(new SequentialCommandGroup(
                 preloadCommand,
@@ -83,6 +84,8 @@ public class LeftFourCycleAuto extends CommandOpMode {
                 dropPoleCommand3,
                 goToStackCommand4,
                 dropPoleCommand4,
+                goToStackCommand5,
+                dropPoleCommand5,
                 new ParkCommand(drive, lift, arm, claw, beaconId)
         ));
     }

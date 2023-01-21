@@ -4,9 +4,17 @@ import static java.lang.Math.toRadians;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
+
+import java.util.Arrays;
 
 public class MeepMeepTesting {
     public static void main(String[] args) {
@@ -22,9 +30,11 @@ public class MeepMeepTesting {
                 .followTrajectorySequence(drive ->
                                 drive.trajectorySequenceBuilder(new Pose2d(40, -58, toRadians(-90)))
                                         .setReversed(true)
-                                        .splineToConstantHeading(new Vector2d(37, -48), toRadians(90))
-                                        .splineToConstantHeading(new Vector2d(36, -25), toRadians(91))
-                                        .splineTo(new Vector2d(32, -5.4), toRadians(130))
+                                        .setAccelConstraint(getAccelerationConstraint(35))
+                                        .setTurnConstraint(toRadians(200), toRadians(200))
+                                        .splineToConstantHeading(new Vector2d(37, -48.5), toRadians(91))
+                                        .splineToConstantHeading(new Vector2d(37, -35), toRadians(90))
+                                        .splineTo(new Vector2d(30, -5.0), toRadians(115))
                                         .waitSeconds(1) //drop preload
 
                                         .setReversed(false)
@@ -60,6 +70,10 @@ public class MeepMeepTesting {
                                         .splineTo(new Vector2d(31, -15), toRadians(-132))
                                         .waitSeconds(1) //at pole 3
 
+                                        .setReversed(false)
+                                        .splineToLinearHeading(new Pose2d(15, -7.3, toRadians(90)), toRadians(180))
+
+
 
 //                                        .splineToSplineHeading(new Pose2d(36, -11.7, toRadians(-90)), toRadians(0)) //to stack
 //                                        .forward(25)
@@ -87,5 +101,16 @@ public class MeepMeepTesting {
                 .addEntity(redBot)
 //                .addEntity(blueBot)
                 .start();
+    }
+
+    public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
+        return new MinVelocityConstraint(Arrays.asList(
+                new AngularVelocityConstraint(maxAngularVel),
+                new MecanumVelocityConstraint(maxVel, trackWidth)
+        ));
+    }
+
+    public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
+        return new ProfileAccelerationConstraint(maxAccel);
     }
 }

@@ -23,7 +23,7 @@ public class DropPreloadCommand extends ParallelCommandGroup {
                 new InstantCommand(claw::close), // Attempt to close claw again to make sure ting is secure
                 new SequentialCommandGroup(
                         new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.HIGH)),
-                        new WaitCommand(1700),
+                        new WaitCommand(1600),
                         new InstantCommand(claw::angleUp)
                 ),
                 new SequentialCommandGroup(
