@@ -42,10 +42,10 @@ class LiftPIDTuner : CommandOpMode() {
                 .whenPressed(
                         SequentialCommandGroup(
                                 InstantCommand({target = 3000.0}),
-                                LiftPositionCommand(lift, 3000),
+                                LiftPositionCommand(lift, 3000, true),
                                 WaitCommand(1000),
                                 InstantCommand({target = 0.0}),
-                                LiftPositionCommand(lift, 0)
+                                LiftPositionCommand(lift, 0, false)
                         )
                 )
     }

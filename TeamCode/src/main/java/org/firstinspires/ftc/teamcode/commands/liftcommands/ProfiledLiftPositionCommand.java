@@ -4,10 +4,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.controller.wpilibcontroller.ElevatorFeedforward;
 import com.arcrobotics.ftclib.controller.wpilibcontroller.ProfiledPIDController;
 import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
@@ -17,12 +15,12 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 
     private ProfiledPIDController profileController;
     private PIDFController liftController;
+    private TrapezoidProfile profile;
 
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.02, 0.005, 0.0012);
-    public static double kV = 0.00155;
-    public static double kA = 0.0021;
-    public static double kStatic = 0.025;
-    private double voltageFactor = 1.0;
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.025, 0.0055, 0.0014);
+    public static double kV = 0.0014;
+    public static double kA = 0.0;
+    public static double kStatic = 0.01;
 
     private double tolerance = 5;
     private boolean holdAtEnd;
@@ -34,10 +32,9 @@ public class ProfiledLiftPositionCommand extends CommandBase {
     public static double setpointPos = 0;
     public static double setpointVel = 0;
     public static double setpointPosError = 0;
-    public static double acceleration;
+    public static double setpointAccel;
 
     private final ElapsedTime timer = new ElapsedTime();
-    private double lastVelocity = 0;
     private double lastTime = 0;
 
     public ProfiledLiftPositionCommand(Lift lift, double targetPosition, boolean holdAtEnd) {
@@ -47,33 +44,33 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 
         addRequirements(lift);
 
-        voltageFactor = 12.0 / lift.getVoltage();
-
         liftController = new PIDFController(coefficients, kV, kA, kStatic, (x, v) -> {
             double kG;
-            if (liftPosition < 283) kG = 0.178;
+            if (liftPosition < 283) kG = 0.17;
             else if (liftPosition < 580) kG = 0.191;
-            else kG = 0.215;
+            else kG = 0.218;
 
-            return kG * voltageFactor;
+            return kG * lift.getVoltageComp();
         });
         liftController.setOutputBounds(-0.85, 0.95);
 
+
         profileController = new ProfiledPIDController(0, 0, 0,
-                new TrapezoidProfile.Constraints(770, 770));
+                new TrapezoidProfile.Constraints(700, 700));
 
     }
 
 
     @Override
     public void initialize() {
-        //once
+
+        profile = new TrapezoidProfile(
+                new TrapezoidProfile.Constraints(700, 700),
+                new TrapezoidProfile.State(targetPosition, 0),
+                new TrapezoidProfile.State(lift.getLiftPosition(), lift.getLiftVelocity())
+        );
+
         timer.reset();
-
-        profileController.reset(lift.getLiftPosition(), lift.getLiftVelocity());
-        profileController.setGoal(targetPosition);
-        profileController.setTolerance(0, 0);
-
         liftController.reset();
     }
 
@@ -81,13 +78,17 @@ public class ProfiledLiftPositionCommand extends CommandBase {
     public void execute() {
         liftPosition = lift.getLiftPosition();
         double currentVelo = lift.getLiftVelocity();
+        double currentTime = timer.seconds();
+        TrapezoidProfile.State state = profile.calculate(currentTime);
+
 
         //Update the profile (ignore the output)
-        profileController.calculate(liftPosition);
+//        profileController.calculate(liftPosition);
+        setpointAccel = (profile.calculate(currentTime).velocity - setpointVel) / (currentTime - lastTime);
 
         //Update the real controller target
-        liftController.setTargetPosition(profileController.getSetpoint().position);
-        liftController.setTargetVelocity(profileController.getSetpoint().velocity);
+        liftController.setTargetPosition(state.position);
+        liftController.setTargetVelocity(state.velocity);
 
         //Get the controller output
         double controllerOutput = liftController.update(liftPosition, currentVelo);
@@ -95,12 +96,10 @@ public class ProfiledLiftPositionCommand extends CommandBase {
         //Update the lift power with the controller
         lift.setLiftPower(controllerOutput);
 
-        acceleration = (currentVelo - lastVelocity) / (timer.seconds() - lastTime);
-        setpointPos = profileController.getSetpoint().position;
-        setpointVel = profileController.getSetpoint().velocity;
-        setpointPosError = profileController.getPositionError();
-        lastVelocity = currentVelo;
-        lastTime = timer.seconds();
+        setpointPos = state.position;
+        setpointVel = state.velocity;
+        setpointPosError = targetPosition - liftPosition;
+        lastTime = currentTime;
     }
 
     @Override

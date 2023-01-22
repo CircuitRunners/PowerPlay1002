@@ -14,10 +14,8 @@ public class ManualLiftCommand extends CommandBase {
     private final double up = 1.0;
     private final double down = -0.7;
 
-    private final double slowUp = 0.5;
+    private final double slowUp = 0.72;
     private final double slowDown = -0.1;
-
-    private double voltageFactor = 1;
 
     public ManualLiftCommand(Lift lift, GamepadEx manipulator){
 
@@ -27,7 +25,6 @@ public class ManualLiftCommand extends CommandBase {
         this.lift = lift;
         this.manipulator = manipulator;
 
-        voltageFactor = 12 / lift.getVoltage();
     }
 
     @Override
@@ -49,9 +46,9 @@ public class ManualLiftCommand extends CommandBase {
 
         //Otherwise, do nothing
         else {
-            if(lift.getLiftPosition() < 283) lift.setLiftPower(0.18 * voltageFactor);
-            else if(lift.getLiftPosition() < 580) lift.setLiftPower(0.195 * voltageFactor);
-            else lift.setLiftPower(0.22 * voltageFactor);
+            if(lift.getLiftPosition() < 283) lift.setLiftPower(0.18 * lift.getVoltageComp());
+            else if(lift.getLiftPosition() < 580) lift.setLiftPower(0.195 * lift.getVoltageComp());
+            else lift.setLiftPower(0.22 * lift.getVoltageComp());
         }
     }
 

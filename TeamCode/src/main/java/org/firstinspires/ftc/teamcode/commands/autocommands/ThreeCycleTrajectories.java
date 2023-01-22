@@ -85,42 +85,42 @@ public class ThreeCycleTrajectories {
         rightToStackPreload =
                 drive.trajectorySequenceBuilder(rightPreloadPosition)
                         .setReversed(false)
-                        .splineTo(new Vector2d(45.3, -7.4), toRadians(0)) //to stack
+                        .splineTo(new Vector2d(45.3, -7.6), toRadians(0)) //to stack
                         .splineTo(rightStackPosition.vec(), toRadians(0))
                         .build();
 
         leftToStackPreload =
                 drive.trajectorySequenceBuilder(leftPreloadPosition)
                         .setReversed(false)
-                        .splineTo(new Vector2d(-45.3, -7.4), toRadians(180)) //to stack
+                        .splineTo(new Vector2d(-45.3, -7.6), toRadians(180)) //to stack
                         .splineTo(leftStackPosition.vec(), toRadians(180))
                         .build();
 
         rightToPole =
                 drive.trajectorySequenceBuilder(rightStackPosition)
                         .setReversed(true)
-                        .splineTo(new Vector2d(45.3, -7.4), toRadians(180))
+                        .splineTo(new Vector2d(45.3, -7.6), toRadians(180))
                         .splineTo(rightDropPosition.vec(), toRadians(-136.5))
                         .build();
 
         leftToPole =
                 drive.trajectorySequenceBuilder(leftStackPosition)
                         .setReversed(true)
-                        .splineTo(new Vector2d(-45.3, -7.4), toRadians(0))
+                        .splineTo(new Vector2d(-45.3, -7.6), toRadians(0))
                         .splineTo(leftDropPosition.vec(), toRadians(-44))
                         .build();
 
         rightToStack =
                 drive.trajectorySequenceBuilder(rightDropPosition)
                         .setReversed(false)
-                        .splineTo(new Vector2d(45.3, -7.4), toRadians(0)) //to stack
+                        .splineTo(new Vector2d(45.3, -7.6), toRadians(0)) //to stack
                         .splineTo(rightStackPosition.vec(), toRadians(0))
                         .build();
 
         leftToStack =
                 drive.trajectorySequenceBuilder(leftDropPosition)
                         .setReversed(false)
-                        .splineTo(new Vector2d(-45.3, -7.4), toRadians(180)) //to stack
+                        .splineTo(new Vector2d(-45.3, -7.6), toRadians(180)) //to stack
                         .splineTo(leftStackPosition.vec(), toRadians(180))
                         .build();
 
@@ -129,7 +129,7 @@ public class ThreeCycleTrajectories {
                 drive.trajectorySequenceBuilder(leftDropPosition)
                         .setConstraints(getVelocityConstraint(47, toRadians(260), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(47))
                         .setReversed(false)
-                        .splineTo(new Vector2d(-59, -7.4), toRadians(180))
+                        .splineTo(new Vector2d(-59, -7.6), toRadians(180))
 //                        .forward(6)
 //                        .turn(toRadians(-43))
 //                        .strafeLeft(23)
@@ -139,7 +139,7 @@ public class ThreeCycleTrajectories {
                 drive.trajectorySequenceBuilder(leftDropPosition)
                         .setConstraints(getVelocityConstraint(47, toRadians(260), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(47))
                         .setReversed(false)
-                        .lineToLinearHeading(new Pose2d(-38, -7.4, toRadians(89)))
+                        .lineToLinearHeading(new Pose2d(-38, -7.6, toRadians(89)))
 //                        .forward(6)
 //                        .turn(toRadians(-43))
                         .build();
@@ -148,7 +148,7 @@ public class ThreeCycleTrajectories {
                 drive.trajectorySequenceBuilder(leftDropPosition)
                         .setConstraints(getVelocityConstraint(47, toRadians(260), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(47))
                         .setReversed(false)
-                        .splineToLinearHeading(new Pose2d(-20, -7.4, toRadians(90)), toRadians(0))
+                        .splineToLinearHeading(new Pose2d(-20, -7.6, toRadians(90)), toRadians(0))
 //                        .forward(6)
 //                        .turn(toRadians(-43))
 //                        .strafeRight(25)

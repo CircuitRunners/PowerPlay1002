@@ -13,19 +13,16 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 public class LiftPositionCommand extends CommandBase {
 
     private PIDFController liftController;
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.031, 0, 0.002);
-    private double kG = 0.176; //gravity
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.032, 0.05, 0.002);
     //Bottom 0.14, 0.145, 0.176
-    private double tolerance = 3;
+    private double tolerance = 4;
     private boolean holdAtEnd;
     private final Lift lift;
-    private final double targetPosition;
 
-    private double liftPosition;
+    public static double targetPosition;
 
-    public LiftPositionCommand(Lift lift, int targetPosition){
-        this(lift, targetPosition, false);
-    }
+    public static double liftPosition = 0;
+    public static double liftVelocity = 0;
 
     public LiftPositionCommand(Lift lift, int targetPosition, boolean holdAtEnd){
         addRequirements(lift);
@@ -36,17 +33,19 @@ public class LiftPositionCommand extends CommandBase {
         this.targetPosition = targetPosition;
 
         //Add a feedforward term to counteract gravity
-        liftController = new PIDFController(coefficients, 0, 0, 0.12, (x, v) -> {
-            if(x < 283) return 0.128;
-            else if(x < 580) return 0.137;
-            else return 0.148;
+        liftController = new PIDFController(coefficients, 0.0012, 0.0, 0.02, (x, v) -> {
+            double kG;
+            if (liftPosition < 283) kG = 0.17;
+            else if (liftPosition < 580) kG = 0.191;
+            else kG = 0.218;
+
+            return kG * lift.getVoltageComp();
         });
-        liftController.setOutputBounds(-0.9, 0.95);
+        liftController.setOutputBounds(-0.75, 0.95);
     }
     @Override
     public void initialize(){
         //once
-        lift.stop();
         liftController.reset();
         liftController.setTargetPosition(targetPosition);
     }
@@ -55,8 +54,10 @@ public class LiftPositionCommand extends CommandBase {
     @Override
     public void execute(){
         liftPosition = lift.getLiftPosition();
+        liftVelocity = lift.getLiftVelocity();
+
         //Update the lift power with the controller
-        lift.setLiftPower(liftController.update(liftPosition));
+        lift.setLiftPower(liftController.update(liftPosition, liftVelocity));
     }
 
     @Override

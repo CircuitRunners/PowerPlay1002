@@ -7,9 +7,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.PerpetualCommand;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -59,7 +57,6 @@ public class MainTeleOp extends CommandOpMode {
 
     private ManualLiftCommand manualLiftCommand;
     private ManualLiftResetCommand manualLiftResetCommand;
-    private LiftPositionCommand liftPositionCommand;
 
 
     @Override
@@ -152,23 +149,23 @@ public class MainTeleOp extends CommandOpMode {
 
         //High preset
         new Trigger(() -> manipulator.getLeftY() > 0.5)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.HIGH).withTimeout(2000));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.HIGH).withTimeout(4000));
 
         //Mid preset
         new Trigger(() -> manipulator.getRightY() > -0.5)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.MID).withTimeout(2000));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.MID).withTimeout(4000));
 
         //Short preset
         new Trigger(() -> manipulator.getRightY() < 0.5)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.SHORT).withTimeout(2000));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.SHORT).withTimeout(4000));
 
         //Ground (terminal dropping) arm preset
         manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.GROUND).withTimeout(2000));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.GROUND).withTimeout(4000));
 
         //Full retract preset
         new Trigger(() -> manipulator.getLeftY() < -0.5)
-                .whenActive(new RetractOuttakeCommand(lift, arm, claw).withTimeout(2000));
+                .whenActive(new RetractOuttakeCommand(lift, arm, claw).withTimeout(4000));
 
 
 
@@ -250,10 +247,10 @@ public class MainTeleOp extends CommandOpMode {
 
         packet.put("Lift Position", lift.getLiftPosition());
         packet.put("Lift velocity", lift.getLiftVelocity());
-        packet.put("Lift target position", ProfiledLiftPositionCommand.setpointPos);
-        packet.put("Lift target velocity", ProfiledLiftPositionCommand.setpointVel);
-        packet.put("Lift position error", ProfiledLiftPositionCommand.setpointPosError);
-        packet.put("Lift acceleration", ProfiledLiftPositionCommand.acceleration);
+        packet.put("Lift target position", LiftPositionCommand.targetPosition);
+//        packet.put("Lift target velocity", ProfiledLiftPositionCommand.setpointVel);
+//        packet.put("Lift position error", ProfiledLiftPositionCommand.setpointPosError);
+//        packet.put("Lift target acceleration", ProfiledLiftPositionCommand.setpointAccel);
 
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
         telemetry.update();

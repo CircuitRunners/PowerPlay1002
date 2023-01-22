@@ -27,6 +27,7 @@ public class Lift extends SubsystemBase {
     private DcMotorEx rightMotor;
 
     private VoltageSensor voltageSensor;
+    private double voltageComp = 1.0;
 
     public Lift(HardwareMap hardwareMap){
 
@@ -41,8 +42,8 @@ public class Lift extends SubsystemBase {
         leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
+        voltageComp = 12.0 / voltageSensor.getVoltage();
     }
 
     @Override
@@ -68,7 +69,7 @@ public class Lift extends SubsystemBase {
     }
 
     public boolean atUpperLimit(){
-        return getLiftPosition() > 845;
+        return getLiftPosition() > 830;
     }
 
     public boolean atLowerLimit(){
@@ -80,7 +81,7 @@ public class Lift extends SubsystemBase {
         leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public double getVoltage(){
-        return voltageSensor.getVoltage();
+    public double getVoltageComp(){
+        return voltageComp;
     }
 }
