@@ -17,7 +17,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
     private PIDFController liftController;
     private TrapezoidProfile profile;
 
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.025, 0.0055, 0.0014);
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.027, 0.0055, 0.00144);
     public static double kV = 0.0014;
     public static double kA = 0.0;
     public static double kStatic = 0.01;

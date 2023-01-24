@@ -139,9 +139,9 @@ public class ThreeCycleTrajectories {
                 drive.trajectorySequenceBuilder(leftDropPosition)
                         .setConstraints(getVelocityConstraint(47, toRadians(260), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(47))
                         .setReversed(false)
-                        .lineToLinearHeading(new Pose2d(-38, -7.6, toRadians(89)))
+                        .lineToLinearHeading(new Pose2d(-37, -7.6, toRadians(88)))
 //                        .forward(6)
-//                        .turn(toRadians(-43))
+//                        .turn(toRadians(-43)) 
                         .build();
 
         leftRightPark =
