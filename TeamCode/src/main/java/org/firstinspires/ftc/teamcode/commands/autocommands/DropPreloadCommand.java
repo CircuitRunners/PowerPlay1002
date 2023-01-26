@@ -27,7 +27,7 @@ public class DropPreloadCommand extends ParallelCommandGroup {
                         new InstantCommand(claw::angleUp)
                 ),
                 new SequentialCommandGroup(
-                        new WaitCommand(200),
+                        new WaitCommand(600),
                         new TrajectorySequenceCommand(
                                 drive, isLeft ? ThreeCycleTrajectories.leftPreloadToPole : ThreeCycleTrajectories.rightPreloadToPole
                         )
@@ -35,7 +35,7 @@ public class DropPreloadCommand extends ParallelCommandGroup {
                 new SequentialCommandGroup(
                         new WaitCommand(200),
                         new ProfiledLiftPositionCommand(lift, Lift.LiftPositions.HIGH.position, true),
-                        new WaitCommand(500),
+                        new WaitCommand(900),
                         new InstantCommand(claw::open),
                         new WaitCommand(500)
                 )
