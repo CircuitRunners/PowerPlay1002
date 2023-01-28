@@ -75,6 +75,7 @@ public class ThreeCycleTrajectories {
                 drive.trajectorySequenceBuilder(ThreeCycleTrajectories.leftStartingPosition)
                         .setReversed(true)
                         .setAccelConstraint(getAccelerationConstraint(30))
+                        .setVelConstraint(getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH))
                         .setTurnConstraint(toRadians(200), toRadians(200))
                         .splineToConstantHeading(new Vector2d(-37, -48.5), toRadians(91))
                         .splineToConstantHeading(new Vector2d(-37, -35), toRadians(90))
@@ -129,7 +130,7 @@ public class ThreeCycleTrajectories {
                 drive.trajectorySequenceBuilder(leftDropPosition)
                         .setConstraints(getVelocityConstraint(47, toRadians(260), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(47))
                         .setReversed(false)
-                        .splineTo(new Vector2d(-59, -7), toRadians(180))
+                        .splineTo(new Vector2d(-62, -7), toRadians(180))
 //                        .forward(6)
 //                        .turn(toRadians(-43))
 //                        .strafeLeft(23)
@@ -148,10 +149,10 @@ public class ThreeCycleTrajectories {
                 drive.trajectorySequenceBuilder(leftDropPosition)
                         .setConstraints(getVelocityConstraint(47, toRadians(260), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(47))
                         .setReversed(false)
-                        .splineToLinearHeading(new Pose2d(-20, -7, toRadians(90)), toRadians(0))
-//                        .forward(6)
-//                        .turn(toRadians(-43))
-//                        .strafeRight(25)
+//                        .splineToLinearHeading(new Pose2d(-18, -5, toRadians(90)), toRadians(0))
+                        .forward(6)
+                        .turn(toRadians(-43))
+                        .strafeRight(25)
                         .build();
 
         rightLeftPark =
