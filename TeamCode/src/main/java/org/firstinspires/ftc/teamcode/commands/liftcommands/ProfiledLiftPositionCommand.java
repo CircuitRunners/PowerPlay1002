@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.commands.liftcommands;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
+import com.acmerobotics.roadrunner.profile.MotionProfile;
+import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
+import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.wpilibcontroller.ProfiledPIDController;
 import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
@@ -14,9 +17,10 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 public class ProfiledLiftPositionCommand extends CommandBase {
 
     private PIDFController liftController;
-    private TrapezoidProfile profile;
+//    private TrapezoidProfile profile;
+    private MotionProfile profile2;
 
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.026, 0.0055, 0.0013);
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.026, 0.0, 0.0013);//i=0.0055
     public static double kV = 0.0011;
     public static double kA = 0.0;
     public static double kStatic = 0.01;
@@ -58,10 +62,17 @@ public class ProfiledLiftPositionCommand extends CommandBase {
     @Override
     public void initialize() {
 
-        profile = new TrapezoidProfile(
-                new TrapezoidProfile.Constraints(700, 700),
-                new TrapezoidProfile.State(targetPosition, 0),
-                new TrapezoidProfile.State(lift.getLiftPosition(), lift.getLiftVelocity())
+//        profile = new TrapezoidProfile(
+//                new TrapezoidProfile.Constraints(700, 700),
+//                new TrapezoidProfile.State(targetPosition, 0),
+//                new TrapezoidProfile.State(lift.getLiftPosition(), lift.getLiftVelocity())
+//        );
+
+        profile2 = MotionProfileGenerator.generateSimpleMotionProfile(
+                new MotionState(lift.getLiftPosition(), lift.getLiftVelocity()),
+                new MotionState(targetPosition, 0),
+                700,
+                700
         );
 
         timer.reset();
@@ -73,27 +84,29 @@ public class ProfiledLiftPositionCommand extends CommandBase {
         liftPosition = lift.getLiftPosition();
         double currentVelo = lift.getLiftVelocity();
         double currentTime = timer.seconds();
-        TrapezoidProfile.State state = profile.calculate(currentTime);
+//        TrapezoidProfile.State state = profile.calculate(currentTime);
+        MotionState state = profile2.get(currentTime);
 
 
         //try to calculate acceleration setpoint
-        setpointAccel = (state.velocity - setpointVel) / (currentTime - lastTime);
 
         //Update the real controller target
-        liftController.setTargetPosition(state.position);
-        liftController.setTargetVelocity(state.velocity);
+        liftController.setTargetPosition(state.getX());
+        liftController.setTargetVelocity(state.getV());
+        liftController.setTargetAcceleration(state.getA());
 
         //Get the controller output
         double controllerOutput = liftController.update(liftPosition, currentVelo);
 
         //Apply kstatic
-        controllerOutput += Math.signum(state.velocity) * kStatic;
+        controllerOutput += Math.signum(state.getV()) * kStatic;
 
         //Update the lift power with the controller
         lift.setLiftPower(controllerOutput);
 
-        setpointPos = state.position;
-        setpointVel = state.velocity;
+        setpointPos = state.getX();
+        setpointVel = state.getV();
+        setpointAccel = state.getA();
         setpointPosError = targetPosition - liftPosition;
         lastTime = currentTime;
     }
