@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 @Config
 public class ProfiledLiftPositionCommand extends CommandBase {
 
-    private ProfiledPIDController profileController;
     private PIDFController liftController;
     private TrapezoidProfile profile;
 
@@ -44,7 +43,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 
         addRequirements(lift);
 
-        liftController = new PIDFController(coefficients, kV, kA, kStatic, (x, v) -> {
+        liftController = new PIDFController(coefficients, kV, kA, 0.0, (x, v) -> {
             double kG;
             if (liftPosition < 283) kG = 0.17;
             else if (liftPosition < 580) kG = 0.191;
@@ -53,11 +52,6 @@ public class ProfiledLiftPositionCommand extends CommandBase {
             return kG * lift.getVoltageComp();
         });
         liftController.setOutputBounds(-0.85, 0.95);
-
-
-        profileController = new ProfiledPIDController(0, 0, 0,
-                new TrapezoidProfile.Constraints(720, 700));
-
     }
 
 
@@ -82,9 +76,8 @@ public class ProfiledLiftPositionCommand extends CommandBase {
         TrapezoidProfile.State state = profile.calculate(currentTime);
 
 
-        //Update the profile (ignore the output)
-//        profileController.calculate(liftPosition);
-        setpointAccel = (profile.calculate(currentTime).velocity - setpointVel) / (currentTime - lastTime);
+        //try to calculate acceleration setpoint
+        setpointAccel = (state.velocity - setpointVel) / (currentTime - lastTime);
 
         //Update the real controller target
         liftController.setTargetPosition(state.position);
@@ -92,6 +85,9 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 
         //Get the controller output
         double controllerOutput = liftController.update(liftPosition, currentVelo);
+
+        //Apply kstatic
+        controllerOutput += Math.signum(state.velocity) * kStatic;
 
         //Update the lift power with the controller
         lift.setLiftPower(controllerOutput);
