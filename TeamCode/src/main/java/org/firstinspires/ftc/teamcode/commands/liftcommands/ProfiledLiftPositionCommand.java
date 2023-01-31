@@ -21,9 +21,9 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 //    private TrapezoidProfile profile;
     private MotionProfile profile2;
 
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.026, 0.0055, 0.0013);//i=0.0055
-    public static double kV = 0.0015;
-    public static double kA = 0.001;
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.0265, 0.0055, 0.0013);//i=0.0055
+    public static double kV = 0.0016;
+    public static double kA = 0.0;
     public static double kStatic = 0.01;
 
     private double tolerance = 5;
@@ -72,8 +72,8 @@ public class ProfiledLiftPositionCommand extends CommandBase {
                 new MotionState(lift.getLiftPosition(), lift.getLiftVelocity()),
                 new MotionState(targetPosition, 0),
                 700,
-                900,
-                4000
+                750,
+                0
         );
 
         timer.reset();
