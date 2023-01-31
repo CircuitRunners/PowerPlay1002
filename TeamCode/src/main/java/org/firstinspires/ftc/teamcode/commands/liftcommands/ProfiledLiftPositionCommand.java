@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
+import com.acmerobotics.roadrunner.profile.MotionProfileBuilder;
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.CommandBase;
@@ -20,9 +21,9 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 //    private TrapezoidProfile profile;
     private MotionProfile profile2;
 
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.026, 0.0, 0.0013);//i=0.0055
-    public static double kV = 0.0011;
-    public static double kA = 0.0;
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.026, 0.0055, 0.0013);//i=0.0055
+    public static double kV = 0.0013;
+    public static double kA = 0.001;
     public static double kStatic = 0.01;
 
     private double tolerance = 5;
@@ -38,7 +39,6 @@ public class ProfiledLiftPositionCommand extends CommandBase {
     public static double setpointAccel;
 
     private final ElapsedTime timer = new ElapsedTime();
-    private double lastTime = 0;
 
     public ProfiledLiftPositionCommand(Lift lift, double targetPosition, boolean holdAtEnd) {
         this.holdAtEnd = holdAtEnd;
@@ -72,7 +72,8 @@ public class ProfiledLiftPositionCommand extends CommandBase {
                 new MotionState(lift.getLiftPosition(), lift.getLiftVelocity()),
                 new MotionState(targetPosition, 0),
                 700,
-                700
+                900,
+                1400
         );
 
         timer.reset();
@@ -88,12 +89,14 @@ public class ProfiledLiftPositionCommand extends CommandBase {
         MotionState state = profile2.get(currentTime);
 
 
-        //try to calculate acceleration setpoint
 
         //Update the real controller target
         liftController.setTargetPosition(state.getX());
         liftController.setTargetVelocity(state.getV());
         liftController.setTargetAcceleration(state.getA());
+
+        //If the setpoint has changed, reset the integral gain
+        if(state.getX() != setpointPos) liftController.reset();
 
         //Get the controller output
         double controllerOutput = liftController.update(liftPosition, currentVelo);
@@ -108,7 +111,6 @@ public class ProfiledLiftPositionCommand extends CommandBase {
         setpointVel = state.getV();
         setpointAccel = state.getA();
         setpointPosError = targetPosition - liftPosition;
-        lastTime = currentTime;
     }
 
     @Override
