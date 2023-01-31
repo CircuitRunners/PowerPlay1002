@@ -46,9 +46,9 @@ public class ManualLiftCommand extends CommandBase {
 
         //Otherwise, do nothing
         else {
-            if(lift.getLiftPosition() < 283) lift.setLiftPower(0.18 * lift.getVoltageComp());
-            else if(lift.getLiftPosition() < 580) lift.setLiftPower(0.195 * lift.getVoltageComp());
-            else lift.setLiftPower(0.22 * lift.getVoltageComp());
+            if(lift.getLiftPosition() < 283) lift.setLiftPower(0.185 * lift.getVoltageComp());
+            else if(lift.getLiftPosition() < 580) lift.setLiftPower(0.20 * lift.getVoltageComp());
+            else lift.setLiftPower(0.225 * lift.getVoltageComp());
         }
     }
 

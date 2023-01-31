@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.outoftheboxrobotics.photoncore.Neutrino.Rev2MSensor.Rev2mDistanceSensorEx;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -10,14 +11,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class ControlAward extends LinearOpMode {
 
 
-
+    private Rev2mDistanceSensor distanceSensor;
 
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Rev2mDistanceSensor distanceSensor = hardwareMap.get(Rev2mDistanceSensor.class, "intakeSensor");
-
-
+        distanceSensor = hardwareMap.get(Rev2mDistanceSensor.class, "intakeSensor");
 
 
         waitForStart();

@@ -22,7 +22,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
     private MotionProfile profile2;
 
     public static PIDCoefficients coefficients = new PIDCoefficients(0.026, 0.0055, 0.0013);//i=0.0055
-    public static double kV = 0.0013;
+    public static double kV = 0.0015;
     public static double kA = 0.001;
     public static double kStatic = 0.01;
 
@@ -73,7 +73,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
                 new MotionState(targetPosition, 0),
                 700,
                 900,
-                1400
+                4000
         );
 
         timer.reset();
@@ -96,7 +96,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
         liftController.setTargetAcceleration(state.getA());
 
         //If the setpoint has changed, reset the integral gain
-        if(state.getX() != setpointPos) liftController.reset();
+//        if(state.getX() != setpointPos) liftController.reset();
 
         //Get the controller output
         double controllerOutput = liftController.update(liftPosition, currentVelo);
