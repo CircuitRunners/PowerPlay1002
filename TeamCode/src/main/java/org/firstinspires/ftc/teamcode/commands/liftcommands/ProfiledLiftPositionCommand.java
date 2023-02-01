@@ -21,9 +21,9 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 //    private TrapezoidProfile profile;
     private MotionProfile profile2;
 
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.0265, 0.0055, 0.0013);//i=0.0055
-    public static double kV = 0.0016;
-    public static double kA = 0.0003;
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.0268, 0.005, 0.00147);//p=0.0265, i=0.0055, d=0.0013
+    public static double kV = 0.00144;
+    public static double kA = 0.00009;
     public static double kStatic = 0.01;
 
     private double tolerance = 5;
@@ -51,11 +51,11 @@ public class ProfiledLiftPositionCommand extends CommandBase {
             double kG;
             if (liftPosition < 283) kG = 0.17;
             else if (liftPosition < 580) kG = 0.191;
-            else kG = 0.218;
+            else kG = 0.22;
 
             return kG * lift.getVoltageComp();
         });
-        liftController.setOutputBounds(-0.85, 0.95);
+        liftController.setOutputBounds(-0.55, 0.95);
     }
 
 
@@ -72,8 +72,8 @@ public class ProfiledLiftPositionCommand extends CommandBase {
                 new MotionState(lift.getLiftPosition(), lift.getLiftVelocity()),
                 new MotionState(targetPosition, 0),
                 700,
-                700,
-                2000
+                800,
+                3000
         );
 
         timer.reset();

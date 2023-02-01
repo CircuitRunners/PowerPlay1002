@@ -35,7 +35,7 @@ public class LiftPositionCommand extends CommandBase {
         //Add a feedforward term to counteract gravity
         liftController = new PIDFController(coefficients, 0.0012, 0.0, 0.02, (x, v) -> {
             double kG;
-            if (liftPosition < 283) kG = 0.17;
+            if (liftPosition < 283) kG = 0.175;
             else if (liftPosition < 580) kG = 0.191;
             else kG = 0.218;
 

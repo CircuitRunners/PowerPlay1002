@@ -148,15 +148,15 @@ public class MainTeleOp extends CommandOpMode {
                 .whenHeld(manualLiftResetCommand);
 
         //High preset
-        new Trigger(() -> manipulator.getLeftY() > 0.5)
+        new Trigger(() -> manipulator.getLeftY() > 0.4)
                 .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.HIGH).withTimeout(4000));
 
         //Mid preset
-        new Trigger(() -> manipulator.getRightY() > -0.5)
+        new Trigger(() -> manipulator.getRightY() > -0.4)
                 .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.MID).withTimeout(4000));
 
         //Short preset
-        new Trigger(() -> manipulator.getRightY() < 0.5)
+        new Trigger(() -> manipulator.getRightY() < 0.4)
                 .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.SHORT).withTimeout(4000));
 
         //Ground (terminal dropping) arm preset
@@ -164,7 +164,7 @@ public class MainTeleOp extends CommandOpMode {
                 .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.GROUND).withTimeout(4000));
 
         //Full retract preset
-        new Trigger(() -> manipulator.getLeftY() < -0.5)
+        new Trigger(() -> manipulator.getLeftY() < -0.4)
                 .whenActive(new RetractOuttakeCommand(lift, arm, claw).withTimeout(4000));
 
 
@@ -248,7 +248,7 @@ public class MainTeleOp extends CommandOpMode {
         packet.put("Lift Position", lift.getLiftPosition());
         packet.put("Lift velocity", lift.getLiftVelocity());
         packet.put("Lift target position", LiftPositionCommand.targetPosition);
-//        packet.put("Lift target velocity", ProfiledLiftPositionCommand.setpointVel);
+        packet.put("Lift target velocity", ProfiledLiftPositionCommand.setpointVel);
 //        packet.put("Lift position error", ProfiledLiftPositionCommand.setpointPosError);
 //        packet.put("Lift target acceleration", ProfiledLiftPositionCommand.setpointAccel);
 
