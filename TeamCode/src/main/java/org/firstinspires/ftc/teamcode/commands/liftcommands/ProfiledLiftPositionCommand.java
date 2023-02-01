@@ -72,7 +72,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
                 new MotionState(lift.getLiftPosition(), lift.getLiftVelocity()),
                 new MotionState(targetPosition, 0),
                 700,
-                750,
+                700,
                 0
         );
 

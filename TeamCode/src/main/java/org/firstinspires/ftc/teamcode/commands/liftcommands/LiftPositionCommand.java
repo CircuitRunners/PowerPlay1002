@@ -41,7 +41,7 @@ public class LiftPositionCommand extends CommandBase {
 
             return kG * lift.getVoltageComp();
         });
-        liftController.setOutputBounds(-0.75, 0.95);
+        liftController.setOutputBounds(-0.65, 0.95);
     }
     @Override
     public void initialize(){
