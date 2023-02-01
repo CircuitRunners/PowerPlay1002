@@ -23,7 +23,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 
     public static PIDCoefficients coefficients = new PIDCoefficients(0.0265, 0.0055, 0.0013);//i=0.0055
     public static double kV = 0.0016;
-    public static double kA = 0.0;
+    public static double kA = 0.0003;
     public static double kStatic = 0.01;
 
     private double tolerance = 5;
@@ -47,7 +47,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 
         addRequirements(lift);
 
-        liftController = new PIDFController(coefficients, kV, kA, 0.0, (x, v) -> {
+        liftController = new PIDFController(coefficients, kV, kA, kStatic, (x, v) -> {
             double kG;
             if (liftPosition < 283) kG = 0.17;
             else if (liftPosition < 580) kG = 0.191;
@@ -73,7 +73,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
                 new MotionState(targetPosition, 0),
                 700,
                 700,
-                0
+                2000
         );
 
         timer.reset();
@@ -100,9 +100,6 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 
         //Get the controller output
         double controllerOutput = liftController.update(liftPosition, currentVelo);
-
-        //Apply kstatic
-        controllerOutput += Math.signum(state.getV()) * kStatic;
 
         //Update the lift power with the controller
         lift.setLiftPower(controllerOutput);
