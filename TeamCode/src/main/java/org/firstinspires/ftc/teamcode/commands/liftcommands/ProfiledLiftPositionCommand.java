@@ -1,18 +1,15 @@
 package org.firstinspires.ftc.teamcode.commands.liftcommands;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.control.PIDCoefficients;
-import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
-import com.acmerobotics.roadrunner.profile.MotionProfileBuilder;
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.controller.wpilibcontroller.ProfiledPIDController;
 import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
+import org.firstinspires.ftc.teamcode.util.PIDFController;
 
 @Config
 public class ProfiledLiftPositionCommand extends CommandBase {
@@ -21,12 +18,15 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 //    private TrapezoidProfile profile;
     private MotionProfile profile2;
 
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.0268, 0.005, 0.00147);//p=0.0265, i=0.0055, d=0.0013
+
+    public static PIDFController.PIDCoefficients coefficients =
+            new PIDFController.PIDCoefficients();//p=0.0268, i=0.005, d=0.00147
     public static double kV = 0.00144;
     public static double kA = 0.00009;
-    public static double kStatic = 0.01;
+    public static double kStatic = 0.04;
 
     private double tolerance = 5;
+    private double integralThreshold = 20;
     private boolean holdAtEnd;
     private final Lift lift;
     private final double targetPosition;
@@ -36,7 +36,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
     public static double setpointPos = 0;
     public static double setpointVel = 0;
     public static double setpointPosError = 0;
-    public static double setpointAccel;
+    public static double setpointAccel = 0;
 
     private final ElapsedTime timer = new ElapsedTime();
 
@@ -47,10 +47,14 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 
         addRequirements(lift);
 
+        coefficients.kP = 0.0268;
+        coefficients.kI = 0.005;
+        coefficients.kD = 0.00147;
+
         liftController = new PIDFController(coefficients, kV, kA, kStatic, (x, v) -> {
             double kG;
-            if (liftPosition < 283) kG = 0.17;
-            else if (liftPosition < 580) kG = 0.191;
+            if (liftPosition < 283) kG = 0.18;
+            else if (liftPosition < 580) kG = 0.195;
             else kG = 0.22;
 
             return kG * lift.getVoltageComp();
@@ -89,17 +93,16 @@ public class ProfiledLiftPositionCommand extends CommandBase {
         MotionState state = profile2.get(currentTime);
 
 
-
         //Update the real controller target
-        liftController.setTargetPosition(state.getX());
-        liftController.setTargetVelocity(state.getV());
-        liftController.setTargetAcceleration(state.getA());
+        liftController.targetPosition = state.getX();
+        liftController.targetVelocity = state.getV();
+        liftController.targetAcceleration = state.getA();
 
-        //If the setpoint has changed, reset the integral gain
-//        if(state.getX() != setpointPos) liftController.reset();
+        //Only use the integral gain if the lift is within a threshold of the target
+        if(Math.abs(targetPosition - liftPosition) > integralThreshold) liftController.resetIntegralSum();
 
         //Get the controller output
-        double controllerOutput = liftController.update(liftPosition, currentVelo);
+        double controllerOutput = liftController.update(System.nanoTime(), liftPosition, currentVelo);
 
         //Update the lift power with the controller
         lift.setLiftPower(controllerOutput);
