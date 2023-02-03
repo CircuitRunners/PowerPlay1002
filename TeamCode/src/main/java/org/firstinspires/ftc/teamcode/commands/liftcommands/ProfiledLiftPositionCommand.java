@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.commands.liftcommands;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
@@ -9,7 +11,7 @@ import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
-import org.firstinspires.ftc.teamcode.util.PIDFController;
+
 
 @Config
 public class ProfiledLiftPositionCommand extends CommandBase {
@@ -19,10 +21,10 @@ public class ProfiledLiftPositionCommand extends CommandBase {
     private MotionProfile profile2;
 
 
-    public static PIDFController.PIDCoefficients coefficients =
-            new PIDFController.PIDCoefficients();//p=0.0268, i=0.005, d=0.00147
-    public static double kV = 0.00144;
-    public static double kA = 0.00009;
+    public static PIDCoefficients coefficients =
+            new PIDCoefficients();//p=0.0268, i=0.005, d=0.00147
+    public static double kV = 0.00148;
+    public static double kA = 0.00008;
     public static double kStatic = 0.04;
 
     private double tolerance = 5;
@@ -53,7 +55,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 
         liftController = new PIDFController(coefficients, kV, kA, kStatic, (x, v) -> {
             double kG;
-            if (liftPosition < 283) kG = 0.18;
+            if (liftPosition < 283) kG = 0.178;
             else if (liftPosition < 580) kG = 0.195;
             else kG = 0.22;
 
@@ -77,7 +79,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
                 new MotionState(targetPosition, 0),
                 700,
                 800,
-                3000
+                5000
         );
 
         timer.reset();
@@ -94,15 +96,15 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 
 
         //Update the real controller target
-        liftController.targetPosition = state.getX();
-        liftController.targetVelocity = state.getV();
-        liftController.targetAcceleration = state.getA();
+        liftController.setTargetPosition(state.getX());
+        liftController.setTargetVelocity(state.getV());
+        liftController.setTargetAcceleration(state.getA());
 
         //Only use the integral gain if the lift is within a threshold of the target
-        if(Math.abs(targetPosition - liftPosition) > integralThreshold) liftController.resetIntegralSum();
+//        if(Math.abs(targetPosition - liftPosition) > integralThreshold) liftController.resetIntegralSum();
 
         //Get the controller output
-        double controllerOutput = liftController.update(System.nanoTime(), liftPosition, currentVelo);
+        double controllerOutput = liftController.update(liftPosition, currentVelo);
 
         //Update the lift power with the controller
         lift.setLiftPower(controllerOutput);

@@ -32,7 +32,7 @@ public class Arm extends SubsystemBase {
 
     //motion profile constraints
     private TrapezoidProfile.Constraints constraints =
-            new TrapezoidProfile.Constraints(1.3, 1.3);
+            new TrapezoidProfile.Constraints(1.5, 1.5);
 
     //Motion profile, initialize to down
     private TrapezoidProfile armProfile =

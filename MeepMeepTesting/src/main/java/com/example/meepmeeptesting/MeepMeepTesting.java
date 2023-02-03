@@ -26,7 +26,7 @@ public class MeepMeepTesting {
         RoadRunnerBotEntity redBot = new DefaultBotBuilder(meepMeep)
                 .setDimensions(14, 15)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(40, 40, toRadians(220), toRadians(220), 11.78)
+                .setConstraints(40, 40, toRadians(230), toRadians(230), 12.1)
                 .followTrajectorySequence(drive ->
                                 drive.trajectorySequenceBuilder(new Pose2d(40, -58, toRadians(-90)))
                                         .setReversed(true)
@@ -44,8 +44,8 @@ public class MeepMeepTesting {
 
 
                                         .setReversed(true)
-                                        .splineTo(new Vector2d(40, -5.5), toRadians(-180))
-                                        .splineTo(new Vector2d(27, -5.5), toRadians(-132))
+                                        .splineTo(new Vector2d(50, -6.5), toRadians(-180))
+                                        .splineTo(new Vector2d(32.8, -10.4), toRadians(-138))
                                         .waitSeconds(1) //at pole 1
 
                                         .setReversed(false)
