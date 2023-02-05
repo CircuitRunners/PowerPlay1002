@@ -186,7 +186,7 @@ public class MainTeleOp extends CommandOpMode {
         Orientation orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
 
         //If lmec is on, force robot centric control
-        double heading = (lmecOn) ? 0.0 : AngleUnit.normalizeRadians(orientation.firstAngle - headingOffset);
+        double heading = (lmecOn) ? 180.0 : AngleUnit.normalizeRadians(orientation.firstAngle - headingOffset);
 
         //Reset the zero point for field centric by making the current heading the offset
         if (gamepad1.x && !prevHeadingReset) {

@@ -36,10 +36,10 @@ public class ThreeCycleTrajectories {
             new Pose2d(-32.8, -10.4, toRadians(129));
 
     public static final Pose2d rightStackPosition =
-            new Pose2d(64.2, -6.8, toRadians(0));
+            new Pose2d(64.2, -7, toRadians(0));
 
     public static final Pose2d leftStackPosition =
-            new Pose2d(-64.2, -6.8, toRadians(180));
+            new Pose2d(-64.2, -7, toRadians(180));
 
     public static TrajectorySequence rightPreloadToPole;
     public static TrajectorySequence leftPreloadToPole;
@@ -90,42 +90,42 @@ public class ThreeCycleTrajectories {
         rightToStackPreload =
                 drive.trajectorySequenceBuilder(rightPreloadPosition)
                         .setReversed(false)
-                        .splineTo(new Vector2d(45.3, -6.8), toRadians(0)) //to stack
+                        .splineTo(new Vector2d(45.3, -7), toRadians(0)) //to stack
                         .splineTo(rightStackPosition.vec(), toRadians(0))
                         .build();
 
         leftToStackPreload =
                 drive.trajectorySequenceBuilder(leftPreloadPosition)
                         .setReversed(false)
-                        .splineTo(new Vector2d(-45.3, -6.8), toRadians(180)) //to stack
+                        .splineTo(new Vector2d(-45.3, -7), toRadians(180)) //to stack
                         .splineTo(leftStackPosition.vec(), toRadians(180))
                         .build();
 
         rightToPole =
                 drive.trajectorySequenceBuilder(rightStackPosition)
                         .setReversed(true)
-                        .splineTo(new Vector2d(45.3, -6.8), toRadians(180))
+                        .splineTo(new Vector2d(45.3, -7), toRadians(180))
                         .splineTo(rightDropPosition.vec(), toRadians(-136))
                         .build();
 
         leftToPole =
                 drive.trajectorySequenceBuilder(leftStackPosition)
                         .setReversed(true)
-                        .splineTo(new Vector2d(-50, -6.8), toRadians(0))
-                        .splineTo(leftDropPosition.vec(), toRadians(-44))
+                        .splineTo(new Vector2d(-50, -7), toRadians(0))
+                        .splineTo(leftDropPosition.vec(), toRadians(-44.3))
                         .build();
 
         rightToStack =
                 drive.trajectorySequenceBuilder(rightDropPosition)
                         .setReversed(false)
-                        .splineTo(new Vector2d(45.3, -6.8), toRadians(0)) //to stack
+                        .splineTo(new Vector2d(45.3, -7), toRadians(0)) //to stack
                         .splineTo(rightStackPosition.vec(), toRadians(0))
                         .build();
 
         leftToStack =
                 drive.trajectorySequenceBuilder(leftDropPosition)
                         .setReversed(false)
-                        .splineTo(new Vector2d(-45.3, -6.8), toRadians(180)) //to stack
+                        .splineTo(new Vector2d(-45.3, -7), toRadians(180)) //to stack
                         .splineTo(leftStackPosition.vec(), toRadians(180))
                         .build();
 
