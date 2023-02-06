@@ -36,7 +36,7 @@ public class LiftPositionCommand extends CommandBase {
         liftController = new PIDFController(coefficients, 0.0012, 0.0, 0.02, (x, v) -> {
             double kG;
             if (liftPosition < 283) kG = 0.175;
-            else if (liftPosition < 580) kG = 0.191;
+            else if (liftPosition < 580) kG = 0.195;
             else kG = 0.218;
 
             return kG * lift.getVoltageComp();
@@ -68,7 +68,7 @@ public class LiftPositionCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted){
-        if (holdAtEnd) lift.setLiftPower(0.18);
+        if (holdAtEnd) lift.setLiftPower(0.2);
         else lift.stop();
     }
 

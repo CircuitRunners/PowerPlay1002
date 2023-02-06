@@ -2,9 +2,6 @@ package org.firstinspires.ftc.teamcode.auto.cycle;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.outoftheboxrobotics.photoncore.PhotonCore;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.autocommands.DropPoleCommand;
@@ -19,8 +16,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
 
-//@Autonomous(name = "Right 1+4")
-public class RightFourCycleAuto extends CommandOpMode {
+//@Autonomous(name = "Right 1+5")
+public class RightFiveCycleAuto extends CommandOpMode {
 
 
     private SampleMecanumDrive drive;
@@ -54,10 +51,12 @@ public class RightFourCycleAuto extends CommandOpMode {
         GoToStackCommand goToStackCommand2 = new GoToStackCommand(drive, lift, claw, arm, false, 2);
         GoToStackCommand goToStackCommand3 = new GoToStackCommand(drive, lift, claw, arm, false, 3);
         GoToStackCommand goToStackCommand4 = new GoToStackCommand(drive, lift, claw, arm, false, 4);
+        GoToStackCommand goToStackCommand5 = new GoToStackCommand(drive, lift, claw, arm, false, 5);
         DropPoleCommand dropPoleCommand1 = new DropPoleCommand(drive, lift, claw, arm, false);
         DropPoleCommand dropPoleCommand2 = new DropPoleCommand(drive, lift, claw, arm, false);
         DropPoleCommand dropPoleCommand3 = new DropPoleCommand(drive, lift, claw, arm, false);
         DropPoleCommand dropPoleCommand4 = new DropPoleCommand(drive, lift, claw, arm, false);
+        DropPoleCommand dropPoleCommand5 = new DropPoleCommand(drive, lift, claw, arm, false);
 
         //Start vision
         beaconDetector.startStream();
@@ -81,6 +80,8 @@ public class RightFourCycleAuto extends CommandOpMode {
                 dropPoleCommand3,
                 goToStackCommand4,
                 dropPoleCommand4,
+                goToStackCommand5,
+                dropPoleCommand5,
                 new ParkCommand(drive, lift, arm, claw, beaconId)
         ));
     }

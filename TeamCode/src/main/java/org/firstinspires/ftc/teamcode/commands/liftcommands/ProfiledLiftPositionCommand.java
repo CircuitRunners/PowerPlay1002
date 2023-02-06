@@ -73,7 +73,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
                 new MotionState(targetPosition, 0),
                 700,
                 800,
-                5000
+                0
         );
 
         timer.reset();
