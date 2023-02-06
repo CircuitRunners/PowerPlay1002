@@ -11,6 +11,8 @@ import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationCon
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.noahbres.meepmeep.MeepMeep;
+import com.noahbres.meepmeep.core.colorscheme.ColorScheme;
+import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeBlueDark;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
@@ -26,26 +28,28 @@ public class MeepMeepTesting {
         RoadRunnerBotEntity redBot = new DefaultBotBuilder(meepMeep)
                 .setDimensions(14, 15)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(40, 40, toRadians(230), toRadians(230), 12.1)
+                .setConstraints(40, 43, toRadians(230), toRadians(230), 12.1)
                 .followTrajectorySequence(drive ->
                                 drive.trajectorySequenceBuilder(new Pose2d(40, -58, toRadians(-90)))
                                         .setReversed(true)
                                         .setAccelConstraint(getAccelerationConstraint(35))
                                         .setTurnConstraint(toRadians(200), toRadians(200))
-                                        .splineToConstantHeading(new Vector2d(37, -48.5), toRadians(91))
+                                        .splineToConstantHeading(new Vector2d(37, -48.5), toRadians(89))
                                         .splineToConstantHeading(new Vector2d(37, -35), toRadians(90))
-                                        .splineTo(new Vector2d(30, -5.0), toRadians(115))
+                                        .splineTo(new Vector2d(30, -5.0), toRadians(114.8))
                                         .waitSeconds(1) //drop preload
+                                        .resetConstraints()
 
                                         .setReversed(false)
-                                        .splineTo(new Vector2d(40, -6.5), toRadians(-2)) //to stack
-                                        .splineTo(new Vector2d(60, -6.5), toRadians(0))
+//                                        .splineToSplineHeading(new Pose2d(45.3, -7.0, toRadians(0)), toRadians(0)) //to stack
+                                        .splineTo(new Vector2d(50, -7.0), toRadians(0)) //to stack
+                                        .splineTo(new Vector2d(64.2, -7.0 ), toRadians(0))
                                         .waitSeconds(1) //at stack 1
 
 
                                         .setReversed(true)
-                                        .splineTo(new Vector2d(50, -6.5), toRadians(-180))
-                                        .splineTo(new Vector2d(32.8, -10.4), toRadians(-138))
+                                        .splineTo(new Vector2d(50, -7.0), toRadians(-180))
+                                        .splineTo(new Vector2d(32.8, -12), toRadians(-144))
                                         .waitSeconds(1) //at pole 1
 
                                         .setReversed(false)
@@ -57,7 +61,7 @@ public class MeepMeepTesting {
 
                                         .setReversed(true)
                                         .splineTo(new Vector2d(40, -11.7), toRadians(-180))
-                                        .splineTo(new Vector2d(31, -15), toRadians(-132))
+                                        .splineTo(new Vector2d(32.8, -10.4), toRadians(-138))
                                         .waitSeconds(1) //at pole 2
 
                                         .setReversed(false)
@@ -83,17 +87,29 @@ public class MeepMeepTesting {
 
                 );
 //
-//        RoadRunnerBotEntity blueBot = new DefaultBotBuilder(meepMeep)
-//                .setDimensions(14, 14)
-//                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-//                .setConstraints(40, 40, toRadians(220), toRadians(220), 11.78)
-//                .followTrajectorySequence(drive ->
-//                        drive.trajectorySequenceBuilder(new Pose2d(-37, 63, toRadians(-90)))
-//                                .splineTo(new Vector2d(-36, 30), toRadians(-90))
-//                                .splineTo(new Vector2d(-36, 18), toRadians(-86))
-//                                .splineToSplineHeading(new Pose2d(-29.5, 16.5, toRadians(50)), toRadians(45))
-//                                .build()
-//                );
+        RoadRunnerBotEntity blueBot = new DefaultBotBuilder(meepMeep)
+                .setDimensions(14, 14)
+                .setColorScheme(new ColorSchemeBlueDark())
+                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                .setConstraints(40, 43, toRadians(230), toRadians(230), 12.1)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(40, -58, toRadians(-90)))
+                                 .setReversed(true)
+                                        .setAccelConstraint(getAccelerationConstraint(35))
+                                        .setTurnConstraint(toRadians(200), toRadians(200))
+                                        .splineToConstantHeading(new Vector2d(37, -48.5), toRadians(91))
+                                        .splineToConstantHeading(new Vector2d(37, -35), toRadians(90))
+                                        .splineTo(new Vector2d(30, -5.0), toRadians(115))
+                                        .waitSeconds(1) //drop preload
+                                        .resetConstraints()
+
+                                        .setReversed(false)
+                                        .splineToSplineHeading(new Pose2d(50, -7.0, toRadians(0)), toRadians(0)) //to stack
+//                                        .splineTo(new Vector2d(45.3, -7.0), toRadians(0)) //to stack
+                                        .splineToConstantHeading(new Vector2d(64.2, -7.0 ), toRadians(0))
+                                        .waitSeconds(1) //at stack 1
+                                .build()
+                );
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
                 .setDarkMode(true)

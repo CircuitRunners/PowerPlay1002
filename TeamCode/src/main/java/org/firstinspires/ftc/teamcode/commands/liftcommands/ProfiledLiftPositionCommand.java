@@ -7,7 +7,6 @@ import com.acmerobotics.roadrunner.profile.MotionProfile;
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
@@ -17,8 +16,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 public class ProfiledLiftPositionCommand extends CommandBase {
 
     private PIDFController liftController;
-//    private TrapezoidProfile profile;
-    private MotionProfile profile2;
+    private MotionProfile profile;
 
 
     public static PIDCoefficients coefficients =
@@ -68,13 +66,9 @@ public class ProfiledLiftPositionCommand extends CommandBase {
     @Override
     public void initialize() {
 
-//        profile = new TrapezoidProfile(
-//                new TrapezoidProfile.Constraints(700, 700),
-//                new TrapezoidProfile.State(targetPosition, 0),
-//                new TrapezoidProfile.State(lift.getLiftPosition(), lift.getLiftVelocity())
-//        );
 
-        profile2 = MotionProfileGenerator.generateSimpleMotionProfile(
+
+        profile = MotionProfileGenerator.generateSimpleMotionProfile(
                 new MotionState(lift.getLiftPosition(), lift.getLiftVelocity()),
                 new MotionState(targetPosition, 0),
                 700,
@@ -92,7 +86,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
         double currentVelo = lift.getLiftVelocity();
         double currentTime = timer.seconds();
 //        TrapezoidProfile.State state = profile.calculate(currentTime);
-        MotionState state = profile2.get(currentTime);
+        MotionState state = profile.get(currentTime);
 
 
         //Update the real controller target

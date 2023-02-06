@@ -21,9 +21,9 @@ public class DropPoleCommand extends ParallelCommandGroup {
         addCommands(
 
                 new SequentialCommandGroup(
-                        new WaitCommand(600),
+                        new WaitCommand(500),
                         new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.HIGH)),
-                        new WaitCommand(1300),
+                        new WaitCommand(1100),
                         new InstantCommand(claw::angleUp)
                 ),
                 new SequentialCommandGroup(
@@ -35,7 +35,7 @@ public class DropPoleCommand extends ParallelCommandGroup {
                 new SequentialCommandGroup(
 //                        new WaitCommand(100),
                         new ProfiledLiftPositionCommand(lift, Lift.LiftPositions.MID.position, true),
-                        new WaitCommand(1000),
+                        new WaitCommand(900),
                         new InstantCommand(claw::open),
                         new WaitCommand(400)
                 )
