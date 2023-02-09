@@ -20,13 +20,12 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 
 
     public static PIDCoefficients coefficients =
-            new PIDCoefficients();//p=0.0268, i=0.005, d=0.00147
+            new PIDCoefficients(0.0268, 0.005, 0.00147);//p=0.0268, i=0.005, d=0.00147
     public static double kV = 0.00148;
-    public static double kA = 0.00008;
-    public static double kStatic = 0.04;
+    public static double kA = 0.00007;
+    public static double kStatic = 0.03;
 
     private double tolerance = 5;
-    private double integralThreshold = 20;
     private boolean holdAtEnd;
     private final Lift lift;
     private final double targetPosition;
@@ -47,9 +46,6 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 
         addRequirements(lift);
 
-        coefficients.kP = 0.0268;
-        coefficients.kI = 0.005;
-        coefficients.kD = 0.00147;
 
         liftController = new PIDFController(coefficients, kV, kA, kStatic, (x, v) -> {
             double kG;
@@ -59,7 +55,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 
             return kG * lift.getVoltageComp();
         });
-        liftController.setOutputBounds(-0.55, 0.95);
+        liftController.setOutputBounds(-0.65, 0.95);
     }
 
 
@@ -72,7 +68,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
                 new MotionState(lift.getLiftPosition(), lift.getLiftVelocity()),
                 new MotionState(targetPosition, 0),
                 700,
-                800,
+                850,
                 0
         );
 
@@ -94,8 +90,6 @@ public class ProfiledLiftPositionCommand extends CommandBase {
         liftController.setTargetVelocity(state.getV());
         liftController.setTargetAcceleration(state.getA());
 
-        //Only use the integral gain if the lift is within a threshold of the target
-//        if(Math.abs(targetPosition - liftPosition) > integralThreshold) liftController.resetIntegralSum();
 
         //Get the controller output
         double controllerOutput = liftController.update(liftPosition, currentVelo);

@@ -11,6 +11,7 @@ import com.arcrobotics.ftclib.command.PerpetualCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -44,7 +45,7 @@ public class MainTeleOp extends CommandOpMode {
     private Lift lift;
     private Claw claw;
     private Arm arm;
-    private Intake intake;
+//    private Intake intake;
 
     //Drive motors and list to hold them
     private DcMotorEx lf, lb, rf, rb;
@@ -70,7 +71,7 @@ public class MainTeleOp extends CommandOpMode {
         lift = new Lift(hardwareMap);
         arm = new Arm(hardwareMap);
         claw = new Claw(hardwareMap);
-        intake = new Intake(hardwareMap);
+//        intake = new Intake(hardwareMap);
 
 
 //        //Retrieve dt motors from the hardware map
@@ -119,15 +120,15 @@ public class MainTeleOp extends CommandOpMode {
                 });
 
 
-        //Intake control
-        driver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenActive(intake::intake)
-                .whenInactive(intake::stop);
-
-        //control to outtake whenever Y is pressed (for safety)
-        driver.getGamepadButton(GamepadKeys.Button.Y)
-                .whenActive(intake::outtake)
-                .whenInactive(intake::stop);
+//        //Intake control
+//        driver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+//                .whenActive(intake::intake)
+//                .whenInactive(intake::stop);
+//
+//        //control to outtake whenever Y is pressed (for safety)
+//        driver.getGamepadButton(GamepadKeys.Button.Y)
+//                .whenActive(intake::outtake)
+//                .whenInactive(intake::stop);
 
 
         //Set up commands
@@ -149,23 +150,23 @@ public class MainTeleOp extends CommandOpMode {
 
         //High preset
         new Trigger(() -> manipulator.getLeftY() > 0.4)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.HIGH).withTimeout(4000));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.HIGH).withTimeout(3000));
 
         //Mid preset
         new Trigger(() -> manipulator.getRightY() > -0.4)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.MID).withTimeout(4000));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.MID).withTimeout(3000));
 
         //Short preset
         new Trigger(() -> manipulator.getRightY() < 0.4)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.SHORT).withTimeout(4000));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.SHORT).withTimeout(3000));
 
         //Ground (terminal dropping) arm preset
         manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.GROUND).withTimeout(4000));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.GROUND).withTimeout(3000));
 
         //Full retract preset
         new Trigger(() -> manipulator.getLeftY() < -0.4)
-                .whenActive(new RetractOuttakeCommand(lift, arm, claw).withTimeout(4000));
+                .whenActive(new RetractOuttakeCommand(lift, arm, claw).withTimeout(3000));
 
 
 
@@ -226,7 +227,6 @@ public class MainTeleOp extends CommandOpMode {
 
         //Set motor powers
 
-//        driveBase.setMotorPowers(new Double[] {frontLeftPower, backLeftPower, frontRightPower, backRightPower});
 
         lf.setPower((Math.signum(frontLeftPower) * 0.03) + frontLeftPower);
         lb.setPower((Math.signum(backLeftPower) * 0.03) + backLeftPower);
