@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands.autocommands;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
@@ -37,7 +38,7 @@ public class GoToStackCommand extends ParallelCommandGroup {
                 liftPos = 36;
                 break;
             case 5:
-                liftPos = 0;
+                liftPos = 2;
                 break;
         }
 
@@ -55,7 +56,8 @@ public class GoToStackCommand extends ParallelCommandGroup {
                         new WaitCommand(900),
                         new InstantCommand(claw::fullOpen), //Wait for the arm to get all the way down before fully opening the claw
                         new WaitCommand(600),
-                        new InstantCommand(claw::close)
+                        new InstantCommand(claw::close),
+                        new WaitCommand(200)
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(100),
@@ -63,7 +65,10 @@ public class GoToStackCommand extends ParallelCommandGroup {
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(300),
-                        new ProfiledLiftPositionCommand(lift, liftPos, true)
+                        new ParallelRaceGroup(
+                                new ProfiledLiftPositionCommand(lift, liftPos, true),
+                                new WaitCommand(2000)
+                        )
                 )
         );
     }

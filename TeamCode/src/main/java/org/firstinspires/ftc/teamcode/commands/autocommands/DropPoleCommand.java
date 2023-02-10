@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands.autocommands;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
@@ -33,11 +34,14 @@ public class DropPoleCommand extends ParallelCommandGroup {
                         )
                 ),
                 new SequentialCommandGroup(
-//                        new WaitCommand(100),
-                        new ProfiledLiftPositionCommand(lift, Lift.LiftPositions.MID.position, true),
+                        new WaitCommand(100),
+                        new ParallelRaceGroup(
+                                new ProfiledLiftPositionCommand(lift, Lift.LiftPositions.MID.position, true),
+                                new WaitCommand(2000)
+                        ),
                         new WaitCommand(400),
                         new InstantCommand(claw::open),
-                        new WaitCommand(400)
+                        new WaitCommand(300)
                 )
         );
     }
