@@ -27,7 +27,7 @@ public class ThreeCycleTrajectories {
             new Pose2d(30, -5.0, toRadians(135));
 
     public static final Pose2d leftPreloadPosition =
-            new Pose2d(-30, -5.0, toRadians(-119.2));
+            new Pose2d(-29.0, -4.0, toRadians(-119.2));
 
     public static final Pose2d rightDropPosition =
             new Pose2d(32.8, -12, toRadians(-132));

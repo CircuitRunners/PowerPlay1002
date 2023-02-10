@@ -20,10 +20,10 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 
 
     public static PIDCoefficients coefficients =
-            new PIDCoefficients(0.0268, 0.005, 0.00147);//p=0.0268, i=0.005, d=0.00147
-    public static double kV = 0.00148;
-    public static double kA = 0.00007;
-    public static double kStatic = 0.03;
+            new PIDCoefficients(0.0268, 0.005, 0.00145);//p=0.0268, i=0.005, d=0.00147
+    public static double kV = 0.00147;
+    public static double kA = 0.000045;
+    public static double kStatic = 0.035;
 
     private double tolerance = 5;
     private boolean holdAtEnd;
@@ -49,7 +49,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 
         liftController = new PIDFController(coefficients, kV, kA, kStatic, (x, v) -> {
             double kG;
-            if (liftPosition < 283) kG = 0.178;
+            if (liftPosition < 283) kG = 0.17;
             else if (liftPosition < 580) kG = 0.195;
             else kG = 0.22;
 
@@ -68,7 +68,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
                 new MotionState(lift.getLiftPosition(), lift.getLiftVelocity()),
                 new MotionState(targetPosition, 0),
                 700,
-                850,
+                820,
                 0
         );
 

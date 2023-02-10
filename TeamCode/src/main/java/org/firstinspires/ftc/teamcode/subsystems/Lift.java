@@ -13,7 +13,7 @@ public class Lift extends SubsystemBase {
     public enum LiftPositions {
         DOWN(0),
         SHORT(88),
-        MID(386),
+        MID(375),
         HIGH(687);
 
         public int position;
