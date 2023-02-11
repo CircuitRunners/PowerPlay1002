@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.auto.cycle;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commands.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.autocommands.DropPoleCommand;
@@ -16,7 +18,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
 
-//@Autonomous(name = "Right 1+5")
+@Autonomous(name = "Right 1+5")
 public class RightFiveCycleAuto extends CommandOpMode {
 
 
@@ -82,7 +84,15 @@ public class RightFiveCycleAuto extends CommandOpMode {
                 dropPoleCommand4,
                 goToStackCommand5,
                 dropPoleCommand5,
-                new ParkCommand(drive, lift, arm, claw, beaconId)
+                new ParkCommand(drive, lift, arm, claw, beaconId, false)
         ));
+    }
+
+    @Override
+    public void run(){
+        CommandScheduler.getInstance().run();
+
+        telemetry.addData("lift", lift.getLiftPosition());
+        telemetry.update();
     }
 }

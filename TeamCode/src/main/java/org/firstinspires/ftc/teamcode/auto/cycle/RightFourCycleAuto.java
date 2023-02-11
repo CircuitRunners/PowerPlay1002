@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
 
-//@Autonomous(name = "Right 1+4")
+@Autonomous(name = "Right 1+4")
 public class RightFourCycleAuto extends CommandOpMode {
 
 
@@ -81,7 +81,7 @@ public class RightFourCycleAuto extends CommandOpMode {
                 dropPoleCommand3,
                 goToStackCommand4,
                 dropPoleCommand4,
-                new ParkCommand(drive, lift, arm, claw, beaconId)
+                new ParkCommand(drive, lift, arm, claw, beaconId, false)
         ));
     }
 }

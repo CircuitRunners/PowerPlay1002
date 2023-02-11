@@ -72,7 +72,6 @@ public class LeftFiveCycleAuto extends CommandOpMode {
         }
 
         beaconDetector.stopStream();
-        beaconId = BeaconDetector.BeaconTags.RIGHT;
 
         schedule(new SequentialCommandGroup(
                 preloadCommand,
@@ -86,7 +85,7 @@ public class LeftFiveCycleAuto extends CommandOpMode {
                 dropPoleCommand4,
                 goToStackCommand5,
                 dropPoleCommand5,
-                new ParkCommand(drive, lift, arm, claw, beaconId)
+                new ParkCommand(drive, lift, arm, claw, beaconId, true)
         ));
     }
 

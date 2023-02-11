@@ -20,26 +20,26 @@ import java.util.Arrays;
 public class ThreeCycleTrajectories {
 
 
-    public static final Pose2d rightStartingPosition = new Pose2d(40, -56.8, toRadians(-90));
+    public static final Pose2d rightStartingPosition = new Pose2d(43, -56.8, toRadians(-90));
     public static final Pose2d leftStartingPosition = new Pose2d(-40, -56.8, toRadians(-90));
 
     public static final Pose2d rightPreloadPosition =
-            new Pose2d(30, -5.0, toRadians(135));
+            new Pose2d(30.2, -6.0, toRadians(115));
 
     public static final Pose2d leftPreloadPosition =
             new Pose2d(-29.0, -4.0, toRadians(-119.2));
 
     public static final Pose2d rightDropPosition =
-            new Pose2d(32.8, -12, toRadians(-132));
+            new Pose2d(37.3, -13, toRadians(36.2));
 
     public static final Pose2d leftDropPosition =
-            new Pose2d(-32.8, -12, toRadians(129)); //-10.4
+            new Pose2d(-32.8, -12, toRadians(143.8)); //-10.4
 
     public static final Pose2d rightStackPosition =
-            new Pose2d(64.1, -7, toRadians(0));
+            new Pose2d(65.25, -6.0, toRadians(0));
 
     public static final Pose2d leftStackPosition =
-            new Pose2d(-64.1, -7, toRadians(180));
+            new Pose2d(-64.15, -7, toRadians(180));
 
     public static TrajectorySequence rightPreloadToPole;
     public static TrajectorySequence leftPreloadToPole;
@@ -68,11 +68,11 @@ public class ThreeCycleTrajectories {
                 drive.trajectorySequenceBuilder(ThreeCycleTrajectories.rightStartingPosition)
                         .setReversed(true)
                         .setAccelConstraint(getAccelerationConstraint(30))
-                        .setVelConstraint(getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH))
+                        .setVelConstraint(getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH))
                         .setTurnConstraint(toRadians(200), toRadians(200))
                         .splineToConstantHeading(new Vector2d(37, -48.5), toRadians(89))
                         .splineToConstantHeading(new Vector2d(37, -35), toRadians(90))
-                        .splineTo(rightPreloadPosition.vec(), toRadians(114.8))
+                        .splineTo(rightPreloadPosition.vec(), toRadians(116.8))
                         .resetConstraints()
                         .build();
 
@@ -87,59 +87,13 @@ public class ThreeCycleTrajectories {
                         .splineTo(leftPreloadPosition.vec(), toRadians(65.2))
                         .resetConstraints()
                         .build();
-
-        //###########################################################################
-
-        rightToStackPreload =
-                drive.trajectorySequenceBuilder(rightPreloadPosition)
-                        .setReversed(false)
-                        .splineTo(new Vector2d(50, -7), toRadians(0)) //to stack
-                        .splineTo(rightStackPosition.vec(), toRadians(0))
-                        .build();
-
-        leftToStackPreload =
-                drive.trajectorySequenceBuilder(leftPreloadPosition)
-                        .setReversed(false)
-                        .splineTo(new Vector2d(-50, -7), toRadians(180)) //to stack
-                        .splineTo(leftStackPosition.vec(), toRadians(180))
-                        .build();
-
-        rightToStack =
-                drive.trajectorySequenceBuilder(rightDropPosition)
-                        .setReversed(false)
-                        .splineTo(new Vector2d(50, -7), toRadians(0)) //to stack
-                        .splineTo(rightStackPosition.vec(), toRadians(0))
-                        .build();
-
-        leftToStack =
-                drive.trajectorySequenceBuilder(leftDropPosition)
-                        .setReversed(false)
-                        .splineTo(new Vector2d(-50, -7), toRadians(180)) //to stack
-                        .splineTo(leftStackPosition.vec(), toRadians(180))
-                        .build();
-
-        rightToStackDrifted =
-                drive.trajectorySequenceBuilder(rightDropPosition)
-                        .setReversed(false)
-                        .splineTo(new Vector2d(50, -7), toRadians(0)) //to stack
-                        .splineTo(rightStackPosition.vec().plus(new Vector2d(0, 0.5)), toRadians(0))
-                        .build();
-
-        leftToStackDrifted =
-                drive.trajectorySequenceBuilder(leftDropPosition)
-                        .setReversed(false)
-                        .splineTo(new Vector2d(-50, -7), toRadians(180)) //to stack
-                        .splineTo(leftStackPosition.vec().plus(new Vector2d(0, 0.5)), toRadians(180))
-                        .build();
-
-
         //###################################################################
 
         rightToPole =
                 drive.trajectorySequenceBuilder(rightStackPosition)
                         .setReversed(true)
-                        .splineTo(new Vector2d(50, -7), toRadians(180))
-                        .splineTo(rightDropPosition.vec(), toRadians(-144))
+                        .splineTo(new Vector2d(50, -6.0), toRadians(180))
+                        .splineTo(rightDropPosition.vec(), toRadians(-143.3))
                         .build();
 
         leftToPole =
@@ -149,29 +103,71 @@ public class ThreeCycleTrajectories {
                         .splineTo(leftDropPosition.vec(), toRadians(-36.2))
                         .build();
 
+        //###########################################################################
+
+        rightToStackPreload =
+                drive.trajectorySequenceBuilder(rightPreloadToPole.end())
+                        .setReversed(false)
+                        .splineTo(new Vector2d(50, -6.0), toRadians(0)) //to stack
+                        .splineTo(rightStackPosition.vec(), toRadians(0))
+                        .build();
+
+        leftToStackPreload =
+                drive.trajectorySequenceBuilder(leftPreloadToPole.end())
+                        .setReversed(false)
+                        .splineTo(new Vector2d(-50, -7), toRadians(180)) //to stack
+                        .splineTo(leftStackPosition.vec(), toRadians(180))
+                        .build();
+
+        rightToStack =
+                drive.trajectorySequenceBuilder(rightToPole.end())
+                        .setReversed(false)
+                        .splineTo(new Vector2d(50, -6.0), toRadians(0)) //to stack
+                        .splineTo(rightStackPosition.vec(), toRadians(0))
+                        .build();
+
+        leftToStack =
+                drive.trajectorySequenceBuilder(leftToPole.end())
+                        .setReversed(false)
+                        .splineTo(new Vector2d(-50, -7), toRadians(180)) //to stack
+                        .splineTo(leftStackPosition.vec(), toRadians(180))
+                        .build();
+
+        rightToStackDrifted =
+                drive.trajectorySequenceBuilder(rightToPole.end())
+                        .setReversed(false)
+                        .splineTo(new Vector2d(50, -6.0), toRadians(0)) //to stack
+                        .splineTo(rightStackPosition.vec().plus(new Vector2d(0, 0.5)), toRadians(0))
+                        .build();
+
+        leftToStackDrifted =
+                drive.trajectorySequenceBuilder(leftToPole.end())
+                        .setReversed(false)
+                        .splineTo(new Vector2d(-50, -7), toRadians(180)) //to stack
+                        .splineTo(leftStackPosition.vec().plus(new Vector2d(0, 0.5)), toRadians(180))
+                        .build();
+
+
 
         //###########################################################################
 
         //PARKING
         leftLeftPark =
-                drive.trajectorySequenceBuilder(leftDropPosition)
+                drive.trajectorySequenceBuilder(leftToPole.end())
                         .setConstraints(getVelocityConstraint(47, toRadians(260), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(47))
                         .setReversed(false)
                         .splineTo(new Vector2d(-62, -7), toRadians(180))
-//                        .forward(6)
-//                        .turn(toRadians(-43))
-//                        .strafeLeft(23)
                         .build();
 
         leftMiddlePark =
-                drive.trajectorySequenceBuilder(leftDropPosition)
+                drive.trajectorySequenceBuilder(leftToPole.end())
                         .setConstraints(getVelocityConstraint(47, toRadians(260), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(47))
                         .setReversed(false)
                         .lineToLinearHeading(new Pose2d(-37, -7, toRadians(88)))
                         .build();
 
         leftRightPark =
-                drive.trajectorySequenceBuilder(leftDropPosition)
+                drive.trajectorySequenceBuilder(leftToPole.end())
                         .setConstraints(getVelocityConstraint(47, toRadians(260), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(47))
                         .setReversed(false)
 //                        .splineToLinearHeading(new Pose2d(-18, -5, toRadians(90)), toRadians(0))
@@ -181,26 +177,26 @@ public class ThreeCycleTrajectories {
                         .build();
 
         rightLeftPark =
-                drive.trajectorySequenceBuilder(leftDropPosition)
+                drive.trajectorySequenceBuilder(rightToPole.end())
                         .setConstraints(getVelocityConstraint(47, toRadians(260), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(47))
                         .setReversed(false)
-                        .splineTo(new Vector2d(62, -7), toRadians(0))
+                        .splineTo(new Vector2d(62, -6.5), toRadians(0))
                         .build();
 
         rightMiddlePark =
-                drive.trajectorySequenceBuilder(leftDropPosition)
+                drive.trajectorySequenceBuilder(rightToPole.end())
                         .setConstraints(getVelocityConstraint(47, toRadians(260), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(47))                        .lineToLinearHeading(new Pose2d(-37, -7, toRadians(88)))
                         .lineToLinearHeading(new Pose2d(37, -7, toRadians(88)))
                         .build();
 
         rightRightPark =
-                drive.trajectorySequenceBuilder(leftDropPosition)
+                drive.trajectorySequenceBuilder(rightToPole.end())
                         .setConstraints(getVelocityConstraint(47, toRadians(260), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(47))
                         .setReversed(false)
-                        //.splineToLinearHeading(new Pose2d(-18, -5, toRadians(90)), toRadians(0))
-                        .forward(6)
-                        .turn(toRadians(-43))
-                        .strafeRight(25)
+                        .lineToLinearHeading(new Pose2d(27, -7, toRadians(88)))
+//                        .forward(6)
+//                        .turn(toRadians(-43))
+//                        .strafeRight(25)
                         .build();
     }
 

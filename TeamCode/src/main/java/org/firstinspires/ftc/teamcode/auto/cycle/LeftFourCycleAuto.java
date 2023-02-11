@@ -83,7 +83,7 @@ public class LeftFourCycleAuto extends CommandOpMode {
                 dropPoleCommand3,
                 goToStackCommand4,
                 dropPoleCommand4,
-                new ParkCommand(drive, lift, arm, claw, beaconId)
+                new ParkCommand(drive, lift, arm, claw, beaconId, true)
         ));
     }
 

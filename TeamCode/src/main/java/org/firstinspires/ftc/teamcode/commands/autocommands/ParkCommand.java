@@ -16,7 +16,7 @@ public class ParkCommand extends ParallelCommandGroup {
 
 
 
-    public ParkCommand(SampleMecanumDrive drive, Lift lift, Arm arm, Claw claw, BeaconDetector.BeaconTags tag){
+    public ParkCommand(SampleMecanumDrive drive, Lift lift, Arm arm, Claw claw, BeaconDetector.BeaconTags tag, boolean isLeft){
 
         addCommands(
                 new SequentialCommandGroup(
@@ -30,21 +30,21 @@ public class ParkCommand extends ParallelCommandGroup {
             case LEFT:
                 addCommands(
                         new TrajectorySequenceCommand(drive,
-                                ThreeCycleTrajectories.leftLeftPark
+                                (isLeft) ? ThreeCycleTrajectories.leftLeftPark : ThreeCycleTrajectories.rightLeftPark
                         )
                 );
                 break;
             case CENTER:
                 addCommands(
                         new TrajectorySequenceCommand(drive,
-                                ThreeCycleTrajectories.leftMiddlePark
+                                (isLeft) ? ThreeCycleTrajectories.leftMiddlePark : ThreeCycleTrajectories.rightMiddlePark
                         )
                 );
                 break;
             case RIGHT:
                 addCommands(
                         new TrajectorySequenceCommand(drive,
-                                ThreeCycleTrajectories.leftRightPark
+                                (isLeft) ? ThreeCycleTrajectories.leftRightPark : ThreeCycleTrajectories.rightRightPark
                         )
                 );
                 break;
