@@ -75,7 +75,7 @@ public class MeepMeepTesting {
                                         .waitSeconds(1) //at pole 3
 
                                         .setReversed(false)
-                                        .splineToLinearHeading(new Pose2d(15, -7.3, toRadians(90)), toRadians(180))
+                                        .splineToLinearHeading(new Pose2d(15, -7, toRadians(90)), toRadians(180))
 
 
 

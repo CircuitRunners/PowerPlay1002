@@ -22,13 +22,13 @@ public class DropPoleCommand extends ParallelCommandGroup {
         addCommands(
 
                 new SequentialCommandGroup(
-                        new WaitCommand(500),
+                        new WaitCommand(400),
                         new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.HIGH)),
                         new WaitCommand(1050),
                         new InstantCommand(claw::angleUp)
                 ),
                 new SequentialCommandGroup(
-                        new WaitCommand(400),
+                        new WaitCommand(300),
                         new TrajectorySequenceCommand(
                                 drive, isLeft ? ThreeCycleTrajectories.leftToPole : ThreeCycleTrajectories.rightToPole
                         ),
@@ -36,7 +36,7 @@ public class DropPoleCommand extends ParallelCommandGroup {
                         new WaitCommand(100)
                 ),
                 new SequentialCommandGroup(
-                        new WaitCommand(100),
+//                        new WaitCommand(100),
                         new ParallelRaceGroup(
                                 new ProfiledLiftPositionCommand(lift, Lift.LiftPositions.MID.position, true),
                                 new WaitCommand(2000)
