@@ -75,6 +75,10 @@ public class SampleMecanumDrive extends MecanumDrive {
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
+
+    private List<Integer> lastEncPositions = new ArrayList<>();
+    private List<Integer> lastEncVels = new ArrayList<>();
+
     public SampleMecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
@@ -139,10 +143,19 @@ public class SampleMecanumDrive extends MecanumDrive {
         // TODO: reverse any motors using DcMotor.setDirection()
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        // TODO: if desired, use setLocalizer() to change the localization method
-        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
 
-        trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
+
+        List<Integer> lastTrackingEncPositions = new ArrayList<>();
+        List<Integer> lastTrackingEncVels = new ArrayList<>();
+
+
+        // TODO: if desired, use setLocalizer() to change the localization method
+        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
+
+        trajectorySequenceRunner = new TrajectorySequenceRunner(
+                follower, HEADING_PID, batteryVoltageSensor,
+                lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
+        );
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
@@ -265,18 +278,26 @@ public class SampleMecanumDrive extends MecanumDrive {
     @NonNull
     @Override
     public List<Double> getWheelPositions() {
+        lastEncPositions.clear();
+
         List<Double> wheelPositions = new ArrayList<>();
         for (DcMotorEx motor : motors) {
-            wheelPositions.add(encoderTicksToInches(motor.getCurrentPosition()));
+            int position = motor.getCurrentPosition();
+            lastEncPositions.add(position);
+            wheelPositions.add(encoderTicksToInches(position));
         }
         return wheelPositions;
     }
 
     @Override
     public List<Double> getWheelVelocities() {
+        lastEncVels.clear();
+
         List<Double> wheelVelocities = new ArrayList<>();
         for (DcMotorEx motor : motors) {
-            wheelVelocities.add(encoderTicksToInches(motor.getVelocity()));
+            int vel = (int) motor.getVelocity();
+            lastEncVels.add(vel);
+            wheelVelocities.add(encoderTicksToInches(vel));
         }
         return wheelVelocities;
     }
