@@ -43,6 +43,8 @@ public class RightFourCycleAuto extends CommandOpMode {
         arm = new Arm(hardwareMap);
 
         drive.setPoseEstimate(ThreeCycleTrajectories.rightStartingPosition);
+        ThreeCycleTrajectories.clawOpenAction = () -> claw.open();
+        ThreeCycleTrajectories.clawCloseAction = () -> claw.close();
         ThreeCycleTrajectories.generateTrajectories(drive);
         claw.close();
 

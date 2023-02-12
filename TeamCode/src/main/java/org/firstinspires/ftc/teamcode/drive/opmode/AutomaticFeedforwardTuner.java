@@ -37,7 +37,7 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.rpmToVelocity;
 @Autonomous(group = "drive")
 public class AutomaticFeedforwardTuner extends LinearOpMode {
     public static double MAX_POWER = 0.7;
-    public static double DISTANCE = 80; // in
+    public static double DISTANCE = 72; // in
 
     @Override
     public void runOpMode() throws InterruptedException {
