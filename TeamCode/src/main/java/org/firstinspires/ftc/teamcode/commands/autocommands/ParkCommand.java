@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.autocommands;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -21,8 +22,11 @@ public class ParkCommand extends ParallelCommandGroup {
 
         addCommands(
                 new SequentialCommandGroup(
-                        new LiftPositionCommand(lift, (int) lift.getLiftPosition() + 40, true),
-                        new WaitCommand(500),
+                        new WaitCommand(100),
+                        new InstantCommand(() -> {lift.setLiftPower(0.8);}),
+                        new WaitCommand(400),
+                        new InstantCommand(() -> {lift.setLiftPower(0);}),
+//                        new WaitCommand(100),
                         new RetractOuttakeCommand(lift, arm, claw)
                 )
 
