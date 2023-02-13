@@ -32,7 +32,7 @@ public class DropPreloadCommand extends ParallelCommandGroup {
                                 drive, isLeft ? ThreeCycleTrajectories.leftPreloadToPole : ThreeCycleTrajectories.rightPreloadToPole
                         ),
 //                        new InstantCommand(claw::open),
-                        new WaitCommand(100)
+                        new WaitCommand(50)
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(200),

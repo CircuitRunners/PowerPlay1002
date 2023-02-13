@@ -51,8 +51,6 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
     private SampleMecanumDrive drive;
 
-    final VoltageSensor voltageSensor = hardwareMap.voltageSensor.iterator().next();
-
     enum Mode {
         DRIVER_MODE,
         TUNING_MODE
@@ -76,6 +74,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
         drive = new SampleMecanumDrive(hardwareMap);
+        final VoltageSensor voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
         mode = Mode.TUNING_MODE;
 

@@ -65,7 +65,7 @@ public class ThreeCycleTrajectories {
     public static MarkerCallback clawCloseAction = () -> {};
     public static MarkerCallback clawOpenAction = () -> {};
     private static final double endCloseActionScale = 0.96;
-    private static final double endOpenActionScale = 0.96;
+    private static final double endOpenActionScale = 0.957;
 
 
     public static void generateTrajectories(SampleMecanumDrive drive) {
@@ -179,12 +179,12 @@ public class ThreeCycleTrajectories {
                 drive.trajectorySequenceBuilder(leftToPole.end())
                         .setConstraints(getVelocityConstraint(47, toRadians(260), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(47))
                         .setReversed(false)
-                        .lineToLinearHeading(new Pose2d(-37, -7, toRadians(88)))
+                        .lineToLinearHeading(new Pose2d(-37, -7, toRadians(90)))
                         .build();
 
         leftRightPark =
                 drive.trajectorySequenceBuilder(leftToPole.end())
-                        .setConstraints(getVelocityConstraint(47, toRadians(260), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(47))
+                        .setConstraints(getVelocityConstraint(48, toRadians(270), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(48))
                         .setReversed(false)
                         .lineToLinearHeading(new Pose2d(-29, -6, toRadians(90)))
 //                        .forward(6)
@@ -202,14 +202,14 @@ public class ThreeCycleTrajectories {
         rightMiddlePark =
                 drive.trajectorySequenceBuilder(rightToPole.end())
                         .setConstraints(getVelocityConstraint(47, toRadians(260), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(47))                        .lineToLinearHeading(new Pose2d(-37, -7, toRadians(88)))
-                        .lineToLinearHeading(new Pose2d(37, -7, toRadians(88)))
+                        .lineToLinearHeading(new Pose2d(37, -7, toRadians(90)))
                         .build();
 
         rightRightPark =
                 drive.trajectorySequenceBuilder(rightToPole.end())
-                        .setConstraints(getVelocityConstraint(47, toRadians(260), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(47))
+                        .setConstraints(getVelocityConstraint(48, toRadians(270), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(48))
                         .setReversed(false)
-                        .lineToLinearHeading(new Pose2d(27, -7, toRadians(88)))
+                        .lineToLinearHeading(new Pose2d(27, -7, toRadians(90)))
 //                        .forward(6)
 //                        .turn(toRadians(-43))
 //                        .strafeRight(25)

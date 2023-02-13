@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
+import org.firstinspires.ftc.teamcode.commands.liftcommands.LiftPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.RetractOuttakeCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -20,6 +21,7 @@ public class ParkCommand extends ParallelCommandGroup {
 
         addCommands(
                 new SequentialCommandGroup(
+                        new LiftPositionCommand(lift, (int) lift.getLiftPosition() + 40, true),
                         new WaitCommand(500),
                         new RetractOuttakeCommand(lift, arm, claw)
                 )

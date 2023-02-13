@@ -9,7 +9,7 @@ public class Claw extends SubsystemBase {
 
     public enum ClawPosition {
         CLOSE(0.47),
-        OPEN(0.435),
+        OPEN(0.429),
         FULL_OPEN(0.275);
 
         public double position;
@@ -65,11 +65,11 @@ public class Claw extends SubsystemBase {
     }
 
     public void angleUp(){
-        angleServo.setPosition(0.66);
+        angleServo.setPosition(0.62);
     }
 
     public void angleMore(){
-        angleServo.setPosition(0.66);
+        angleServo.setPosition(0.62);
     }
 
 

@@ -53,9 +53,8 @@ public class GoToStackCommand extends ParallelCommandGroup {
                                         )
                                 : new TrajectorySequenceCommand(
                                 drive, isLeft ? ThreeCycleTrajectories.leftToStackPreload : ThreeCycleTrajectories.rightToStackPreload
-                        )
-//                        new InstantCommand(claw::close),
-//                        new WaitCommand(100)
+                        ),
+                        new WaitCommand(100)
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(200),
