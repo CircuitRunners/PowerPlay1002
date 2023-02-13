@@ -34,7 +34,7 @@ public class ThreeCycleTrajectories {
             new Pose2d(37.3, -13, toRadians(36.2));
 
     public static final Pose2d leftDropPosition =
-            new Pose2d(-32.8, -12, toRadians(143.8)); //-10.4
+            new Pose2d(-33.0, -11.8, toRadians(143.8)); //-10.4
 
     public static final Pose2d rightStackPosition =
             new Pose2d(65.25, -6.0, toRadians(0));
@@ -152,7 +152,7 @@ public class ThreeCycleTrajectories {
                         .addTemporalMarker(endCloseActionScale, 0.0, clawCloseAction)
                         .setReversed(false)
                         .splineTo(new Vector2d(50, -6.0), toRadians(0)) //to stack
-                        .splineTo(rightStackPosition.vec().plus(new Vector2d(0, 0.5)), toRadians(0))
+                        .splineTo(rightStackPosition.vec().plus(new Vector2d(0, 0.7)), toRadians(0))
                         .build();
 
         leftToStackDrifted =
@@ -160,7 +160,7 @@ public class ThreeCycleTrajectories {
                         .addTemporalMarker(endCloseActionScale, 0.0, clawCloseAction)
                         .setReversed(false)
                         .splineTo(new Vector2d(-50, -7), toRadians(180)) //to stack
-                        .splineTo(leftStackPosition.vec().plus(new Vector2d(0, 0.5)), toRadians(180))
+                        .splineTo(leftStackPosition.vec().plus(new Vector2d(0, 0.7)), toRadians(180))
                         .build();
 
 
