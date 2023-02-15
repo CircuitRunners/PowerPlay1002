@@ -186,7 +186,7 @@ public class ThreeCycleTrajectories {
                 drive.trajectorySequenceBuilder(leftToPole.end())
                         .setConstraints(getVelocityConstraint(48, toRadians(270), DriveConstants.TRACK_WIDTH), getAccelerationConstraint(48))
                         .setReversed(false)
-                        .lineToLinearHeading(new Pose2d(-20, -6, toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(-18, -6, toRadians(90)))
 //                        .forward(6)
 //                        .turn(toRadians(-43))
 //                        .strafeRight(25)

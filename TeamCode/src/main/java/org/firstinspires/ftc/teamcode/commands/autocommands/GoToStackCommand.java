@@ -30,7 +30,7 @@ public class GoToStackCommand extends ParallelCommandGroup {
                 liftPos = 160;
                 break;
             case 2:
-                liftPos = 121;
+                liftPos = 126;
                 break;
             case 3:
                 liftPos = 84;
