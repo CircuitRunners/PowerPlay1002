@@ -149,23 +149,23 @@ public class MainTeleOp extends CommandOpMode {
 
         //High preset
         new Trigger(() -> manipulator.getLeftY() > 0.4)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.HIGH).withTimeout(3000));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.HIGH).withTimeout(2000));
 
         //Mid preset
         new Trigger(() -> manipulator.getRightY() > -0.4)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.MID).withTimeout(3000));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.MID).withTimeout(2000));
 
         //Short preset
         new Trigger(() -> manipulator.getRightY() < 0.4)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.SHORT).withTimeout(3000));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.SHORT).withTimeout(2000));
 
         //Ground (terminal dropping) arm preset
         manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.GROUND).withTimeout(3000));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.GROUND).withTimeout(2000));
 
         //Full retract preset
         new Trigger(() -> manipulator.getLeftY() < -0.4)
-                .whenActive(new RetractOuttakeCommand(lift, arm, claw).withTimeout(3000));
+                .whenActive(new RetractOuttakeCommand(lift, arm, claw).withTimeout(2000));
 
 
 
