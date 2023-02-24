@@ -35,7 +35,7 @@ public class ParkAuto extends CommandOpMode {
         drive = new SampleMecanumDrive(hardwareMap);
         drive.setPoseEstimate(startPose);
 
-        beaconDetector = new BeaconDetector(hardwareMap);
+        beaconDetector = new BeaconDetector(hardwareMap, true);
 
         //Start vision
         beaconDetector.startStream();

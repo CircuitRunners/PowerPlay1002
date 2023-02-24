@@ -23,14 +23,14 @@ public class LockingMecanum extends SubsystemBase {
     //Move servos to lock wheels
     public void lock(){
         //@TODO Replace 1 with the position of the servo where it is locked
-        leftLinkage.setPosition(0.23);
+        leftLinkage.setPosition(0.24);
         rightLinkage.setPosition(0.6);
     }
 
     //Move servos to unlock wheels
     public void unlock(){
         //@TODO Replace 0 with the position of the servo where it is unlocked
-        leftLinkage.setPosition(0.05);
+        leftLinkage.setPosition(0.045);
         rightLinkage.setPosition(0.95);
     }
 

@@ -47,7 +47,7 @@ public class RightFiveCycleAuto extends CommandOpMode {
         ThreeCycleTrajectories.generateTrajectories(drive);
         claw.close();
 
-        beaconDetector = new BeaconDetector(hardwareMap);
+        beaconDetector = new BeaconDetector(hardwareMap, false);
 
 
         DropPreloadCommand preloadCommand = new DropPreloadCommand(drive, lift, claw, arm, false);

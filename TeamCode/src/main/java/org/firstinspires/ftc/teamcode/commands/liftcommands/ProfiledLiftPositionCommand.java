@@ -55,7 +55,7 @@ public class ProfiledLiftPositionCommand extends CommandBase {
 
             return kG * lift.getVoltageComp();
         });
-        liftController.setOutputBounds(-0.65, 0.98);
+        liftController.setOutputBounds(-0.45, 0.98);
     }
 
 

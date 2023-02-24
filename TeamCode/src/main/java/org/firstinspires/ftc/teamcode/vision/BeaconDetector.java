@@ -48,12 +48,13 @@ public class BeaconDetector {
     final float THRESHOLD_HIGH_DECIMATION_RANGE_METERS = 1.0f;
     final int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION = 4;
 
-    public BeaconDetector(HardwareMap hardwareMap) {
+    public BeaconDetector(HardwareMap hardwareMap, boolean useWebcamOne) {
 
         //Obtain the GUI element for showing the camera stream
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         //Creating the camera object from the webcam
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class,
+                (useWebcamOne) ? "Webcam 1" : "Webcam 2"), cameraMonitorViewId);
         //Creating the pipeline
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
 

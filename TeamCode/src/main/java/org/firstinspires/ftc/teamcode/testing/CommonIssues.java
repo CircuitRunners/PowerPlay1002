@@ -12,7 +12,7 @@ public class CommonIssues extends LinearOpMode {
 
 
 
-    DcMotorEx lf = hardwareMap.get(DcMotorEx.class, "lf");
+    DcMotorEx lf;
     DcMotorEx lb;
     DcMotorEx rf;
     DcMotorEx rb;
@@ -39,11 +39,11 @@ public class CommonIssues extends LinearOpMode {
         rf.setPower(-0.5);
         rb.setPower(-0.5);
 
-        sleep(1000);
-//        ElapsedTime timer = new ElapsedTime();
-//        while (timer.seconds() < 5 && opModeIsActive()){
-//            //do nothing
-//        }
+//        sleep(1000);
+        ElapsedTime timer = new ElapsedTime();
+        while (timer.seconds() < 5){
+            //do nothing
+        }
 
         lf.setPower(0);
         lb.setPower(0);
