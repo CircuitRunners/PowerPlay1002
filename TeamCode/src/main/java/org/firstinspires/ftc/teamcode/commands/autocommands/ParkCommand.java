@@ -36,7 +36,7 @@ public class ParkCommand extends ParallelCommandGroup {
             case LEFT:
                 addCommands(
                         new TrajectorySequenceCommand(drive,
-                                (isLeft) ? ThreeCycleTrajectories.leftLeftPark : ThreeCycleTrajectories.rightLeftPark
+                                (isLeft) ? ThreeCycleTrajectories.leftLeftPark : ThreeCycleTrajectories.rightRightPark
                         )
                 );
                 break;
@@ -50,7 +50,7 @@ public class ParkCommand extends ParallelCommandGroup {
             case RIGHT:
                 addCommands(
                         new TrajectorySequenceCommand(drive,
-                                (isLeft) ? ThreeCycleTrajectories.leftRightPark : ThreeCycleTrajectories.rightRightPark
+                                (isLeft) ? ThreeCycleTrajectories.leftRightPark : ThreeCycleTrajectories.rightLeftPark
                         )
                 );
                 break;
