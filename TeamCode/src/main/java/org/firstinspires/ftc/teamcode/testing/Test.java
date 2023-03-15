@@ -3,11 +3,12 @@ package org.firstinspires.ftc.teamcode.testing;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Disabled
-@Autonomous
+
+@TeleOp
 public class Test extends LinearOpMode {
 
     private DcMotor leftFront;
@@ -28,17 +29,13 @@ public class Test extends LinearOpMode {
 
         waitForStart();
 
-        leftFront.setPower(1.0);
-        rightFront.setPower(1.0);
-        leftBack.setPower(1.0);
-        rightBack.setPower(1.0);
+        while (opModeIsActive()){
 
-        sleep(1000);
-
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftBack.setPower(0);
-        rightBack.setPower(0);
+            leftFront.setPower(gamepad1.left_stick_y);
+            leftBack.setPower(gamepad1.left_stick_y);
+            rightFront.setPower(gamepad1.right_stick_y);
+            rightBack.setPower(gamepad1.right_stick_y);
+        }
 
     }
 }

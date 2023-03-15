@@ -13,9 +13,7 @@ public class Arm extends SubsystemBase {
 
     public enum ArmPositions {
         DOWN(0.06),
-        SHORT(0.6),
-        MID(0.6),
-        HIGH(0.6),
+        SCORING(0.6),
         GROUND(0.8);
 
         public double position;
@@ -63,12 +61,17 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic(){
 
-        //Read the current target for the profile
-        double position = armProfile.calculate(timer.seconds()).position;
 
-        //Set servo positions
-        leftServo.setPosition(position);
-        rightServo.setPosition(position);
+        if(!armProfile.isFinished(timer.seconds())) {
+            //Read the current target for the profile
+            double position = armProfile.calculate(timer.seconds()).position;
+
+            //Set servo positions
+            leftServo.setPosition(position);
+            rightServo.setPosition(position);
+
+        }
+
 
     }
 

@@ -119,16 +119,6 @@ public class MainTeleOp extends CommandOpMode {
                 });
 
 
-//        //Intake control
-//        driver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-//                .whenActive(intake::intake)
-//                .whenInactive(intake::stop);
-//
-//        //control to outtake whenever Y is pressed (for safety)
-//        driver.getGamepadButton(GamepadKeys.Button.Y)
-//                .whenActive(intake::outtake)
-//                .whenInactive(intake::stop);
-
 
         //Set up commands
         manualLiftCommand = new ManualLiftCommand(lift, manipulator);
@@ -160,11 +150,11 @@ public class MainTeleOp extends CommandOpMode {
                 .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.SHORT).withTimeout(2000));
 
         //Ground (terminal dropping) arm preset
-        manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.GROUND).withTimeout(2000));
+//        manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
+//                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.GROUND).withTimeout(2000));
 
         //Full retract preset
-        new Trigger(() -> manipulator.getLeftY() < -0.4)
+        new Trigger(() -> manipulator.getLeftY() < -0.6)
                 .whenActive(new RetractOuttakeCommand(lift, arm, claw).withTimeout(2000));
 
 
