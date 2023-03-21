@@ -36,7 +36,7 @@ class MoveToScoringCommand(lift: Lift, arm: Arm, claw: Claw, preset: Presets) : 
                 InstantCommand({
                     when (preset) {
                         Presets.GROUND -> arm.position = ArmPositions.GROUND.position
-                        Presets.SHORT, Presets.MID, Presets.HIGH -> arm.position = ArmPositions.SCORING.position
+                        else -> arm.position = ArmPositions.SCORING.position
                     }
                 }),
 

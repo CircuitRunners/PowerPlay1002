@@ -139,15 +139,18 @@ public class MainTeleOp extends CommandOpMode {
 
         //High preset
         new Trigger(() -> manipulator.getLeftY() > 0.4)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.HIGH).withTimeout(2000));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.HIGH)
+                        .withTimeout(1900));
 
         //Mid preset
         new Trigger(() -> manipulator.getRightY() > -0.4)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.MID).withTimeout(2000));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.MID)
+                        .withTimeout(1900));
 
         //Short preset
         new Trigger(() -> manipulator.getRightY() < 0.4)
-                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.SHORT).withTimeout(2000));
+                .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.SHORT)
+                        .withTimeout(190));
 
         //Ground (terminal dropping) arm preset
 //        manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
@@ -155,7 +158,7 @@ public class MainTeleOp extends CommandOpMode {
 
         //Full retract preset
         new Trigger(() -> manipulator.getLeftY() < -0.6)
-                .whenActive(new RetractOuttakeCommand(lift, arm, claw).withTimeout(2000));
+                .whenActive(new RetractOuttakeCommand(lift, arm, claw).withTimeout(1900));
 
 
 
@@ -194,7 +197,7 @@ public class MainTeleOp extends CommandOpMode {
 
         //Read gamepad joysticks
         double y = -gamepad1.left_stick_y; // Remember, this is reversed!
-        double x = (lmecOn) ? 0 : gamepad1.left_stick_x * 1.06; // Counteract imperfect strafing
+        double x = gamepad1.left_stick_x * 1.06; // Counteract imperfect strafing
         double rx = gamepad1.right_stick_x;
 
         //Apply a curve to the inputs
@@ -204,7 +207,7 @@ public class MainTeleOp extends CommandOpMode {
 
         //Make a vector out of the x and y and rotate it by the heading
         Vector2d vec = new Vector2d(x, y).rotated(-heading);
-        x = vec.getX();
+        x = (lmecOn) ? 0 : vec.getX();
         y = vec.getY();
 
         //Ensure powers are in the range of [-1, 1] and set power
