@@ -140,17 +140,20 @@ public class MainTeleOp extends CommandOpMode {
         //High preset
         new Trigger(() -> manipulator.getLeftY() > 0.4)
                 .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.HIGH)
-                        .withTimeout(1900));
+                        .withTimeout(1900)
+                        .interruptOn(() -> manualLiftCommand.isManualActive()));
 
         //Mid preset
         new Trigger(() -> manipulator.getRightY() > -0.4)
                 .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.MID)
-                        .withTimeout(1900));
+                        .withTimeout(1900)
+                        .interruptOn(() -> manualLiftCommand.isManualActive()));
 
         //Short preset
         new Trigger(() -> manipulator.getRightY() < 0.4)
                 .whenActive(new MoveToScoringCommand(lift, arm, claw, MoveToScoringCommand.Presets.SHORT)
-                        .withTimeout(190));
+                        .withTimeout(1900)
+                        .interruptOn(() -> manualLiftCommand.isManualActive()));
 
         //Ground (terminal dropping) arm preset
 //        manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
@@ -158,7 +161,9 @@ public class MainTeleOp extends CommandOpMode {
 
         //Full retract preset
         new Trigger(() -> manipulator.getLeftY() < -0.6)
-                .whenActive(new RetractOuttakeCommand(lift, arm, claw).withTimeout(1900));
+                .whenActive(new RetractOuttakeCommand(lift, arm, claw)
+                        .withTimeout(1900)
+                        .interruptOn(() -> manualLiftCommand.isManualActive()));
 
 
 

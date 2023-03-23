@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.cycle;
+package org.firstinspires.ftc.teamcode.auto.cycle.medium;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
 
-@Autonomous(name = "Left 1+4")
+@Autonomous(name = "Left 1+4", group = "Medium")
 public class LeftFourCycleAuto extends CommandOpMode {
 
 

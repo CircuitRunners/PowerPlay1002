@@ -27,6 +27,11 @@ public class ManualLiftCommand extends CommandBase {
 
     }
 
+    public boolean isManualActive(){
+        return manipulator.getButton(GamepadKeys.Button.DPAD_UP) ||
+                manipulator.getButton(GamepadKeys.Button.DPAD_DOWN);
+    }
+
     @Override
     public void execute() {
         //Two dpad buttons cant be pressed at the same time so we don't have to worry about that.
