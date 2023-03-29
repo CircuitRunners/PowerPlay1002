@@ -23,7 +23,7 @@ public class Claw extends SubsystemBase {
 
 
     private ServoImplEx claw;
-    private ServoImplEx angleServo;
+    private ServoImplEx poleGuide;
 
 
     //Servos for the linkages
@@ -31,10 +31,12 @@ public class Claw extends SubsystemBase {
     public Claw(HardwareMap hardwareMap){
         //Retrieve servos from the hardware map
         claw = hardwareMap.get(ServoImplEx.class, "clawServo");
-        angleServo = hardwareMap.get(ServoImplEx.class, "angleServo");
+        poleGuide = hardwareMap.get(ServoImplEx.class, "poleGuide");
 
         claw.setPwmRange(new PwmControl.PwmRange(500, 2500));
-        angleServo.setPwmRange(new PwmControl.PwmRange(500, 2500));
+
+        // Experimental
+        poleGuide.setPwmRange(new PwmControl.PwmRange(500, 2500));
 
         fullOpen();
         clawPosition = ClawPosition.FULL_OPEN;
@@ -61,11 +63,11 @@ public class Claw extends SubsystemBase {
     }
 
     public void angleDown(){
-        angleServo.setPosition(0.413);
+        poleGuide.setPosition(0); // change this
     }
 
     public void angleUp(){
-        angleServo.setPosition(0.62);
+        poleGuide.setPosition(1); // change this
     }
 
 
