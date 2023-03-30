@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
-@TeleOp
+@TeleOp(name="Tank Drive")
 public class Test extends LinearOpMode {
 
     private DcMotor leftFront;
@@ -31,10 +31,11 @@ public class Test extends LinearOpMode {
 
         while (opModeIsActive()){
 
-            leftFront.setPower(gamepad1.left_stick_y);
-            leftBack.setPower(gamepad1.left_stick_y);
-            rightFront.setPower(gamepad1.right_stick_y);
-            rightBack.setPower(gamepad1.right_stick_y);
+
+            leftFront.setPower(gamepad1.left_stick_y - gamepad1.right_stick_x);
+            leftBack.setPower(gamepad1.left_stick_y - gamepad1.right_stick_x);
+            rightFront.setPower(gamepad1.left_stick_y + gamepad1.right_stick_x);
+            rightBack.setPower(gamepad1.left_stick_y + gamepad1.right_stick_x);
         }
 
     }
