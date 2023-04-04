@@ -25,11 +25,11 @@ class MoveToScoringCommand(lift: Lift, arm: Arm, claw: Claw, preset: Presets) : 
                 when (preset) {
                     Presets.GROUND -> InstantCommand({}) //do nothing
                     Presets.SHORT ->
-                        ProfiledLiftPositionCommand(lift, LiftPositions.SHORT.position.toDouble(), true)
+                        LiftPositionCommand(lift, LiftPositions.SHORT.position, true)
                     Presets.MID ->
-                        ProfiledLiftPositionCommand(lift, LiftPositions.MID.position.toDouble(), true)
+                        LiftPositionCommand(lift, LiftPositions.MID.position, true)
                     Presets.HIGH ->
-                        ProfiledLiftPositionCommand(lift, LiftPositions.HIGH.position.toDouble(), true)
+                        LiftPositionCommand(lift, LiftPositions.HIGH.position, true)
 
                 },
 

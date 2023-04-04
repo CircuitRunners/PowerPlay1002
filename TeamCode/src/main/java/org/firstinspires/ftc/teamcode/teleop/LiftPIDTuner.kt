@@ -17,12 +17,12 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift
 
 @Config
 @TeleOp(name="PID Tuner")
-@Disabled
+//@Disabled
 class LiftPIDTuner : CommandOpMode() {
 
 
     private lateinit var lift: Lift
-    private lateinit var claw: Claw
+//    private lateinit var claw: Claw
 
     private var target = 0.0
 
@@ -30,7 +30,7 @@ class LiftPIDTuner : CommandOpMode() {
     override fun initialize() {
 
         lift = Lift(hardwareMap)
-        claw = Claw(hardwareMap)
+//        claw = Claw(hardwareMap)
 
         telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry)
 
@@ -41,8 +41,8 @@ class LiftPIDTuner : CommandOpMode() {
         driver.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(
                         SequentialCommandGroup(
-                                InstantCommand({target = 3000.0}),
-                                LiftPositionCommand(lift, 3000, true),
+                                InstantCommand({target = 700.0}),
+                                LiftPositionCommand(lift, 700, true),
                                 WaitCommand(1000),
                                 InstantCommand({target = 0.0}),
                                 LiftPositionCommand(lift, 0, false)

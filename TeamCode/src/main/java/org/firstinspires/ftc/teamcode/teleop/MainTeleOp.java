@@ -27,10 +27,8 @@ import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftResetCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.MoveToScoringCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.RetractOuttakeCommand;
-import org.firstinspires.ftc.teamcode.commands.liftcommands.ProfiledLiftPositionCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.subsystems.LockingMecanum;
 
@@ -244,10 +242,8 @@ public class MainTeleOp extends CommandOpMode {
 
         packet.put("Lift Position", lift.getLiftPosition());
         packet.put("Lift velocity", lift.getLiftVelocity());
-        packet.put("Lift target position", LiftPositionCommand.targetPosition);
-        packet.put("Lift target velocity", ProfiledLiftPositionCommand.setpointVel);
-//        packet.put("Lift position error", ProfiledLiftPositionCommand.setpointPosError);
-//        packet.put("Lift target acceleration", ProfiledLiftPositionCommand.setpointAccel);
+        packet.put("Lift controller output", LiftPositionCommand.controllerOutput);
+        packet.put("Lift target position", LiftPositionCommand.setpointPos);
 
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
         telemetry.update();

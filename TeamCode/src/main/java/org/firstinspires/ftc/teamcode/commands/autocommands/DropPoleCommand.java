@@ -38,7 +38,7 @@ public class DropPoleCommand extends ParallelCommandGroup {
                 new SequentialCommandGroup(
 //                        new WaitCommand(100),
                         new ParallelRaceGroup(
-                                new ProfiledLiftPositionCommand(lift, Lift.LiftPositions.MID.position, true),
+                                new LiftPositionCommand(lift, Lift.LiftPositions.MID.position, true),
                                 new WaitCommand(2000)
                         )
 //                        new WaitCommand(400),

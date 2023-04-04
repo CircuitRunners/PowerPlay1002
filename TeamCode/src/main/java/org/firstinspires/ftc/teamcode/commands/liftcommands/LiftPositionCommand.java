@@ -3,9 +3,7 @@ package org.firstinspires.ftc.teamcode.commands.liftcommands;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
-import com.acmerobotics.roadrunner.kinematics.Kinematics;
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.controller.wpilibcontroller.ElevatorFeedforward;
 
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
 
@@ -13,16 +11,19 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 public class LiftPositionCommand extends CommandBase {
 
     private PIDFController liftController;
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.032, 0.05, 0.002);
+    public static PIDCoefficients coefficients =
+            new PIDCoefficients(0.0269, 0.0, 0.00138); //ki=0.0045
     //Bottom 0.14, 0.145, 0.176
-    private double tolerance = 4;
+
+    private double tolerance = 3;
+    private double targetPosition = 0;
     private boolean holdAtEnd;
     private final Lift lift;
 
-    public static double targetPosition;
-
+    public static double setpointPos;
     public static double liftPosition = 0;
     public static double liftVelocity = 0;
+    public static double controllerOutput = 0;
 
     public LiftPositionCommand(Lift lift, int targetPosition, boolean holdAtEnd){
         addRequirements(lift);
@@ -31,17 +32,18 @@ public class LiftPositionCommand extends CommandBase {
         this.holdAtEnd = holdAtEnd;
         this.lift = lift;
         this.targetPosition = targetPosition;
+        setpointPos = targetPosition;
 
         //Add a feedforward term to counteract gravity
-        liftController = new PIDFController(coefficients, 0.0012, 0.0, 0.02, (x, v) -> {
+        liftController = new PIDFController(coefficients, 0.0, 0.0, 0.03, (x, v) -> {
             double kG;
             if (liftPosition < 283) kG = 0.18;
-            else if (liftPosition < 580) kG = 0.195;
-            else kG = 0.218;
+            else if (liftPosition < 580) kG = 0.196;
+            else kG = 0.222;
 
             return kG * lift.getVoltageComp();
         });
-        liftController.setOutputBounds(-0.65, 0.95);
+        liftController.setOutputBounds(-0.65, 0.98);
     }
     @Override
     public void initialize(){
@@ -56,8 +58,12 @@ public class LiftPositionCommand extends CommandBase {
         liftPosition = lift.getLiftPosition();
         liftVelocity = lift.getLiftVelocity();
 
+        liftController.setTargetPosition(targetPosition);
+
+        controllerOutput = liftController.update(liftPosition, liftVelocity);
+
         //Update the lift power with the controller
-        lift.setLiftPower(liftController.update(liftPosition, liftVelocity));
+        lift.setLiftPower(controllerOutput);
     }
 
     @Override

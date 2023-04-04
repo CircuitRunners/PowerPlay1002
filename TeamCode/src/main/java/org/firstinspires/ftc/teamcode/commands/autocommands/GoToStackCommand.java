@@ -70,7 +70,7 @@ public class GoToStackCommand extends ParallelCommandGroup {
                         new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.DOWN))
                 ),
                 new SequentialCommandGroup(
-                        new WaitCommand(300),
+                        new WaitCommand(500),
                         new ParallelRaceGroup(
                                 new ProfiledLiftPositionCommand(lift, liftPos, true),
                                 new WaitCommand(1900)

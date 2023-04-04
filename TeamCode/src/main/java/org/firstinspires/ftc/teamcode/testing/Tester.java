@@ -4,26 +4,36 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
-@Disabled
-@TeleOp (name = "Run Full Speed 4 fun")
+@TeleOp (name = "Servo Wiggler")
 public class Tester extends LinearOpMode {
-    private DcMotor leftFront;
-    private DcMotor rightFront;
-    private DcMotor leftBack;
-    private DcMotor rightBack;
+
+
+    private Servo claw;
+    private Servo leftArm;
+    private Servo rightArm;
+
+
     @Override
     public void runOpMode() {
-        leftFront = hardwareMap.get(DcMotor.class, "lf");
-        rightFront = hardwareMap.get(DcMotor.class, "rf");
-        leftBack = hardwareMap.get(DcMotor.class, "lb");
-        rightBack = hardwareMap.get(DcMotor.class, "rb");
+        claw = hardwareMap.get(ServoImplEx.class, "clawServo");
+        leftArm = hardwareMap.get(ServoImplEx.class, "leftArm");
+        rightArm = hardwareMap.get(ServoImplEx.class, "rightArm");
+
         waitForStart();
         while (opModeIsActive()) {
-            leftFront.setPower(1);
-            leftBack.setPower(1);
-            rightFront.setPower(1);
-            rightBack.setPower(1);
+            if (gamepad1.a) claw.setPosition(0);
+            else claw.setPosition(1);
+
+            if (gamepad1.b) {
+                leftArm.setPosition(0);
+                rightArm.setPosition(0);
+            } else {
+                leftArm.setPosition(0.3);
+                rightArm.setPosition(0.3);
+            }
         }
     }
 }
