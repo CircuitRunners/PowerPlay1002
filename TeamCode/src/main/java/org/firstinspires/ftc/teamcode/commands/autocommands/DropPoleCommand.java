@@ -8,7 +8,6 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.LiftPositionCommand;
-import org.firstinspires.ftc.teamcode.commands.liftcommands.ProfiledLiftPositionCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -25,7 +24,7 @@ public class DropPoleCommand extends ParallelCommandGroup {
                         new WaitCommand(400),
                         new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.SCORING)),
                         new WaitCommand(1050),
-                        new InstantCommand(claw::angleUp)
+                        new InstantCommand(claw::primePoleGuide)
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(300),

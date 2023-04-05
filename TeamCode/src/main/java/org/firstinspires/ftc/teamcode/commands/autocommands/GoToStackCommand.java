@@ -8,13 +8,11 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 
 
 import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
-import org.firstinspires.ftc.teamcode.commands.liftcommands.LiftPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ProfiledLiftPositionCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 
 public class GoToStackCommand extends ParallelCommandGroup {
 
@@ -58,7 +56,7 @@ public class GoToStackCommand extends ParallelCommandGroup {
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(200),
-                        new InstantCommand(claw::angleDown),
+                        new InstantCommand(claw::sheathPoleGuide),
                         new WaitCommand(800),
                         new InstantCommand(claw::fullOpen) //Wait for the arm to get all the way down before fully opening the claw
 //                        new WaitCommand(600),

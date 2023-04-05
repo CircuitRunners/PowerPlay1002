@@ -29,6 +29,7 @@ import org.firstinspires.ftc.teamcode.commands.presets.MoveToScoringCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.RetractOuttakeCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.ConeFlipper;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.subsystems.LockingMecanum;
 
@@ -42,13 +43,13 @@ public class MainTeleOp extends CommandOpMode {
     private Lift lift;
     private Claw claw;
     private Arm arm;
-//    private Intake intake;
+    private ConeFlipper flipper;
 
-    //Drive motors and list to hold them
+//    Drive motors and list to hold them
     private DcMotorEx lf, lb, rf, rb;
-    //IMU sensor
+//    IMU sensor
     private BNO055IMU imu;
-    //Offset variable for resetting heading;
+//    Offset variable for resetting heading;
     private double headingOffset = toRadians(-90);
     private boolean prevHeadingReset = false;
     private boolean lmecOn = false;
@@ -56,56 +57,53 @@ public class MainTeleOp extends CommandOpMode {
     private ManualLiftCommand manualLiftCommand;
     private ManualLiftResetCommand manualLiftResetCommand;
 
-
     @Override
     public void initialize() {
-
 //        PhotonCore.enable();
-        //Set the bulk cache command to continuously run
+//        Set the bulk cache command to continuously run
         schedule(new BulkCacheCommand(hardwareMap));
 
         lockingMecanum = new LockingMecanum(hardwareMap);
         lift = new Lift(hardwareMap);
         arm = new Arm(hardwareMap);
         claw = new Claw(hardwareMap);
+        flipper = new ConeFlipper(hardwareMap);
 //        intake = new Intake(hardwareMap);
 
 
-//        //Retrieve dt motors from the hardware map
+//        Retrieve dt motors from the hardware map
         lf = hardwareMap.get(DcMotorEx.class, "lf");
         lb = hardwareMap.get(DcMotorEx.class, "lb");
         rf = hardwareMap.get(DcMotorEx.class, "rf");
         rb = hardwareMap.get(DcMotorEx.class, "rb");
 
-        //Add all the dt motors to the list
+//        Add all the dt motors to the list
         List<DcMotorEx> motors = Arrays.asList(lf, lb, rf, rb);
 
         for (DcMotorEx motor : motors) {
-            //Set the zero power behavior to brake
+//            Set the zero power behavior to brake
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            //Ensure all motors are set to no encoders
+//            Ensure all motors are set to no encoders
             motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
 
-        //Reverse left side motors
+//        Reverse left side motors
         lf.setDirection(DcMotorSimple.Direction.REVERSE);
         lb.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        //Initialize imu
+//        Initialize imu
         imu = hardwareMap.get(BNO055IMU.class, "imu 1");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
 
+//        Commands
 
-        //Commands
-
-        //Set up gamepads
+//        Set up gamepads
         GamepadEx driver = new GamepadEx(gamepad1);
         GamepadEx manipulator = new GamepadEx(gamepad2);
 
-
-        //Lmec Control
+//        Lmec Control
         new Trigger(() -> driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.7)
                 .whenActive(() -> {
                     lockingMecanum.lock();
@@ -116,13 +114,15 @@ public class MainTeleOp extends CommandOpMode {
                     lmecOn = false;
                 });
 
-
-
         //Set up commands
         manualLiftCommand = new ManualLiftCommand(lift, manipulator);
         manualLiftResetCommand = new ManualLiftResetCommand(lift, manipulator);
 
         lift.setDefaultCommand(new PerpetualCommand(manualLiftCommand));
+
+//        ConeFlipper control
+        driver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .toggleWhenActive(flipper::down, flipper::up);
 
         //Claw control
         manipulator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
@@ -192,10 +192,10 @@ public class MainTeleOp extends CommandOpMode {
 
         prevHeadingReset = gamepad1.x;
 
-        if (arm.getPosition() > 0.51) {
-            claw.angleUp();
+        if (arm.getPosition() > 0.251) {
+            claw.primePoleGuide();
         } else {
-            claw.angleDown();
+            claw.sheathPoleGuide();
         }
 
         //Read gamepad joysticks
