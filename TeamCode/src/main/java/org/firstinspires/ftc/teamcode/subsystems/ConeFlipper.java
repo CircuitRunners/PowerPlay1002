@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 public class ConeFlipper extends SubsystemBase {
 
     public enum FlipperPosition {
-        UP(0.82),
-        DOWN(0.4920),
-        UP_POSITION(0.99);
+        UP(0.7340037465095519),
+        DOWN(0.47415332746505734),
+        UP_POSITION(0.7389147591580881);
 
         public double position;
 

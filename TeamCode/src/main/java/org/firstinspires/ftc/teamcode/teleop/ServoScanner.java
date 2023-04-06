@@ -1,40 +1,73 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.button.Trigger;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
+import org.firstinspires.ftc.teamcode.commands.presets.MoveToScoringCommand;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @TeleOp
-public class ServoScanner extends LinearOpMode {
+public class ServoScanner extends CommandOpMode {
 
-    private String deviceName = "poleGuide";
+    private String deviceName = "clawServo";
+    private double stepValue = 0.1;
+    private double pos = 0;
 
     ServoImplEx thisCrazyServo;
-    ArrayList<Double> storedValues = new ArrayList<Double>(2);
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void initialize() {
         thisCrazyServo = hardwareMap.get(ServoImplEx.class, deviceName);
+
         thisCrazyServo.setPwmRange(new PwmControl.PwmRange(500, 2500));
 
-        if (gamepad1.left_bumper) {
-            storedValues.add((double) gamepad1.left_stick_y);
-        }
+        GamepadEx driver = new GamepadEx(gamepad1);
 
-        waitForStart();
+        driver.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+                (()->{ stepValue /= 10; })
+        );
+        driver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+                (()->{ stepValue *= 10; })
+        );
 
-        while (opModeIsActive()) {
-            thisCrazyServo.setPosition(gamepad1.left_stick_y);
-            telemetry.addData("Position", thisCrazyServo.getPosition());
-            telemetry.addData("Values", storedValues.stream().map(Object::toString)
-                    .collect(Collectors.joining(", ")));
-            telemetry.update();
-        }
+        driver.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
+                (()->{ if (pos <= 1 - stepValue) pos += stepValue; })
+        );
+        driver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
+                (()->{ if (pos >= 0 + stepValue) pos -= stepValue; })
+        );
+
+        driver.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(
+                (()->{ if (pos <= 1 - (10 * stepValue)) pos += 10*stepValue; })
+        );
+        driver.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(
+                (()->{ if (pos >= 0 + 10*stepValue) pos -= 10*stepValue; })
+        );
+
+    }
+    @Override
+    public void run() {
+        super.run();
+
+        if ((Math.abs(gamepad1.left_stick_y) > 0.01) && gamepad1.square) pos = gamepad1.left_stick_y;
+
+        thisCrazyServo.setPosition(pos);
+
+        telemetry.addData("Position", thisCrazyServo.getPosition());
+        telemetry.addData("Step Value", stepValue);
+        telemetry.addData("Step Value", gamepad1.left_stick_y);
+
+        telemetry.update();
     }
 
 }
