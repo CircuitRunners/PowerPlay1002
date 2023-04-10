@@ -250,6 +250,19 @@ public class MainTeleOp extends CommandOpMode {
 
     }
 
+    @Override
+    public void runOpMode() throws InterruptedException {
+        initialize();
+
+        waitForStart();
+        claw.fullOpen(); // WARNING THE SERVO APPEARS TO BE POWERED AFTER STOP!!! CAUTION CAUTION REMOVE WHEN FIX FOUND.
+        // run the scheduler
+        while (!isStopRequested() && opModeIsActive()) {
+            run();
+        }
+        reset();
+    }
+
     private static double cubeInput(double input, double factor) {
         double t = factor * Math.pow(input, 3);
         double r = input * (1 - factor);

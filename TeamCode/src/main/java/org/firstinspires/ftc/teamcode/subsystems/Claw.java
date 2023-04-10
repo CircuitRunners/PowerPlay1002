@@ -41,7 +41,7 @@ public class Claw extends SubsystemBase {
         // Experimental
         poleGuide.setPwmRange(new PwmControl.PwmRange(500, 2500));
 
-        fullOpen();
+//        fullOpen();
         clawPosition = ClawPosition.FULL_OPEN;
         sheathPoleGuide();
     }

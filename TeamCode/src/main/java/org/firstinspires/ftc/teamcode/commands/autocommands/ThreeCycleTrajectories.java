@@ -30,6 +30,14 @@ public class ThreeCycleTrajectories {
     public static final Pose2d leftPreloadPosition =
             new Pose2d(-29.0, -4.0, toRadians(-119.2));
 
+    public static final Pose2d rightHighPosition = // Same as the preloads
+            new Pose2d(30.0, -6.0, toRadians(115));
+
+    public static final Pose2d leftHighPosition = // Same as the prelaods
+            new Pose2d(-29.0, -4.0, toRadians(-119.2));
+
+
+
     public static final Pose2d rightDropPosition =
             new Pose2d(35.0, -13.5, toRadians(36.2));
 
@@ -54,6 +62,9 @@ public class ThreeCycleTrajectories {
 
     public static TrajectorySequence rightToPole;
     public static TrajectorySequence leftToPole;
+
+    public static TrajectorySequence rightToPoleHigh;
+    public static TrajectorySequence leftToPoleHigh;
 
     public static TrajectorySequence leftLeftPark;
     public static TrajectorySequence leftMiddlePark;
@@ -111,6 +122,24 @@ public class ThreeCycleTrajectories {
                         .setReversed(true)
                         .splineTo(new Vector2d(-50, -6.5), toRadians(0))
                         .splineTo(leftDropPosition.vec(), toRadians(-35.9))
+                        .build();
+
+        //###########################################################################
+
+        rightToPoleHigh =
+                drive.trajectorySequenceBuilder(rightStackPosition)
+                        .addTemporalMarker(endOpenActionScale, 0.0, clawOpenAction)
+                        .setReversed(true)
+                        .splineTo(new Vector2d(50, -5.5), toRadians(180))
+                        .splineTo(rightHighPosition.vec(), toRadians(144.0))
+                        .build();
+
+        leftToPoleHigh =
+                drive.trajectorySequenceBuilder(leftStackPosition)
+                        .addTemporalMarker(endOpenActionScale, 0.0, clawOpenAction)
+                        .setReversed(true)
+                        .splineTo(new Vector2d(-50, -6.5), toRadians(0))
+                        .splineTo(leftHighPosition.vec(), toRadians(35.9))
                         .build();
 
         //###########################################################################
