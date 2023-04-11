@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.cycle.medium;
+package org.firstinspires.ftc.teamcode.auto.cycle.high;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
@@ -18,8 +18,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.vision.BeaconDetector;
 
 
-@Autonomous(name = "Left 1+5", group = "Medium")
-public class LeftFiveCycleAuto extends CommandOpMode {
+@Autonomous(name = "Left 1+5 H", group = "High")
+public class LeftHighFiveCycleAuto extends CommandOpMode {
 
 
     private SampleMecanumDrive drive;
@@ -49,19 +49,23 @@ public class LeftFiveCycleAuto extends CommandOpMode {
 
         beaconDetector = new BeaconDetector(hardwareMap, true);
 
+
         DropPreloadCommand preloadCommand = new DropPreloadCommand(drive, lift, claw, arm, true);
-        GoToStackCommand goToStackCommand1 = new GoToStackCommand(drive, lift, claw, arm, true, 1);
-        GoToStackCommand goToStackCommand2 = new GoToStackCommand(drive, lift, claw, arm, true, 2);
-        GoToStackCommand goToStackCommand3 = new GoToStackCommand(drive, lift, claw, arm, true, 3);
-        GoToStackCommand goToStackCommand4 = new GoToStackCommand(drive, lift, claw, arm, true, 4);
-        GoToStackCommand goToStackCommand5 = new GoToStackCommand(drive, lift, claw, arm, true, 5);
-        DropPoleCommand dropPoleCommand1 = new DropPoleCommand(drive, lift, claw, arm, true);
-        DropPoleCommand dropPoleCommand2 = new DropPoleCommand(drive, lift, claw, arm, true);
-        DropPoleCommand dropPoleCommand3 = new DropPoleCommand(drive, lift, claw, arm, true);
-        DropPoleCommand dropPoleCommand4 = new DropPoleCommand(drive, lift, claw, arm, true);
-        DropPoleCommand dropPoleCommand5 = new DropPoleCommand(drive, lift, claw, arm, true);
-
-
+        GoToStackCommand goToStackCommand1 =
+                new GoToStackCommand(drive, lift, claw, arm, true, true, 1);
+        GoToStackCommand goToStackCommand2 =
+                new GoToStackCommand(drive, lift, claw, arm, true, true,2);
+        GoToStackCommand goToStackCommand3 =
+                new GoToStackCommand(drive, lift, claw, arm, true, true,3);
+        GoToStackCommand goToStackCommand4 =
+                new GoToStackCommand(drive, lift, claw, arm, true, true,4);
+        GoToStackCommand goToStackCommand5 =
+                new GoToStackCommand(drive, lift, claw, arm, true, true,5);
+        DropPoleCommand dropPoleCommand1 = new DropPoleCommand(drive, lift, claw, arm, true, true);
+        DropPoleCommand dropPoleCommand2 = new DropPoleCommand(drive, lift, claw, arm, true, true);
+        DropPoleCommand dropPoleCommand3 = new DropPoleCommand(drive, lift, claw, arm, true, true);
+        DropPoleCommand dropPoleCommand4 = new DropPoleCommand(drive, lift, claw, arm, true, true);
+        DropPoleCommand dropPoleCommand5 = new DropPoleCommand(drive, lift, claw, arm, true, true);
 
         //Start vision
         beaconDetector.startStream();
@@ -87,7 +91,7 @@ public class LeftFiveCycleAuto extends CommandOpMode {
                 dropPoleCommand4,
                 goToStackCommand5,
                 dropPoleCommand5,
-                new ParkCommand(drive, lift, arm, claw, beaconId, true)
+                new ParkCommand(drive, lift, arm, claw, beaconId, true, true)
         ));
     }
 

@@ -172,11 +172,17 @@ public class MainTeleOp extends CommandOpMode {
 
     }
 
+    int loopNum = 0;
     @Override
     public void run() {
+
         //Run the other functions in the superclass
         super.run();
 
+        if(loopNum == 0){
+            claw.fullOpen();
+            loopNum++;
+        }
 
         //Read heading and subtract offset, then normalize again
         Orientation orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
@@ -191,12 +197,12 @@ public class MainTeleOp extends CommandOpMode {
         }
 
         prevHeadingReset = gamepad1.x;
-
-        if (arm.getPosition() > 0.251) {
-            claw.primePoleGuide();
-        } else {
-            claw.sheathPoleGuide();
-        }
+//
+//        if (arm.getPosition() > 0.251) {
+//            claw.primePoleGuide();
+//        } else {
+//            claw.sheathPoleGuide();
+//        }
 
         //Read gamepad joysticks
         double y = -gamepad1.left_stick_y; // Remember, this is reversed!
@@ -248,19 +254,6 @@ public class MainTeleOp extends CommandOpMode {
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
         telemetry.update();
 
-    }
-
-    @Override
-    public void runOpMode() throws InterruptedException {
-        initialize();
-
-        waitForStart();
-        claw.fullOpen(); // WARNING THE SERVO APPEARS TO BE POWERED AFTER STOP!!! CAUTION CAUTION REMOVE WHEN FIX FOUND.
-        // run the scheduler
-        while (!isStopRequested() && opModeIsActive()) {
-            run();
-        }
-        reset();
     }
 
     private static double cubeInput(double input, double factor) {

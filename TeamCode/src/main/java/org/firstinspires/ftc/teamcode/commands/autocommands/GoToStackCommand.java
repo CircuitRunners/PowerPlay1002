@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 
 
 import org.firstinspires.ftc.teamcode.commands.TrajectorySequenceCommand;
+import org.firstinspires.ftc.teamcode.commands.liftcommands.LiftPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ProfiledLiftPositionCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
@@ -17,7 +18,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 public class GoToStackCommand extends ParallelCommandGroup {
 
 
-    public GoToStackCommand(SampleMecanumDrive drive, Lift lift, Claw claw, Arm arm, boolean isLeft, int cycle) {
+    public GoToStackCommand(SampleMecanumDrive drive, Lift lift, Claw claw, Arm arm, boolean isLeft,
+                            boolean isHigh, int cycle) {
 
 
         // Have the liftPos set to something relevant in case something goes wonky
@@ -44,10 +46,15 @@ public class GoToStackCommand extends ParallelCommandGroup {
                 new SequentialCommandGroup(
                         (cycle != 1) ?
                                 (cycle >= 4) ? new TrajectorySequenceCommand(
-                                        drive, isLeft ? ThreeCycleTrajectories.leftToStackDrifted : ThreeCycleTrajectories.rightToStackDrifted
+                                        drive, (isHigh) ?
+                                        isLeft ? ThreeCycleTrajectories.leftToStackDrifted : ThreeCycleTrajectories.rightToStackDrifted :
+                                        isLeft ? ThreeCycleTrajectories.leftHighToStackDrifted : ThreeCycleTrajectories.rightHighToStackDrifted
+
                                 ) :
                                         new TrajectorySequenceCommand(
-                                                drive, isLeft ? ThreeCycleTrajectories.leftToStack : ThreeCycleTrajectories.rightToStack
+                                                drive, (isHigh) ?
+                                                isLeft ? ThreeCycleTrajectories.leftToStack : ThreeCycleTrajectories.rightToStack :
+                                                isLeft ? ThreeCycleTrajectories.leftHighToStack : ThreeCycleTrajectories.rightHighToStack
                                         )
                                 : new TrajectorySequenceCommand(
                                 drive, isLeft ? ThreeCycleTrajectories.leftToStackPreload : ThreeCycleTrajectories.rightToStackPreload
@@ -70,7 +77,7 @@ public class GoToStackCommand extends ParallelCommandGroup {
                 new SequentialCommandGroup(
                         new WaitCommand(500),
                         new ParallelRaceGroup(
-                                new ProfiledLiftPositionCommand(lift, liftPos, true),
+                                new LiftPositionCommand(lift, liftPos, true),
                                 new WaitCommand(1900)
                         )
                 )

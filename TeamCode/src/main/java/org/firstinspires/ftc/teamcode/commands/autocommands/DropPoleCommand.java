@@ -16,7 +16,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 public class DropPoleCommand extends ParallelCommandGroup {
 
 
-    public DropPoleCommand(SampleMecanumDrive drive, Lift lift, Claw claw, Arm arm, boolean isLeft) {
+    public DropPoleCommand(SampleMecanumDrive drive, Lift lift, Claw claw, Arm arm, boolean isLeft,
+                           boolean isHigh) {
 
         addCommands(
 
@@ -28,21 +29,24 @@ public class DropPoleCommand extends ParallelCommandGroup {
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(300),
-                        new TrajectorySequenceCommand(
-                                drive, isLeft ? ThreeCycleTrajectories.leftToPoleHigh : ThreeCycleTrajectories.rightToPoleHigh
-                        ),
-//                        new InstantCommand(claw::open),
+                        (isHigh) ?
+                                new TrajectorySequenceCommand(
+                                        drive, isLeft ? ThreeCycleTrajectories.leftHighToPole : ThreeCycleTrajectories.rightHighToPole
+                                ) :
+                                new TrajectorySequenceCommand(
+                                        drive, isLeft ? ThreeCycleTrajectories.leftToPole : ThreeCycleTrajectories.rightToPole
+                                ),
                         new WaitCommand(100)
                 ),
                 new SequentialCommandGroup(
 //                        new WaitCommand(100),
                         new ParallelRaceGroup(
-                                new LiftPositionCommand(lift, Lift.LiftPositions.HIGH.position, true),
+                                new LiftPositionCommand(lift,
+                                        (isHigh) ? Lift.LiftPositions.HIGH.position : Lift.LiftPositions.MID.position,
+                                        true
+                                ),
                                 new WaitCommand(2000)
                         )
-//                        new WaitCommand(400),
-//                        new InstantCommand(claw::open),
-//                        new WaitCommand(300)
                 )
         );
     }

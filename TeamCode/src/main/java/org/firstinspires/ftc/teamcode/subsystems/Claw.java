@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 public class Claw extends SubsystemBase {
 
     public enum ClawPosition {
-        CLOSE(0.95), //0.962345 has worked
+        CLOSE(0.966), //0.962345 has worked
         OPEN(0.89),
         FULL_OPEN(0.64);
 

@@ -14,8 +14,8 @@ public class ManualLiftCommand extends CommandBase {
     private final double up = 1.0;
     private final double down = -0.7;
 
-    private final double slowUp = 0.8;
-    private final double slowDown = -0.1;
+    private final double slowUp = 0.65;
+    private final double slowDown = -0.01;
 
     public ManualLiftCommand(Lift lift, GamepadEx manipulator){
 
