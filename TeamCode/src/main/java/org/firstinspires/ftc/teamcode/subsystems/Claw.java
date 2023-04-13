@@ -12,6 +12,7 @@ public class Claw extends SubsystemBase {
         OPEN(0.89),
         FULL_OPEN(0.64);
 
+
         public double position;
 
         ClawPosition(double position){
@@ -19,8 +20,8 @@ public class Claw extends SubsystemBase {
         }
     }
 
-    private double poleGuideOpen = 0.75;
-    private double poleGuideClose = 0.481;
+    private double poleGuideOpen = 0.242;
+    private double poleGuideClose = 0.4946;
 
     private ClawPosition clawPosition;
 
@@ -66,11 +67,11 @@ public class Claw extends SubsystemBase {
     }
 
     public void sheathPoleGuide(){
-        poleGuide.setPosition(poleGuideOpen);
+        poleGuide.setPosition(poleGuideClose);
     }
 
     public void primePoleGuide(){
-        poleGuide.setPosition(poleGuideClose);
+        poleGuide.setPosition(poleGuideOpen);
     }
 
 

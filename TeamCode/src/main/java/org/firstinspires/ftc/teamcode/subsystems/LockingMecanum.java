@@ -31,8 +31,4 @@ public class LockingMecanum extends SubsystemBase {
         leftLinkage.setPosition(0.045);
         rightLinkage.setPosition(0.95);
     }
-
-
-
-
 }

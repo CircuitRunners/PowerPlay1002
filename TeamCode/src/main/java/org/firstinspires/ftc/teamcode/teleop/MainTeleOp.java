@@ -8,6 +8,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.PerpetualCommand;
+import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -131,6 +132,10 @@ public class MainTeleOp extends CommandOpMode {
                     else claw.open();
                 });
 
+//        //Manual pole guide control
+//        manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+//                .toggleWhenActive(claw::sheathPoleGuide, claw::primePoleGuide);
+
         //Bottom limit lift reset
         manipulator.getGamepadButton(GamepadKeys.Button.Y)
                 .whenHeld(manualLiftResetCommand);
@@ -198,11 +203,11 @@ public class MainTeleOp extends CommandOpMode {
 
         prevHeadingReset = gamepad1.x;
 //
-//        if (arm.getPosition() > 0.251) {
-//            claw.primePoleGuide();
-//        } else {
-//            claw.sheathPoleGuide();
-//        }
+        if (arm.getPosition() > 0.251) {
+            claw.primePoleGuide();
+        } else {
+            claw.sheathPoleGuide();
+        }
 
         //Read gamepad joysticks
         double y = -gamepad1.left_stick_y; // Remember, this is reversed!
