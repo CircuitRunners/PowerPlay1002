@@ -188,7 +188,7 @@ public class MainTeleOp extends CommandOpMode {
         Orientation orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
 
         //If lmec is on, force robot centric control
-        double heading = (lmecOn) ? 180.0 : AngleUnit.normalizeRadians(orientation.firstAngle - headingOffset);
+        double heading = AngleUnit.normalizeRadians(orientation.firstAngle - headingOffset);
 
         //Reset the zero point for field centric by making the current heading the offset
         if (gamepad1.x && !prevHeadingReset) {
@@ -215,9 +215,11 @@ public class MainTeleOp extends CommandOpMode {
         rx = cubeInput(rx, 0.3);
 
         //Make a vector out of the x and y and rotate it by the heading
-        Vector2d vec = new Vector2d(x, y).rotated(-heading);
-        x = (lmecOn) ? 0 : vec.getX();
-        y = vec.getY();
+        if(!lmecOn){
+            Vector2d vec = new Vector2d(x, y).rotated(-heading);
+            x = (lmecOn) ? 0 : vec.getX();
+            y = vec.getY();
+        }
 
         //Ensure powers are in the range of [-1, 1] and set power
         double denominator = Math.max(abs(y) + abs(x) + abs(rx), 1.0);
