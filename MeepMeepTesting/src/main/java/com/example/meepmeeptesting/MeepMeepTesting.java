@@ -41,7 +41,6 @@ public class MeepMeepTesting {
                                         .resetConstraints()
 
                                         .setReversed(false)
-//                                        .splineToSplineHeading(new Pose2d(45.3, -7.0, toRadians(0)), toRadians(0)) //to stack
                                         .splineTo(new Vector2d(50, -7.0), toRadians(0)) //to stack
                                         .splineTo(new Vector2d(64.2, -7.0 ), toRadians(0))
                                         .waitSeconds(1) //at stack 1
@@ -53,8 +52,8 @@ public class MeepMeepTesting {
                                         .waitSeconds(1) //at pole 1
 
                                         .setReversed(false)
-                                        .splineTo(new Vector2d(40, -11.7), toRadians(0)) //to stack
-                                        .splineTo(new Vector2d(60, -11.7), toRadians(0))
+                                        .splineTo(new Vector2d(50, -6.5), toRadians(0)) //to stack
+                                        .splineTo(new Vector2d(64.2, -6.5), toRadians(0))
                                         .waitSeconds(1) //at stack 2
 
                                         //repeat cycles

@@ -36,7 +36,7 @@ public class DropPoleCommand extends ParallelCommandGroup {
                                 new TrajectorySequenceCommand(
                                         drive, isLeft ? ThreeCycleTrajectories.leftToPole : ThreeCycleTrajectories.rightToPole
                                 ),
-                        new WaitCommand(100)
+                        new WaitCommand(50)
                 ),
                 new SequentialCommandGroup(
 //                        new WaitCommand(100),

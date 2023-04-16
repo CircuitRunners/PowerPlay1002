@@ -44,7 +44,7 @@ public class Claw extends SubsystemBase {
 
 //        fullOpen();
         clawPosition = ClawPosition.FULL_OPEN;
-        sheathPoleGuide();
+//        sheathPoleGuide();
     }
 
     public ClawPosition getClawPosition(){

@@ -12,7 +12,7 @@ public class LiftPositionCommand extends CommandBase {
 
     private PIDFController liftController;
     public static PIDCoefficients coefficients =
-            new PIDCoefficients(0.0269, 0.0, 0.00138); //ki=0.0045
+            new PIDCoefficients(0.0269, 0.0002, 0.0014); //ki=0.0045
     //Bottom 0.14, 0.145, 0.176
 
     private double tolerance = 3;
@@ -43,7 +43,7 @@ public class LiftPositionCommand extends CommandBase {
 
             return kG * lift.getVoltageComp();
         });
-        liftController.setOutputBounds(-0.7, 0.98);
+        liftController.setOutputBounds(-0.65, 0.98);
     }
     @Override
     public void initialize(){

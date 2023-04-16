@@ -33,7 +33,7 @@ public class GoToStackCommand extends ParallelCommandGroup {
                 liftPos = 126;
                 break;
             case 3:
-                liftPos = 84;
+                liftPos = 86;
                 break;
             case 4:
                 liftPos = 42;
@@ -47,28 +47,25 @@ public class GoToStackCommand extends ParallelCommandGroup {
                         (cycle != 1) ?
                                 (cycle >= 4) ? new TrajectorySequenceCommand(
                                         drive, (isHigh) ?
-                                        isLeft ? ThreeCycleTrajectories.leftToStackDrifted : ThreeCycleTrajectories.rightToStackDrifted :
-                                        isLeft ? ThreeCycleTrajectories.leftHighToStackDrifted : ThreeCycleTrajectories.rightHighToStackDrifted
+                                        isLeft ? ThreeCycleTrajectories.leftHighToStackDrifted : ThreeCycleTrajectories.rightHighToStackDrifted :
+                                        isLeft ? ThreeCycleTrajectories.leftToStackDrifted : ThreeCycleTrajectories.rightToStackDrifted
 
                                 ) :
                                         new TrajectorySequenceCommand(
                                                 drive, (isHigh) ?
-                                                isLeft ? ThreeCycleTrajectories.leftToStack : ThreeCycleTrajectories.rightToStack :
-                                                isLeft ? ThreeCycleTrajectories.leftHighToStack : ThreeCycleTrajectories.rightHighToStack
+                                                isLeft ? ThreeCycleTrajectories.leftHighToStack : ThreeCycleTrajectories.rightHighToStack :
+                                                isLeft ? ThreeCycleTrajectories.leftToStack : ThreeCycleTrajectories.rightToStack
                                         )
                                 : new TrajectorySequenceCommand(
                                 drive, isLeft ? ThreeCycleTrajectories.leftToStackPreload : ThreeCycleTrajectories.rightToStackPreload
                         ),
-                        new WaitCommand(100)
+                        new WaitCommand(50)
                 ),
                 new SequentialCommandGroup(
-                        new WaitCommand(200),
-                        new InstantCommand(claw::sheathPoleGuide),
                         new WaitCommand(800),
-                        new InstantCommand(claw::fullOpen) //Wait for the arm to get all the way down before fully opening the claw
-//                        new WaitCommand(600),
-//                        new InstantCommand(claw::close),
-//                        new WaitCommand(200)
+                        new InstantCommand(claw::sheathPoleGuide),
+                        new WaitCommand(200),
+                        new InstantCommand(claw::fullOpen)
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(100),
