@@ -22,10 +22,10 @@ public class DropPoleCommand extends ParallelCommandGroup {
         addCommands(
 
                 new SequentialCommandGroup(
-                        new WaitCommand(400),
-                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.SCORING))
-//                        new WaitCommand(1050),
-//                        new InstantCommand(claw::primePoleGuide)
+                        new WaitCommand(200),
+                        new InstantCommand(() -> arm.setLevel(Arm.ArmPositions.SCORING)),
+                        new WaitCommand(1050),
+                        new InstantCommand(claw::primePoleGuide)
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(300),

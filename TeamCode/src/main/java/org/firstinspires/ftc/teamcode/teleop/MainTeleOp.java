@@ -190,6 +190,7 @@ public class MainTeleOp extends CommandOpMode {
 
         if(loopNum == 0){
             claw.fullOpen();
+            claw.sheathPoleGuide();
             loopNum++;
         }
 

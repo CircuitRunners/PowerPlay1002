@@ -28,7 +28,7 @@ public class ThreeCycleTrajectories {
             new Pose2d(30.0, -6.0, toRadians(115));
 
     public static final Pose2d leftPreloadPosition =
-            new Pose2d(-29.0, -4.0, toRadians(-119.2));
+            new Pose2d(-29.0, -2.2, toRadians(-119.2));
 
     public static final Pose2d rightMediumPosition =
             new Pose2d(35.0, -13.5, toRadians(36.2));
@@ -40,7 +40,7 @@ public class ThreeCycleTrajectories {
             new Pose2d(35.0, -2.0, toRadians(115));
 
     public static final Pose2d leftHighPosition =
-            new Pose2d(-38.0, -1.0, toRadians(-119.2));
+            new Pose2d(-34.0, -0.5, toRadians(-119.2));
 
     public static final Pose2d rightStackPosition =
             new Pose2d(65.0, -5.5, toRadians(0));
@@ -92,7 +92,7 @@ public class ThreeCycleTrajectories {
     public static MarkerCallback clawCloseAction = () -> {};
     public static MarkerCallback clawOpenAction = () -> {};
     private static final double endCloseActionScale = 0.965;
-    private static final double endOpenActionScale = 0.952;
+    private static final double endOpenActionScale = 0.957;
 
 
     public static void generateTrajectories(SampleMecanumDrive drive) {
@@ -114,12 +114,12 @@ public class ThreeCycleTrajectories {
                 drive.trajectorySequenceBuilder(ThreeCycleTrajectories.leftStartingPosition)
                         .addTemporalMarker(endOpenActionScale, 0.0, clawOpenAction)
                         .setReversed(true)
-                        .setAccelConstraint(getAccelerationConstraint(31))
+                        .setAccelConstraint(getAccelerationConstraint(33))
                         .setVelConstraint(getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH))
                         .setTurnConstraint(toRadians(200), toRadians(200))
                         .splineToConstantHeading(new Vector2d(-37, -48.5), toRadians(91))
                         .splineToConstantHeading(new Vector2d(-37, -35), toRadians(90))
-                        .splineTo(leftPreloadPosition.vec(), toRadians(67.4))
+                        .splineTo(leftPreloadPosition.vec(), toRadians(72))
                         .resetConstraints()
                         .build();
 
