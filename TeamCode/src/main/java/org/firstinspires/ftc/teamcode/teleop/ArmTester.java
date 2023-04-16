@@ -1,35 +1,29 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.PwmControl;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
-import org.firstinspires.ftc.teamcode.commands.presets.MoveToScoringCommand;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @TeleOp
-public class ServoScanner extends CommandOpMode {
+public class ArmTester extends CommandOpMode {
 
-    private String deviceName = "coneFlipper";
     private double stepValue = 0.1;
     private double pos = 0;
 
-    ServoImplEx thisCrazyServo;
+    ServoImplEx leftArm, rightArm;
 
     @Override
     public void initialize() {
-        thisCrazyServo = hardwareMap.get(ServoImplEx.class, deviceName);
+        leftArm = hardwareMap.get(ServoImplEx.class, "leftArm");
+        rightArm = hardwareMap.get(ServoImplEx.class, "rightArm");
 
-        thisCrazyServo.setPwmRange(new PwmControl.PwmRange(500, 2500));
+
+        //Set the maximum pwm range
+        leftArm.setPwmRange(new PwmControl.PwmRange(500, 2500));
+        rightArm.setPwmRange(new PwmControl.PwmRange(500, 2500));
 
         GamepadEx driver = new GamepadEx(gamepad1);
 
@@ -61,9 +55,11 @@ public class ServoScanner extends CommandOpMode {
 
         if ((Math.abs(gamepad1.left_stick_y) > 0.01) && gamepad1.square) pos = gamepad1.left_stick_y;
 
-        thisCrazyServo.setPosition(pos);
+        rightArm.setPosition(pos);
+        leftArm.setPosition(pos);
 
-        telemetry.addData("Position", thisCrazyServo.getPosition());
+        telemetry.addData("Position", rightArm.getPosition());
+        telemetry.addData("Position", leftArm.getPosition());
         telemetry.addData("Step Value", stepValue);
         telemetry.addData("Step Value", gamepad1.left_stick_y);
 

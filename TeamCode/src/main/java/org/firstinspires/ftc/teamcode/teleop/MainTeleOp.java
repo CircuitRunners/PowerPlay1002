@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.PerpetualCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.Trigger;
@@ -53,7 +54,7 @@ public class MainTeleOp extends CommandOpMode {
 //    Offset variable for resetting heading;
     private double headingOffset = toRadians(-90);
     private boolean prevHeadingReset = false;
-    private boolean lmecOn = false;
+    private boolean lmecOn = false, poleGuideEnabled = false;
 
     private ManualLiftCommand manualLiftCommand;
     private ManualLiftResetCommand manualLiftResetCommand;
@@ -131,10 +132,13 @@ public class MainTeleOp extends CommandOpMode {
                     if(arm.canFullOpenClaw()) claw.fullOpen();
                     else claw.open();
                 });
+        manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .toggleWhenActive(claw::sheathPoleGuide, claw::primePoleGuide);
 
 //        //Manual pole guide control
-//        manipulator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-//                .toggleWhenActive(claw::sheathPoleGuide, claw::primePoleGuide);
+//        new Trigger(() -> manipulator.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.7)
+//                .whenActive(claw::sheathPoleGuide)
+//                .whenInactive(claw::sheathPoleGuide);
 
         //Bottom limit lift reset
         manipulator.getGamepadButton(GamepadKeys.Button.Y)
@@ -202,11 +206,13 @@ public class MainTeleOp extends CommandOpMode {
         }
 
         prevHeadingReset = gamepad1.x;
-//
-        if (arm.getPosition() > 0.251) {
+
+        if ((arm.getPosition() > 0.251) && (poleGuideEnabled == false)) { // && poleGuideEnabled
             claw.primePoleGuide();
-        } else {
+            poleGuideEnabled = true;
+        } else if (arm.getPosition() <= 0.251)  { // if (poleGuideEnabled)
             claw.sheathPoleGuide();
+            poleGuideEnabled = false;
         }
 
         //Read gamepad joysticks
