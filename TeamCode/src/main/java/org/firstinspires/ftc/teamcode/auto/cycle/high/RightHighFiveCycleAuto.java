@@ -42,7 +42,10 @@ public class RightHighFiveCycleAuto extends CommandOpMode {
         arm = new Arm(hardwareMap);
 
         drive.setPoseEstimate(ThreeCycleTrajectories.rightStartingPosition);
-        ThreeCycleTrajectories.clawOpenAction = () -> claw.open();
+        ThreeCycleTrajectories.clawOpenAction = () -> {
+            claw.open();
+            claw.poleGuideDown();
+        };
         ThreeCycleTrajectories.clawCloseAction = () -> claw.close();
         ThreeCycleTrajectories.generateTrajectories(drive);
         claw.close();

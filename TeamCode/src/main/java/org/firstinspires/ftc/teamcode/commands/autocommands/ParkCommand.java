@@ -21,15 +21,15 @@ public class ParkCommand extends ParallelCommandGroup {
 
         addCommands(
                 new SequentialCommandGroup(
-                        new WaitCommand(100),
-                        new InstantCommand(() -> {
-                            lift.setLiftPower(0.8);
-                        }),
-                        new WaitCommand(400),
-                        new InstantCommand(() -> {
-                            lift.setLiftPower(0);
-                        }),
 //                        new WaitCommand(100),
+//                        new InstantCommand(() -> {
+//                            lift.setLiftPower(0.8);
+//                        }),
+//                        new WaitCommand(400),
+//                        new InstantCommand(() -> {
+//                            lift.setLiftPower(0);
+//                        }),
+                        new WaitCommand(800),
                         new RetractOuttakeCommand(lift, arm, claw)
                 )
 
