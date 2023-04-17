@@ -41,14 +41,14 @@ public class MeepMeepTesting {
                                         .resetConstraints()
 
                                         .setReversed(false)
-                                        .splineTo(new Vector2d(50, -7.0), toRadians(0)) //to stack
-                                        .splineTo(new Vector2d(64.2, -7.0 ), toRadians(0))
+                                        .splineTo(new Vector2d(50, -6.5), toRadians(0)) //to stack
+                                        .splineTo(new Vector2d(64.2, -6.5 ), toRadians(0))
                                         .waitSeconds(1) //at stack 1
 
 
                                         .setReversed(true)
-                                        .splineTo(new Vector2d(50, -7.0), toRadians(-180))
-                                        .splineTo(new Vector2d(32.8, -12), toRadians(-144))
+//                                        .splineTo(new Vector2d(50, -6.5), toRadians(-180))
+                                        .splineTo(new Vector2d(32.8, -12), toRadians(-141))
                                         .waitSeconds(1) //at pole 1
 
                                         .setReversed(false)
@@ -59,18 +59,18 @@ public class MeepMeepTesting {
                                         //repeat cycles
 
                                         .setReversed(true)
-                                        .splineTo(new Vector2d(40, -11.7), toRadians(-180))
-                                        .splineTo(new Vector2d(32.8, -10.4), toRadians(-138))
+                                        .splineTo(new Vector2d(50, -6.5), toRadians(-180))
+                                        .splineTo(new Vector2d(32.8, -12), toRadians(-141))
                                         .waitSeconds(1) //at pole 2
 
                                         .setReversed(false)
-                                        .splineTo(new Vector2d(40, -11.7), toRadians(0)) //to stack
-                                        .splineTo(new Vector2d(60, -11.7), toRadians(0))
+                                        .splineTo(new Vector2d(50, -6.5), toRadians(0)) //to stack
+                                        .splineTo(new Vector2d(64.2, -6.5), toRadians(0))
                                         .waitSeconds(1) //at stack 3
 
                                         .setReversed(true)
-                                        .splineTo(new Vector2d(40, -11.7), toRadians(-180))
-                                        .splineTo(new Vector2d(31, -15), toRadians(-132))
+                                        .splineTo(new Vector2d(50, -6.5), toRadians(-180))
+                                        .splineTo(new Vector2d(32.8, -12), toRadians(-141))
                                         .waitSeconds(1) //at pole 3
 
                                         .setReversed(false)

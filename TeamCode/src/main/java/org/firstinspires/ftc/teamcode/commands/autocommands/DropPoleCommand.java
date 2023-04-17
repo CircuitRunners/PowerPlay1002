@@ -45,7 +45,7 @@ public class DropPoleCommand extends ParallelCommandGroup {
                                         (isHigh) ? Lift.LiftPositions.HIGH.position : Lift.LiftPositions.MID.position,
                                         true
                                 ),
-                                new WaitCommand(2000)
+                                new WaitCommand(1900)
                         )
                 )
         );
