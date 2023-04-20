@@ -24,7 +24,7 @@ public class DropPoleCommand extends ParallelCommandGroup {
                 new SequentialCommandGroup(
                         new WaitCommand(200),
                         new InstantCommand(() -> arm.setPosition(
-                                (isLeft && !isHigh) ? Arm.ArmPositions.SCORING.position : Arm.ArmPositions.SCORING.position + 0.04
+                               Arm.ArmPositions.SCORING.position
                         )),
                         new WaitCommand(1050),
                         new InstantCommand(claw::primePoleGuide)
@@ -37,8 +37,8 @@ public class DropPoleCommand extends ParallelCommandGroup {
                                 ) :
                                 new TrajectorySequenceCommand(
                                         drive, isLeft ? ThreeCycleTrajectories.leftToPole : ThreeCycleTrajectories.rightToPole
-                                ),
-                        new WaitCommand(50)
+                                )
+//                        new WaitCommand(50)
                 ),
                 new SequentialCommandGroup(
 //                        new WaitCommand(100),

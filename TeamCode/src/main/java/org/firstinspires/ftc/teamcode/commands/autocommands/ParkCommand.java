@@ -25,7 +25,7 @@ public class ParkCommand extends ParallelCommandGroup {
                         new InstantCommand(() -> {
                             lift.setLiftPower(0.8);
                         }),
-                        new WaitCommand(400),
+                        new WaitCommand(500),
                         new InstantCommand(() -> {
                             lift.setLiftPower(0);
                         }),
@@ -42,7 +42,7 @@ public class ParkCommand extends ParallelCommandGroup {
                         new TrajectorySequenceCommand(drive,
                                 (isHigh) ?
                                         (isLeft) ? ThreeCycleTrajectories.leftHighLeftPark : ThreeCycleTrajectories.rightHighRightPark :
-                                        (isLeft) ? ThreeCycleTrajectories.leftLeftPark : ThreeCycleTrajectories.TEMP_rightRightPark
+                                        (isLeft) ? ThreeCycleTrajectories.leftLeftPark : ThreeCycleTrajectories.rightRightPark
                         )
                 );
                 break;

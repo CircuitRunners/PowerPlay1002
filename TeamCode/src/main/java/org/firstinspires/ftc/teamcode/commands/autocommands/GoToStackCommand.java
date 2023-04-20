@@ -58,8 +58,8 @@ public class GoToStackCommand extends ParallelCommandGroup {
                                         )
                                 : new TrajectorySequenceCommand(
                                 drive, isLeft ? ThreeCycleTrajectories.leftToStackPreload : ThreeCycleTrajectories.rightToStackPreload
-                        ),
-                        new WaitCommand(100)
+                        )
+//                        new WaitCommand(100)
                 ),
                 new SequentialCommandGroup(
                         new WaitCommand(800),

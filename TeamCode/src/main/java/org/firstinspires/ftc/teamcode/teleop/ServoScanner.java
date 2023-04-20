@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @TeleOp
 public class ServoScanner extends CommandOpMode {
 
-    private String deviceName = "coneFlipper";
+    private String deviceName = "clawServo";
     private double stepValue = 0.1;
     private double pos = 0;
 
