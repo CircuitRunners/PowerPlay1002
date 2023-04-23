@@ -52,8 +52,8 @@ public class MeepMeepTesting {
                                         .waitSeconds(1) //at pole 1
 
                                         .setReversed(false)
-                                        .splineTo(new Vector2d(50, -6.5), toRadians(0)) //to stack
-                                        .splineTo(new Vector2d(64.2, -6.5), toRadians(0))
+                                        .splineTo(new Vector2d(50, -6.0), toRadians(0)) //to stack
+                                        .splineTo(new Vector2d(65.0, -6.0), toRadians(0))
                                         .waitSeconds(1) //at stack 2
 
                                         //repeat cycles

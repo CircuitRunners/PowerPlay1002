@@ -43,7 +43,7 @@ public class ParkAuto extends CommandOpMode {
         TrajectorySequence leftTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)
                 .back(27)
                 .turn(toRadians(90))
-                .back(25)
+                .back(18)
 //                .turn(toRadians(-90))
                 .build();
         TrajectorySequence middleTrajectoryAbs = drive.trajectorySequenceBuilder(startPose)

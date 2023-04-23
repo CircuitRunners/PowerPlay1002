@@ -229,7 +229,7 @@ public class MainTeleOp extends CommandOpMode {
         if(!lmecOn){
             Vector2d vec = new Vector2d(x, y).rotated(-heading);
             x = (lmecOn) ? 0 : vec.getX();
-            y = vec.getY();
+            y = (lmecOn) ? -vec.getY() : vec.getY();
         }
 
         //Ensure powers are in the range of [-1, 1] and set power

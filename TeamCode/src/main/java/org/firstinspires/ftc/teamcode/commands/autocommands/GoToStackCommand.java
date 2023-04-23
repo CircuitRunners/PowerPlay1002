@@ -27,7 +27,7 @@ public class GoToStackCommand extends ParallelCommandGroup {
 
         switch (cycle) {
             case 1:
-                liftPos = 160;
+                liftPos = 161;
                 break;
             case 2:
                 liftPos = 126;
