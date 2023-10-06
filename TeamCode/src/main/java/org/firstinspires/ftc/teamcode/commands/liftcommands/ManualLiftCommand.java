@@ -50,12 +50,12 @@ public class ManualLiftCommand extends CommandBase {
         }
 
         //Otherwise, do nothing
-        else {
-            if(lift.getLiftPosition() < 3) lift.setLiftPower(1);
-            else if(lift.getLiftPosition() < 283) lift.setLiftPower(1); //0.19 * lift.getVoltageComp()
-            else if(lift.getLiftPosition() < 580) lift.setLiftPower(1); //0.20 * lift.getVoltageComp()
-            else lift.setLiftPower(1);
-        }
+//        else {
+//            if(lift.getLiftPosition() < 3) lift.setLiftPower(1);
+//            else if(lift.getLiftPosition() < 283) lift.setLiftPower(1); //0.19 * lift.getVoltageComp()
+//            else if(lift.getLiftPosition() < 580) lift.setLiftPower(1); //0.20 * lift.getVoltageComp()
+//            else lift.setLiftPower(1);
+//        }
     }
 
 

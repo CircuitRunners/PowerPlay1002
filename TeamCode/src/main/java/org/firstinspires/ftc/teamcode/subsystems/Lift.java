@@ -69,7 +69,7 @@ public class Lift extends SubsystemBase {
     }
 
     public boolean atUpperLimit(){
-        return getLiftPosition() > 830;
+        return getLiftPosition() > 800;
     }
 
     public boolean atLowerLimit(){
