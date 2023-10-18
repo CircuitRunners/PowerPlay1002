@@ -89,3 +89,4 @@ lint/tmp/
 *.hprof
 .idea/misc.xml
 .DS_Store
+*.xml
